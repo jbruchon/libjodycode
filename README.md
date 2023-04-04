@@ -3,12 +3,12 @@ Introduction
 libjodycode is a software code library containing code shared among several of
 the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
 zeromerge. These shared pieces of code were copied between each program as
-they were updated. As the number of programs has increased and keeping these
+they were updated. As the number of programs increased and keeping these
 pieces of code synced became more annoying, the decision was made to combine
 all of them into a single reusable shared library.
 
-Please consider financially supporting continued development of libjodycode using
-the links on my home page (Ko-fi, PayPal, SubscribeStar, Flattr, etc.):
+Please consider financially supporting continued development of libjodycode
+using the links on my home page (Ko-fi, PayPal, SubscribeStar, Flattr, etc.):
 
 https://www.jodybruchon.com/
 
