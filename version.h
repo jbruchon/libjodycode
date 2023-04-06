@@ -5,6 +5,6 @@
 #define LIBJODYCODE_VERSION_H
 
 #define VER "0.1"
-#define VERDATE "2023-03-28"
+#define VERDATE "2023-04-06"
 
 #endif /* LIBJODYCODE_VERSION_H */

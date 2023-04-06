@@ -1,4 +1,4 @@
-# jdupes Makefile
+# libjodycode Makefile
 
 CFLAGS ?= -O2 -g
 PREFIX = /usr/local
@@ -10,6 +10,7 @@ MAN_EXT = 1
 CC ?= gcc
 INSTALL = install
 RM      = rm -f
+LN      = ln -s -f
 RMDIR	= rmdir -p
 MKDIR   = mkdir -p
 
@@ -20,6 +21,8 @@ COMPILER_OPTIONS += -std=gnu99 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -f
 COMPILER_OPTIONS += -DSMA_MAX_FREE=11 -DNO_ATIME
 
 UNAME_S=$(shell uname -s)
+VERSION=$(shell grep '#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
+VERSION_MAJOR=$(shell grep '#define VER ' version.h | sed 's/[^"]*"//;s/\..*//')
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
@@ -78,7 +81,8 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).so $(OBJS)
+	$(CC) -shared -o $(PROGRAM_NAME).so.$(VERSION) $(OBJS)
+	$(LN) $(PROGRAM_NAME).so.$(VERSION) $(PROGRAM_NAME).so.$(VERSION_MAJOR)
 
 staticlib: $(OBJS)
 	$(AR) rcs libjodycode.a $(OBJS)
@@ -112,15 +116,15 @@ test:
 	./test.sh
 
 stripped: sharedlib staticlib
-	strip --strip-unneeded libjodycode.so
+	strip --strip-unneeded libjodycode.so.$(VERSION)
 	strip --strip-debug libjodycode.a
 
 clean:
-	$(RM) $(OBJS) $(OBJS_CLEAN) build_date.h $(PROGRAM_NAME) $(PROGRAM_NAME).exe *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(OBJS) $(OBJS_CLEAN) $(PROGRAM_NAME).so* *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: clean
 	$(RM) *.pkg.tar.*
-	$(RM) -r jdupes-*-*/ jdupes-*-*.zip
+	$(RM) -r $(PROGRAM_NAME)-*-*/ $(PROGRAM_NAME)-*-*.zip
 
 chrootpackage:
 	+./chroot_build.sh
