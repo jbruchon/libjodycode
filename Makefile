@@ -3,16 +3,17 @@
 CFLAGS ?= -O2 -g
 PREFIX = /usr/local
 PROGRAM_NAME = libjodycode
-BIN_DIR = $(PREFIX)/bin
+LIB_DIR = $(PREFIX)/lib
 MAN_BASE_DIR = $(PREFIX)/share/man
-MAN_DIR = $(MAN_BASE_DIR)/man1
-MAN_EXT = 1
+MAN7_DIR = $(MAN_BASE_DIR)/man7
 CC ?= gcc
 INSTALL = install
 RM      = rm -f
-LN      = ln -s -f
+LN      = ln -sf
 RMDIR	= rmdir -p
 MKDIR   = mkdir -p
+INSTALL_PROGRAM = $(INSTALL) -m 0755
+INSTALL_DATA    = $(INSTALL) -m 0644
 
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
@@ -67,9 +68,6 @@ endif
 
 CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
 
-INSTALL_PROGRAM = $(INSTALL) -m 0755
-INSTALL_DATA    = $(INSTALL) -m 0644
-
 # ADDITIONAL_OBJECTS - some platforms will need additional object files
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
@@ -94,23 +92,25 @@ staticlib: $(OBJS)
 #	gzip -9 < jodycode.8 > jodycode.8.gz
 
 $(PROGRAM_NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
+#	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
 
 installdirs:
-	test -e $(DESTDIR)$(BIN_DIR) || $(MKDIR) $(DESTDIR)$(BIN_DIR)
-	test -e $(DESTDIR)$(MAN_DIR) || $(MKDIR) $(DESTDIR)$(MAN_DIR)
+	test -e $(DESTDIR)$(LIB_DIR) || $(MKDIR) $(DESTDIR)$(LIB_DIR)
+	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
-install: $(PROGRAM_NAME) installdirs
-	$(INSTALL_PROGRAM)	$(PROGRAM_NAME)   $(DESTDIR)$(BIN_DIR)/$(PROGRAM_NAME)
-	$(INSTALL_DATA)		$(PROGRAM_NAME).1 $(DESTDIR)$(MAN_DIR)/$(PROGRAM_NAME).$(MAN_EXT)
+install: sharedlib staticlib installdirs
+	$(INSTALL_DATA)	$(PROGRAM_NAME).so.$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
+	$(LN)		$(PROGRAM_NAME).so.$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+	$(INSTALL_DATA)	$(PROGRAM_NAME).7 $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 uninstalldirs:
-	-test -e $(DESTDIR)$(BIN_DIR) && $(RMDIR) $(DESTDIR)$(BIN_DIR)
-	-test -e $(DESTDIR)$(MAN_DIR) && $(RMDIR) $(DESTDIR)$(MAN_DIR)
+	-test -e $(DESTDIR)$(LIB_DIR) && $(RMDIR) $(DESTDIR)$(LIB_DIR)
+	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
 
 uninstall: uninstalldirs
-	$(RM)	$(DESTDIR)$(BIN_DIR)/$(PROGRAM_NAME)
-	$(RM)	$(DESTDIR)$(MAN_DIR)/$(PROGRAM_NAME).$(MAN_EXT)
+	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
+	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+	$(RM)	$(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 test:
 	./test.sh
