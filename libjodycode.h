@@ -36,6 +36,8 @@ extern "C" {
 #endif
 
 
+/*** jody_cacheinfo ***/
+
 /* Don't use cacheinfo on Windows */
 #ifndef ON_WINDOWS
 
@@ -58,6 +60,9 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 #else
  #define jc_get_proc_cacheinfo(a)
 #endif /* ON_WINDOWS */
+
+
+/*** jody_hash ***/
 
 /* Width of a jody_hash. Changing this will also require
  * changing the width of tail masks to match. */
@@ -90,6 +95,14 @@ extern int jc_make_relative_link_name(const char * const src,
 
 extern int jc_numeric_sort(char * restrict c1,
                 char * restrict c2, int sort_direction);
+
+
+/*** jody_string ***/
+
+extern int jc_strncaseeq(const char *s1, const char *s2, size_t len);
+extern int jc_strcaseeq(const char *s1, const char *s2);
+extern int jc_strneq(const char *s1, const char *s2, size_t len);
+extern int jc_streq(const char *s1, const char *s2);
 
 
 /*** jody_string_malloc ***/
