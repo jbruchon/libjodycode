@@ -73,9 +73,8 @@ CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
 
-OBJS += jody_cacheinfo.o jody_hash.o jody_oom.o jody_paths.o jody_sort.o
-OBJS += jody_string.o jody_string_malloc.o jody_strtoepoch.o
-OBJS += jody_win_stat.o jody_win_unicode.o
+OBJS += cacheinfo.o jody_hash.o oom.o paths.o sort.o string.o string_malloc.o
+OBJS += strtoepoch.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: sharedlib staticlib

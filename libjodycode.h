@@ -1,5 +1,8 @@
-/* Detect size of CPU data caches
- * See jody_cacheinfo.c for license information */
+/* Jody Bruchon's helpful code library header
+ * Copyright (C) 2014-2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Licensed under The MIT License
+ * Source code: https://github.com/jbruchon/libjodycode
+ */
 
 #ifndef LIBJODYCODE_H
 #define LIBJODYCODE_H
@@ -36,7 +39,7 @@ extern "C" {
 #endif
 
 
-/*** jody_cacheinfo ***/
+/*** cacheinfo ***/
 
 /* Don't use cacheinfo on Windows */
 #ifndef ON_WINDOWS
@@ -97,7 +100,7 @@ extern int jc_numeric_sort(char * restrict c1,
                 char * restrict c2, int sort_direction);
 
 
-/*** jody_string ***/
+/*** string ***/
 
 extern int jc_strncaseeq(const char *s1, const char *s2, size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
@@ -105,7 +108,7 @@ extern int jc_strneq(const char *s1, const char *s2, size_t len);
 extern int jc_streq(const char *s1, const char *s2);
 
 
-/*** jody_string_malloc ***/
+/*** string_malloc ***/
 
 #ifdef DEBUG
 extern uintmax_t sma_allocs;
@@ -123,12 +126,12 @@ extern void jc_string_free(void * const addr);
 extern void jc_string_malloc_destroy(void);
 
 
-/*** jody_strtoepoch ***/
+/*** strtoepoch ***/
 
 time_t jc_strtoepoch(const char * const datetime);
 
 
-/*** jody_win_stat ***/
+/*** win_stat ***/
 
 #ifdef ON_WINDOWS
 struct winstat {
@@ -161,7 +164,7 @@ extern int win_stat(const char * const filename, struct winstat * const restrict
 #endif /* ON_WINDOWS */
 
 
-/*** jody_win_unicode ***/
+/*** win_unicode ***/
 
 extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
 
