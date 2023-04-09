@@ -10,25 +10,29 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdint.h>
+#include <sys/types.h>
+#include <unistd.h>
+#ifdef ON_WINDOWS
 #ifndef WIN32_LEAN_AND_MEAN
  #define WIN32_LEAN_AND_MAN
 #endif
 #include <windows.h>
-#include <stdint.h>
+ /* Unicode conversion on Windows */
+ #ifndef M2W
+  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, WPATH_MAX)
+ #endif
+ #ifndef W2M
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, NULL)
+ #endif
+#else
+ #include <sys/stat.h>
+#endif /* ON_WINDOWS */
 
 #ifndef PATHBUF_SIZE
  #define PATHBUF_SIZE 4096
 #endif
 #ifndef WPATH_MAX
  #define WPATH_MAX 8192
-#endif
-
-/* Unicode conversion on Windows */
-#ifndef M2W
- #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, WPATH_MAX)
-#endif
-#ifndef W2M
- #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, NULL)
 #endif
 
 
@@ -52,7 +56,7 @@ struct jc_proc_cacheinfo {
 extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 
 #else
- #define get_proc_cacheinfo(a)
+ #define jc_get_proc_cacheinfo(a)
 #endif /* ON_WINDOWS */
 
 /* Width of a jody_hash. Changing this will also require
@@ -71,10 +75,6 @@ typedef uint32_t jodyhash_t;
 typedef uint16_t jodyhash_t;
 #endif
 
-#ifndef JODY_HASH_NOCOMPAT
-typedef jodyhash_t hash_t;
-#endif
-
 /* Version increments when algorithm changes incompatibly */
 #define JODY_HASH_VERSION 5
 
@@ -91,6 +91,9 @@ extern int jc_make_relative_link_name(const char * const src,
 extern int jc_numeric_sort(char * restrict c1,
                 char * restrict c2, int sort_direction);
 
+
+/*** jody_string_malloc ***/
+
 #ifdef DEBUG
 extern uintmax_t sma_allocs;
 extern uintmax_t sma_free_ignored;
@@ -103,11 +106,18 @@ extern uintmax_t sma_free_tails;
 #endif
 
 extern void *jc_string_malloc(size_t len);
-extern void string_free(void * const addr);
+extern void jc_string_free(void * const addr);
 extern void jc_string_malloc_destroy(void);
+
+
+/*** jody_strtoepoch ***/
 
 time_t jc_strtoepoch(const char * const datetime);
 
+
+/*** jody_win_stat ***/
+
+#ifdef ON_WINDOWS
 struct winstat {
 	uint64_t st_ino;
 	int64_t st_size;
@@ -135,8 +145,12 @@ struct winstat {
 extern time_t nttime_to_unixtime(const uint64_t * const restrict timestamp);
 extern time_t unixtime_to_nttime(const uint64_t * const restrict timestamp);
 extern int win_stat(const char * const filename, struct winstat * const restrict buf);
+#endif /* ON_WINDOWS */
 
-extern int fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
+
+/*** jody_win_unicode ***/
+
+extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
 
 #ifdef UNICODE
  extern void jc_slash_convert(char *path);

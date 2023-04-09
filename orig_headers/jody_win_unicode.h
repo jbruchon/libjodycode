@@ -10,7 +10,7 @@ extern "C" {
 
 #include <stdio.h>
 
-extern int fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
+extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
 
 #ifdef UNICODE
  #ifndef WPATH_MAX

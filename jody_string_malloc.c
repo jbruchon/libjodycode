@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "jody_string_malloc.h"
+#include "libjodycode.h"
 
 /* Size of pages to allocate at once. Must be divisible by uintptr_t.
  * The maximum object size is this page size minus about 16 bytes! */
@@ -43,7 +43,7 @@ uintmax_t sma_free_tails = 0;
 /* This is used to bypass jc_string_malloc for debugging */
 #ifdef SMA_PASSTHROUGH
 void *jc_string_malloc(size_t len) { return malloc(len); }
-void string_free(void *ptr) { free(ptr); return; }
+void jc_string_free(void *ptr) { free(ptr); return; }
 void jc_string_malloc_destroy(void) { return; }
 
 #else /* Not SMA_PASSTHROUGH mode */
@@ -62,7 +62,7 @@ static size_t sma_nextfree = sizeof(uintptr_t);
 
 
 /* Scan the freed chunk list for a suitably sized object */
-static inline void *scan_freelist(const size_t size)
+static inline void *jc_scan_freelist(const size_t size)
 {
 	size_t *object, *min_p;
 	size_t sz, min = 0;
@@ -169,7 +169,7 @@ void *jc_string_malloc(size_t len)
 	}
 
 	/* Allocate objects from the free list first */
-	address = (size_t *)scan_freelist(len);
+	address = (size_t *)jc_scan_freelist(len);
 	if (address != NULL) {
 		DBG(sma_free_reclaimed++;)
 		return (void *)address;
@@ -189,7 +189,7 @@ void *jc_string_malloc(size_t len)
 			tailaddr = (size_t *)((uintptr_t)page + sma_nextfree);
 			*tailaddr = (size_t)sz;
 			tailaddr++;
-			string_free(tailaddr);
+			jc_string_free(tailaddr);
 			DBG(sma_free_tails++;)
 		}
 
@@ -212,7 +212,7 @@ void *jc_string_malloc(size_t len)
 
 
 /* Free an object, adding to free list if possible */
-void string_free(void * const addr)
+void jc_string_free(void * const addr)
 {
 	int freefull = 0;
 	struct freelist *emptyslot = NULL;
@@ -281,7 +281,7 @@ sf_failed:
 	return;
 
 sf_double_free:
-	fprintf(stderr, "jc_string_malloc: ERROR: attempt to string_free() already freed object at %p\n", addr);
+	fprintf(stderr, "jc_string_malloc: ERROR: attempt to jc_string_free() already freed object at %p\n", addr);
 	return;
 }
 

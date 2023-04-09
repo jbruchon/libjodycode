@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
+#include "libjodycode.h"
 
 #define REQ_NUM(a) { if (a < '0' || a > '9') return -1; }
 #define ATONUM(a,b) (a = b - '0')

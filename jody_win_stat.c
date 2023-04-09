@@ -13,8 +13,8 @@
 #endif
 #include <windows.h>
 #include <limits.h>
-#include "jody_win_stat.h"
 #include <stdint.h>
+#include "libjodycode.h"
 
 /* Convert NT epoch to UNIX epoch */
 time_t nttime_to_unixtime(const uint64_t * const restrict timestamp)

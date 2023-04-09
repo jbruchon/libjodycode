@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "jody_hash.h"
+#include "libjodycode.h"
 
 /* DO NOT modify the shift unless you know what you're doing.
  * This shift was decided upon after lots of testing and

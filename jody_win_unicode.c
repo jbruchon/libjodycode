@@ -3,13 +3,11 @@
  * Copyright (C) 2014-2023 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
-#include "jody_win_unicode.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-
-#include "jody_oom.h"
+#include "libjodycode.h"
 
 #ifdef UNICODE
 #define WIN32_LEAN_AND_MEAN
@@ -61,7 +59,7 @@ error_wc2mb:
 #endif /* UNICODE */
 
 /* Print a string that is wide on Windows but normal on POSIX */
-extern int fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
+extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
 {
 #ifdef UNICODE
   int retval;
@@ -74,8 +72,8 @@ extern int fwprint(FILE * const restrict stream, const char * const restrict str
     if (!M2W(str, wstr)) return -1;
     fflush(stream);
     _setmode(_fileno(stream), stream_mode);
-    if (cr == 2) retval = fwprintf(stream, L"%S%C", wstr, 0);
-    else retval = fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
+    if (cr == 2) retval = jc_fwprintf(stream, L"%S%C", wstr, 0);
+    else retval = jc_fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
     fflush(stream);
     _setmode(_fileno(stream), _O_TEXT);
     return retval;

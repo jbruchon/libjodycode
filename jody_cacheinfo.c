@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "jody_cacheinfo.h"
+#include "libjodycode.h"
 
 /* None of this code is useful outside of Linux */
 #ifdef __linux__

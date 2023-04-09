@@ -5,7 +5,7 @@
  */
 
 #include <stdlib.h>
-#include "jody_sort.h"
+#include "libjodycode.h"
 
 #define IS_NUM(a) (((a >= '0') && (a <= '9')) ? 1 : 0)
 #define IS_LOWER(a) (((a >= 'a') && (a <= 'z')) ? 1 : 0)

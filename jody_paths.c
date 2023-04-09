@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "jody_paths.h"
+#include "libjodycode.h"
 
 /* Collapse dot-dot and single dot path components
  * This code MUST be passed a full file pathname (starting with '/') */

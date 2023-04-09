@@ -4,6 +4,7 @@ CFLAGS ?= -O2 -g
 PREFIX = /usr/local
 PROGRAM_NAME = libjodycode
 LIB_DIR = $(PREFIX)/lib
+INC_DIR = $(PREFIX)/include
 MAN_BASE_DIR = $(PREFIX)/share/man
 MAN7_DIR = $(MAN_BASE_DIR)/man7
 CC ?= gcc
@@ -79,8 +80,7 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).so.$(VERSION) $(OBJS)
-	$(LN) $(PROGRAM_NAME).so.$(VERSION) $(PROGRAM_NAME).so.$(VERSION_MAJOR)
+	$(CC) -shared -o $(PROGRAM_NAME).so $(OBJS)
 
 staticlib: $(OBJS)
 	$(AR) rcs libjodycode.a $(OBJS)
@@ -99,17 +99,23 @@ installdirs:
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
 install: sharedlib staticlib installdirs
-	$(INSTALL_DATA)	$(PROGRAM_NAME).so.$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
-	$(LN)		$(PROGRAM_NAME).so.$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+	$(INSTALL_DATA)	$(PROGRAM_NAME).so $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
+	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
+	$(INSTALL_DATA)	$(PROGRAM_NAME).a $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
+	$(INSTALL_DATA)	$(PROGRAM_NAME).h $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
 	$(INSTALL_DATA)	$(PROGRAM_NAME).7 $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 uninstalldirs:
 	-test -e $(DESTDIR)$(LIB_DIR) && $(RMDIR) $(DESTDIR)$(LIB_DIR)
+	-test -e $(DESTDIR)$(INC_DIR) && $(RMDIR) $(DESTDIR)$(INC_DIR)
 	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
 
 uninstall: uninstalldirs
-	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
 	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
+	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).a
+	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
 	$(RM)	$(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 test:
@@ -120,7 +126,7 @@ stripped: sharedlib staticlib
 	strip --strip-debug libjodycode.a
 
 clean:
-	$(RM) $(OBJS) $(OBJS_CLEAN) $(PROGRAM_NAME).so* *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(OBJS) $(OBJS_CLEAN) $(PROGRAM_NAME).so* *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: clean
 	$(RM) *.pkg.tar.*

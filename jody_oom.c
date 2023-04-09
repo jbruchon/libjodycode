@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "jody_oom.h"
+#include "libjodycode.h"
 
 /* Out of memory failure */
 extern void jc_oom(const char * const restrict msg)
