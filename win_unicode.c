@@ -43,7 +43,7 @@ extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
     if (len < 1) goto error_wc2mb;
 
     argv[counter] = (char *)malloc((size_t)len + 1);
-    if (!argv[counter]) oom("widearg_to_argv()");
+    if (!argv[counter]) jc_oom("widearg_to_argv()");
     strncpy(argv[counter], temp, (size_t)len + 1);
   }
   return;
@@ -72,8 +72,8 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
     if (!M2W(str, wstr)) return -1;
     fflush(stream);
     _setmode(_fileno(stream), stream_mode);
-    if (cr == 2) retval = jc_fwprintf(stream, L"%S%C", wstr, 0);
-    else retval = jc_fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
+    if (cr == 2) retval = fwprintf(stream, L"%S%C", wstr, 0);
+    else retval = fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
     fflush(stream);
     _setmode(_fileno(stream), _O_TEXT);
     return retval;
