@@ -125,10 +125,13 @@ stripped: sharedlib staticlib
 	strip --strip-unneeded libjodycode.so.$(VERSION)
 	strip --strip-debug libjodycode.a
 
-clean:
-	$(RM) $(OBJS) $(OBJS_CLEAN) $(PROGRAM_NAME).so* *.a *~ .*.un~ *.gcno *.gcda *.gcov
+objsclean:
+	$(RM) $(OBJS)
 
-distclean: clean
+clean: objsclean
+	$(RM) $(PROGRAM_NAME).so* *.a *~ .*.un~ *.gcno *.gcda *.gcov
+
+distclean: objsclean clean
 	$(RM) *.pkg.tar.*
 	$(RM) -r $(PROGRAM_NAME)-*-*/ $(PROGRAM_NAME)-*-*.zip
 
