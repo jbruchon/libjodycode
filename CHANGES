@@ -1,0 +1,6 @@
+libjodycode 1.0
+
+- Initial release
+- Includes the following code from other Jody Bruchon projects:
+  cacheinfo, jody_hash.  oom, paths, sort, string, string_malloc, strtoepoch,
+  win_stat, win_unicode
