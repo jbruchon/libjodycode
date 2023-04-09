@@ -17,7 +17,7 @@
 #include "libjodycode.h"
 
 /* Convert NT epoch to UNIX epoch */
-time_t nttime_to_unixtime(const uint64_t * const restrict timestamp)
+time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
 {
 	uint64_t newstamp;
 
@@ -29,7 +29,7 @@ time_t nttime_to_unixtime(const uint64_t * const restrict timestamp)
 }
 
 /* Convert UNIX epoch to NT epoch */
-time_t unixtime_to_nttime(const uint64_t * const restrict timestamp)
+time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
 {
 	uint64_t newstamp;
 
@@ -41,7 +41,7 @@ time_t unixtime_to_nttime(const uint64_t * const restrict timestamp)
 }
 
 /* Get stat()-like extra information for a file on Windows */
-int win_stat(const char * const filename, struct winstat * const restrict buf)
+int jc_win_stat(const char * const filename, struct winstat * const restrict buf)
 {
   HANDLE hFile;
   BY_HANDLE_FILE_INFORMATION bhfi;
@@ -66,11 +66,11 @@ int win_stat(const char * const filename, struct winstat * const restrict buf)
   buf->st_ino = ((uint64_t)(bhfi.nFileIndexHigh) << 32) + (uint64_t)bhfi.nFileIndexLow;
   buf->st_size = ((int64_t)(bhfi.nFileSizeHigh) << 32) + (int64_t)bhfi.nFileSizeLow;
   timetemp = ((uint64_t)(bhfi.ftCreationTime.dwHighDateTime) << 32) + bhfi.ftCreationTime.dwLowDateTime;
-  buf->st_ctime = nttime_to_unixtime(&timetemp);
+  buf->st_ctime = jc_nttime_to_unixtime(&timetemp);
   timetemp = ((uint64_t)(bhfi.ftLastWriteTime.dwHighDateTime) << 32) + bhfi.ftLastWriteTime.dwLowDateTime;
-  buf->st_mtime = nttime_to_unixtime(&timetemp);
+  buf->st_mtime = jc_nttime_to_unixtime(&timetemp);
   timetemp = ((uint64_t)(bhfi.ftLastAccessTime.dwHighDateTime) << 32) + bhfi.ftLastAccessTime.dwLowDateTime;
-  buf->st_atime = nttime_to_unixtime(&timetemp);
+  buf->st_atime = jc_nttime_to_unixtime(&timetemp);
   buf->st_dev = (uint32_t)bhfi.dwVolumeSerialNumber;
   buf->st_nlink = (uint32_t)bhfi.nNumberOfLinks;
   buf->st_mode = (uint32_t)bhfi.dwFileAttributes;

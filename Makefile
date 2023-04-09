@@ -74,7 +74,7 @@ CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
 #ADDITIONAL_OBJECTS += getopt.o
 
 OBJS += cacheinfo.o jody_hash.o oom.o paths.o sort.o string.o string_malloc.o
-OBJS += strtoepoch.o win_stat.o win_unicode.o
+OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: sharedlib staticlib

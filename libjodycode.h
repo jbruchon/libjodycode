@@ -131,6 +131,12 @@ extern void jc_string_malloc_destroy(void);
 time_t jc_strtoepoch(const char * const datetime);
 
 
+/*** version ***/
+
+extern const char *jc_version;
+extern const char *jc_verdate;
+
+
 /*** win_stat ***/
 
 #ifdef ON_WINDOWS
