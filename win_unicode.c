@@ -13,47 +13,75 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <io.h>
-extern int out_mode;
-extern int err_mode;
-#ifndef PATHBUF_SIZE
- #define PATHBUF_SIZE 8196
-#endif
+static int out_mode = _O_TEXT;
+static int err_mode = _O_TEXT;
 static wchar_t wstr[PATHBUF_SIZE];
 
 /* Convert slashes to backslashes in a file path */
 extern void jc_slash_convert(char *path)
 {
-  while (*path != '\0') {
-    if (*path == '/') *path = '\\';
-    path++;
-  }
-  return;
+	while (*path != '\0') {
+		if (*path == '/') *path = '\\';
+		path++;
+	}
+	return;
+}
+
+
+/* Set output modes to TEXT, BINARY, or UTF-16 */
+extern void jc_set_output_modes(unsigned int modes)
+{
+	/* Mode is selected by setting a bit flag:
+	 * 0x01 = 1: set stdout mode to UTF-16
+	 * 0x02 = 1: set stderr mode to UTF-16
+	 * 0x04 = 1: set stdout mode to UTF-16 only if it is a terminal
+	 * 0x08 = 1: set stderr mode to UTF-16 only if it is a terminal
+	 * 0x10 = 1: set flagged outputs to text mode instead
+	 * If not setting UTF-16, all modes default to BINARY without 0x10 set
+	 * */
+	if (modes & 0x10U) {
+		out_mode = (modes & 0x01U) ? _O_TEXT : out_mode;
+		err_mode = (modes & 0x02U) ? _O_TEXT : err_mode;
+		return;
+	}
+	if (modes & 0x04U) {
+		/* Only use UTF-16 for terminal output, else use UTF-8 */
+		if (!_isatty(_fileno(stdout))) out_mode = _O_BINARY;
+		else out_mode = _O_U16TEXT;
+	} else if (modes & 0x08U) {
+		if (!_isatty(_fileno(stderr))) err_mode = _O_BINARY;
+		else err_mode = _O_U16TEXT;
+	} else {
+		out_mode = (modes & 0x01U) ? _O_U16TEXT : _O_BINARY;
+		err_mode = (modes & 0x02U) ? _O_U16TEXT : _O_BINARY;
+	}
+	return;
 }
 
 
 /* Copy Windows wide character arguments to UTF-8 */
 extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 {
-  static char temp[PATHBUF_SIZE * 2];
-  int len;
+	static char temp[PATHBUF_SIZE * 2];
+	int len;
 
-  if (!argv) goto error_bad_argv;
-  for (int counter = 0; counter < argc; counter++) {
-    len = W2M(wargv[counter], &temp);
-    if (len < 1) goto error_wc2mb;
+	if (!argv) goto error_bad_argv;
+	for (int counter = 0; counter < argc; counter++) {
+		len = W2M(wargv[counter], &temp);
+		if (len < 1) goto error_wc2mb;
 
-    argv[counter] = (char *)malloc((size_t)len + 1);
-    if (!argv[counter]) jc_oom("widearg_to_argv()");
-    strncpy(argv[counter], temp, (size_t)len + 1);
-  }
-  return;
+		argv[counter] = (char *)malloc((size_t)len + 1);
+		if (!argv[counter]) jc_oom("widearg_to_argv()");
+		strncpy(argv[counter], temp, (size_t)len + 1);
+	}
+	return;
 
 error_bad_argv:
-  fprintf(stderr, "fatal: bad argv pointer\n");
-  exit(EXIT_FAILURE);
+	fprintf(stderr, "fatal: bad argv pointer\n");
+	exit(EXIT_FAILURE);
 error_wc2mb:
-  fprintf(stderr, "fatal: WideCharToMultiByte failed\n");
-  exit(EXIT_FAILURE);
+	fprintf(stderr, "fatal: WideCharToMultiByte failed\n");
+	exit(EXIT_FAILURE);
 }
 
 #endif /* UNICODE */
@@ -62,26 +90,26 @@ error_wc2mb:
 extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
 {
 #ifdef UNICODE
-  int retval;
-  int stream_mode = out_mode;
+	int retval;
+	int stream_mode = out_mode;
 
-  if (stream == stderr) stream_mode = err_mode;
+	if (stream == stderr) stream_mode = err_mode;
 
-  if (stream_mode == _O_U16TEXT) {
-    /* Convert to wide string and send to wide console output */
-    if (!M2W(str, wstr)) return -1;
-    fflush(stream);
-    _setmode(_fileno(stream), stream_mode);
-    if (cr == 2) retval = fwprintf(stream, L"%S%C", wstr, 0);
-    else retval = fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
-    fflush(stream);
-    _setmode(_fileno(stream), _O_TEXT);
-    return retval;
-  } else {
+	if (stream_mode == _O_U16TEXT) {
+		/* Convert to wide string and send to wide console output */
+		if (!M2W(str, wstr)) return -1;
+		fflush(stream);
+		_setmode(_fileno(stream), stream_mode);
+		if (cr == 2) retval = fwprintf(stream, L"%S%C", wstr, 0);
+		else retval = fwprintf(stream, L"%S%S", wstr, cr == 1 ? L"\n" : L"");
+		fflush(stream);
+		_setmode(_fileno(stream), _O_TEXT);
+		return retval;
+	} else {
 #endif
-    if (cr == 2) return fprintf(stream, "%s%c", str, 0);
-    else return fprintf(stream, "%s%s", str, cr == 1 ? "\n" : "");
+		if (cr == 2) return fprintf(stream, "%s%c", str, 0);
+		else return fprintf(stream, "%s%s", str, cr == 1 ? "\n" : "");
 #ifdef UNICODE
-  }
+	}
 #endif
 }

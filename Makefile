@@ -15,6 +15,7 @@ RMDIR	= rmdir -p
 MKDIR   = mkdir -p
 INSTALL_PROGRAM = $(INSTALL) -m 0755
 INSTALL_DATA    = $(INSTALL) -m 0644
+SUFFIX = so
 
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
@@ -40,6 +41,7 @@ endif
 ifeq ($(OS), Windows_NT)
 	ifndef NO_WINDOWS
 		ON_WINDOWS=1
+		SUFFIX=dll
 	endif
 endif
 
@@ -80,7 +82,7 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).so $(OBJS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS)
 
 staticlib: $(OBJS)
 	$(AR) rcs libjodycode.a $(OBJS)
@@ -95,10 +97,12 @@ $(PROGRAM_NAME): $(OBJS)
 #	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
 
 installdirs:
+	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
 	test -e $(DESTDIR)$(LIB_DIR) || $(MKDIR) $(DESTDIR)$(LIB_DIR)
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
 install: sharedlib staticlib installdirs
+	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
 	$(INSTALL_DATA)	$(PROGRAM_NAME).so $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
 	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
 	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
@@ -107,11 +111,13 @@ install: sharedlib staticlib installdirs
 	$(INSTALL_DATA)	$(PROGRAM_NAME).7 $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 uninstalldirs:
+	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
 	-test -e $(DESTDIR)$(LIB_DIR) && $(RMDIR) $(DESTDIR)$(LIB_DIR)
 	-test -e $(DESTDIR)$(INC_DIR) && $(RMDIR) $(DESTDIR)$(INC_DIR)
 	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
 
 uninstall: uninstalldirs
+	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
 	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
 	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
 	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).a
@@ -122,14 +128,14 @@ test:
 	./test.sh
 
 stripped: sharedlib staticlib
-	strip --strip-unneeded libjodycode.so.$(VERSION)
+	strip --strip-unneeded libjodycode.$(SUFFIX)
 	strip --strip-debug libjodycode.a
 
 objsclean:
 	$(RM) $(OBJS)
 
 clean: objsclean
-	$(RM) $(PROGRAM_NAME).so* *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(PROGRAM_NAME).$(SUFFIX) *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*

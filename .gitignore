@@ -6,8 +6,8 @@
 *.o.*
 *.a
 *.so
-*.so.*
-*.1.gz
+*.dll
+*.7.gz
 
 #
 # Never ignore these

@@ -31,11 +31,17 @@ extern "C" {
  #include <sys/stat.h>
 #endif /* ON_WINDOWS */
 
-#ifndef PATHBUF_SIZE
- #define PATHBUF_SIZE 4096
+#ifdef UNICODE
+ #ifndef PATHBUF_SIZE
+  #define PATHBUF_SIZE 8196
+ #endif
+#else
+ #ifndef PATHBUF_SIZE
+  #define PATHBUF_SIZE 4096
+ #endif
 #endif
 #ifndef WPATH_MAX
- #define WPATH_MAX 8192
+ #define WPATH_MAX PATHBUF_SIZE
 #endif
 
 
@@ -140,7 +146,7 @@ extern const char *jc_verdate;
 /*** win_stat ***/
 
 #ifdef ON_WINDOWS
-struct winstat {
+struct jc_winstat {
 	uint64_t st_ino;
 	int64_t st_size;
 	uint32_t st_dev;
@@ -164,9 +170,9 @@ struct winstat {
 #define S_ISTEMP(st_mode) ((st_mode & FILE_ATTRIBUTE_TEMPORARY) ? 1 : 0)
 #define S_ISREG(st_mode) ((st_mode & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)) ? 0 : 1)
 
-extern time_t nttime_to_unixtime(const uint64_t * const restrict timestamp);
-extern time_t unixtime_to_nttime(const uint64_t * const restrict timestamp);
-extern int win_stat(const char * const filename, struct winstat * const restrict buf);
+extern time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp);
+extern time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp);
+extern int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf);
 #endif /* ON_WINDOWS */
 
 
@@ -176,6 +182,7 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 
 #ifdef UNICODE
  extern void jc_slash_convert(char *path);
+ extern void jc_set_output_modes(unsigned int modes);
  extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv);
 #else
  #define jc_slash_convert(a)

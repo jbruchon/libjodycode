@@ -41,7 +41,7 @@ time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
 }
 
 /* Get stat()-like extra information for a file on Windows */
-int jc_win_stat(const char * const filename, struct winstat * const restrict buf)
+int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf)
 {
   HANDLE hFile;
   BY_HANDLE_FILE_INFORMATION bhfi;
