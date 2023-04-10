@@ -60,7 +60,7 @@ PKGNAME="${NAME}-${VER}-$TA"
 echo "Generating package for: $PKGNAME"
 mkdir -p "$PKGNAME"
 test ! -d "$PKGNAME" && echo "Can't create directory for package" && exit 1
-cp CHANGES README.md LICENSE $PKGNAME/
+cp CHANGES README.md LICENSE libjodycode.h $PKGNAME/
 E1=1; E2=1
 make clean && make -j$PM stripped && cp $NAME$EXT $PKGNAME/$NAME$EXT && E1=0
 make clean && make -j$PM DEBUG=1 stripped && cp $NAME$EXT $PKGNAME/${NAME}-debug$EXT && E2=0
