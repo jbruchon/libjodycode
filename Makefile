@@ -23,8 +23,8 @@ COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswit
 COMPILER_OPTIONS += -std=gnu99 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
 
 UNAME_S=$(shell uname -s)
-VERSION=$(shell grep '#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
-VERSION_MAJOR=$(shell grep '#define VER ' version.h | sed 's/[^"]*"//;s/\..*//')
+VERSION=$(shell grep '\#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
+VERSION_MAJOR=$(shell grep '\#define VER ' version.h | sed 's/[^"]*"//;s/\..*//')
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
@@ -96,32 +96,34 @@ $(PROGRAM_NAME): $(OBJS)
 #	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
 
 installdirs:
-	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
 	test -e $(DESTDIR)$(LIB_DIR) || $(MKDIR) $(DESTDIR)$(LIB_DIR)
+	test -e $(DESTDIR)$(INC_DIR) || $(MKDIR) $(DESTDIR)$(INC_DIR)
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
-install: sharedlib staticlib installdirs
-	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
-	$(INSTALL_DATA)	$(PROGRAM_NAME).so $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
+installfiles:
+	$(INSTALL_DATA)	$(PROGRAM_NAME).so            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
 	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
 	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
-	$(INSTALL_DATA)	$(PROGRAM_NAME).a $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
-	$(INSTALL_DATA)	$(PROGRAM_NAME).h $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
-	$(INSTALL_DATA)	$(PROGRAM_NAME).7 $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+	$(INSTALL_DATA)	$(PROGRAM_NAME).a             $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
+	$(INSTALL_DATA)	$(PROGRAM_NAME).h             $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
+	$(INSTALL_DATA)	$(PROGRAM_NAME).7             $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+
+install: sharedlib staticlib installdirs installfiles
 
 uninstalldirs:
-	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
-	-test -e $(DESTDIR)$(LIB_DIR) && $(RMDIR) $(DESTDIR)$(LIB_DIR)
-	-test -e $(DESTDIR)$(INC_DIR) && $(RMDIR) $(DESTDIR)$(INC_DIR)
+	-test -e $(DESTDIR)$(LIB_DIR)  && $(RMDIR) $(DESTDIR)$(LIB_DIR)
+	-test -e $(DESTDIR)$(INC_DIR)  && $(RMDIR) $(DESTDIR)$(INC_DIR)
 	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
 
-uninstall: uninstalldirs
-	@[ "$(ON_WINDOWS)" = "1" ] && echo "Do not use install rules on Windows" && exit 1
+uninstallfiles:
 	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
 	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
-	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).a
+	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
+	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
 	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
 	$(RM)	$(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+
+uninstall: uninstallfiles uninstalldirs
 
 test:
 	./test.sh
