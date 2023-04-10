@@ -21,7 +21,6 @@ SUFFIX = so
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
 COMPILER_OPTIONS += -std=gnu99 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
-COMPILER_OPTIONS += -DSMA_MAX_FREE=11 -DNO_ATIME
 
 UNAME_S=$(shell uname -s)
 VERSION=$(shell grep '#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
