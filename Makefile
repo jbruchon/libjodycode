@@ -16,11 +16,13 @@ MKDIR   = mkdir -p
 INSTALL_PROGRAM = $(INSTALL) -m 0755
 INSTALL_DATA    = $(INSTALL) -m 0644
 SUFFIX = so
+API_VERSION = 1
 
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
 COMPILER_OPTIONS += -std=gnu99 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
+LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
 
 UNAME_S=$(shell uname -s)
 VERSION=$(shell grep '\#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
@@ -69,6 +71,7 @@ ifdef ON_WINDOWS
 endif
 
 CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
+LDFLAGS += $(LINK_OPTIONS)
 
 # ADDITIONAL_OBJECTS - some platforms will need additional object files
 # to support features not supplied by their vendor. Eg: GNU getopt()
@@ -81,7 +84,7 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) $(LDFLAGS)
 
 staticlib: $(OBJS)
 	$(AR) rcs libjodycode.a $(OBJS)
