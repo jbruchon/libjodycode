@@ -40,7 +40,7 @@ uintmax_t sma_free_tails = 0;
 #endif
 
 
-/* This is used to bypass jc_string_malloc for debugging */
+/* This is used to bypass jc_string_malloc */
 #ifdef SMA_PASSTHROUGH
 void *jc_string_malloc(size_t len) { return malloc(len); }
 void jc_string_free(void *ptr) { free(ptr); return; }
