@@ -22,7 +22,7 @@
  * the program's total reused freed alloc counter doesn't increase as a
  * result or you're slowing allocs down to no benefit. */
 #ifndef SMA_MAX_FREE
-#define SMA_MAX_FREE 32
+#define SMA_MAX_FREE 64
 #endif
 
 #ifdef DEBUG
