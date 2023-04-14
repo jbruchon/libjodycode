@@ -128,7 +128,7 @@ extern uintmax_t sma_free_tails;
 #endif
 
 extern void *jc_string_malloc(size_t len);
-extern void jc_string_free(void * const addr);
+extern void jc_string_free(void * const address);
 extern void jc_string_malloc_destroy(void);
 
 
