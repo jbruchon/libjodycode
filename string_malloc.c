@@ -232,11 +232,17 @@ ptl_alloc_finish:
 /* Free an object, adding to free list if possible */
 void jc_string_free(void * const address)
 {
+#ifdef SMA_IGNORE_FREE
+	(void)address;
+	return;
+#else
 	int freefull = 0;
 	struct freelist *emptyslot = NULL;
 	struct passthru_list *prev = NULL;
 	struct passthru_list *cur = sma_ptl_head;
+#ifndef SMA_FAST_FREE
 	static uintptr_t after;
+#endif
 	static size_t *sizeptr;
 	static size_t size;
 
@@ -248,18 +254,22 @@ void jc_string_free(void * const address)
 	size = *(size_t *)sizeptr;
 	if (size == 0) goto sf_double_free;
 
+#ifndef SMA_FAST_FREE
 	/* Calculate after-block pointer for merge checks */
 	after = (uintptr_t)address + size;
+#endif
 
 	/* If free list is full, try to replace a smaller object */
-	if (sma_freelist_cnt == SMA_MAX_FREE) freefull = 1;
+	if (sma_freelist_cnt == 0) freefull = 1;
 
-	/* Attempt to merge into other free objects */
+	/* Find free slot; attempt to merge into other free objects */
 	for (int i = 0; i < SMA_MAX_FREE; i++) {
 		/* Record first empty slot */
-		if (emptyslot == NULL && sma_freelist[i].addr == NULL) {
+		if (freefull == 0 && emptyslot == NULL && sma_freelist[i].addr == NULL) {
 			emptyslot = &(sma_freelist[i]);
-//			break;
+#ifdef SMA_FAST_FREE
+			break;
+#else
 		} else if ((uintptr_t)(sma_freelist[i].addr) == after) {
 			/* Merge with a block after this one if possible */
 			sma_freelist[i].addr = sizeptr;
@@ -277,6 +287,7 @@ void jc_string_free(void * const address)
 			emptyslot = &(sma_freelist[i]);
 			DBG(sma_free_replaced++;)
 			break;
+#endif /* SMA_FAST_FREE */
 		}
 	}
 
@@ -309,6 +320,7 @@ sf_failed:
 sf_double_free:
 	fprintf(stderr, "jc_string_malloc: ERROR: attempt to jc_string_free() already freed object at %p\n", address);
 	return;
+#endif /* SMA_IGNORE_FREE */
 }
 
 /* Destroy all allocated pages */
