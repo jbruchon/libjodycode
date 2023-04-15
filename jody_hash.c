@@ -20,6 +20,8 @@
 #define JODY_HASH_SHIFT 14
 #endif
 
+#define JH_SHIFT2 ((JODY_HASH_SHIFT * 2) - (((JODY_HASH_SHIFT * 2) > JODY_HASH_WIDTH) * JODY_HASH_WIDTH))
+
 /* The constant value's purpose is to cause each byte in the
  * jodyhash_t word to have a positionally dependent variation.
  * It is injected into the calculation to prevent a string of
@@ -32,7 +34,7 @@
 
 /* Set hash parameters based on requested hash width */
 #if JODY_HASH_WIDTH == 64
-#define JODY_HASH_CONSTANT 0x1f3d5b79U
+#define JODY_HASH_CONSTANT 0x1f3d5b79ULL
 static const jodyhash_t tail_mask[] = {
 	0x0000000000000000,
 	0x00000000000000ff,
@@ -65,6 +67,12 @@ static const jodyhash_t tail_mask[] = {
 #endif /* JODY_HASH_WIDTH == 16 */
 
 
+/* Macros for bitwise rotation */
+#define ROL(a)  (jodyhash_t)((a << JODY_HASH_SHIFT) | (a >> ((sizeof(jodyhash_t) * 8) - JODY_HASH_SHIFT)))
+#define ROR(a)  (jodyhash_t)((a >> JODY_HASH_SHIFT) | (a << ((sizeof(jodyhash_t) * 8) - JODY_HASH_SHIFT)))
+#define ROL2(a) (jodyhash_t)(a << JH_SHIFT2 | (a >> ((sizeof(jodyhash_t) * 8) - JH_SHIFT2)))
+#define ROR2(a) (jodyhash_t)(a >> JH_SHIFT2 | (a << ((sizeof(jodyhash_t) * 8) - JH_SHIFT2)))
+
 /* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
  * The first block should pass a start_hash of zero.
  * All blocks after the first should pass start_hash as the value
@@ -75,9 +83,9 @@ static const jodyhash_t tail_mask[] = {
 extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
 		const jodyhash_t start_hash, const size_t count)
 {
+	const jodyhash_t s_constant = ROR2(JODY_HASH_CONSTANT);
 	jodyhash_t hash = start_hash;
-	jodyhash_t element;
-	jodyhash_t partial_salt;
+	jodyhash_t element, partial_constant;
 	size_t len;
 
 	/* Don't bother trying to hash a zero-length block */
@@ -88,10 +96,9 @@ extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
 		element = *data;
 		hash += element;
 		hash += JODY_HASH_CONSTANT;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash_t) * 8 - JODY_HASH_SHIFT); /* bit rotate left */
-		hash ^= element;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash_t) * 8 - JODY_HASH_SHIFT);
-		hash ^= JODY_HASH_CONSTANT;
+		hash ^= ROR(element);
+		hash ^= s_constant;
+		hash = ROL2(hash);
 		hash += element;
 		data++;
 	}
@@ -99,14 +106,14 @@ extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
 	/* Handle data tail (for blocks indivisible by sizeof(jodyhash_t)) */
 	len = count & (sizeof(jodyhash_t) - 1);
 	if (len) {
-		partial_salt = JODY_HASH_CONSTANT & tail_mask[len];
+		partial_constant = JODY_HASH_CONSTANT & tail_mask[len];
 		element = *data & tail_mask[len];
 		hash += element;
-		hash += partial_salt;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash_t) * 8 - JODY_HASH_SHIFT);
+		hash += partial_constant;
+		hash = ROL(hash);
 		hash ^= element;
-		hash = (hash << JODY_HASH_SHIFT) | hash >> (sizeof(jodyhash_t) * 8 - JODY_HASH_SHIFT);
-		hash ^= partial_salt;
+		hash = ROL(hash);
+		hash ^= partial_constant;
 		hash += element;
 	}
 
