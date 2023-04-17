@@ -116,7 +116,7 @@ extern int jc_strneq(const char *s1, const char *s2, size_t len);
 extern int jc_streq(const char *s1, const char *s2);
 
 
-/*** string_malloc ***/
+/*** string_malloc - DEPRECATED ***/
 
 #ifdef DEBUG
 extern uintmax_t sma_allocs;

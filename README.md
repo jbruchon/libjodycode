@@ -7,6 +7,9 @@ they were updated. As the number of programs increased and keeping these
 pieces of code synced became more annoying, the decision was made to combine
 all of them into a single reusable shared library.
 
+As of v1.1, string_malloc is deprecated and will be removed in API v2. Do not
+use it. It's slower than regular malloc() in most tests.
+
 Please consider financially supporting continued development of libjodycode
 using the links on my home page (Ko-fi, PayPal, SubscribeStar, Flattr, etc.):
 

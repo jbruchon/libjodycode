@@ -24,6 +24,9 @@ COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswit
 COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
 LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
 
+# string_malloc tests show it's too slow; deprecate it by falling back to regular malloc()
+COMPILER_OPTIONS += -DSMA_PASSTHROUGH
+
 UNAME_S=$(shell uname -s)
 VERSION=$(shell grep '\#define VER ' version.h | sed 's/[^"]*"//;s/".*//')
 VERSION_MAJOR=$(shell grep '\#define VER ' version.h | sed 's/[^"]*"//;s/\..*//')
