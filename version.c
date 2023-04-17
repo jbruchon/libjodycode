@@ -9,3 +9,4 @@
 
 const char *jc_version = VER;
 const char *jc_verdate = VERDATE;
+const int jc_jodyhash_version = JODY_HASH_VERSION;

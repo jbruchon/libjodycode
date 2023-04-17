@@ -140,6 +140,7 @@ time_t jc_strtoepoch(const char * const datetime);
 
 extern const char *jc_version;
 extern const char *jc_verdate;
+extern const int jc_jodyhash_version;
 
 
 /*** win_stat ***/
