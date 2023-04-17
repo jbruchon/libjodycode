@@ -21,7 +21,7 @@ API_VERSION = 1
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
-COMPILER_OPTIONS += -std=gnu99 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
+COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
 LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
 
 UNAME_S=$(shell uname -s)
@@ -68,6 +68,15 @@ ifdef ON_WINDOWS
 		PROGRAM_SUFFIX=.exe
 	endif
 	COMPILER_OPTIONS += -D__USE_MINGW_ANSI_STDIO=1 -DON_WINDOWS=1
+endif
+
+# SIMD SSE2 implementation on x86 32-bit requires -msse2
+ifdef NO_SIMD
+COMPILER_OPTIONS += -DNO_SIMD
+else
+ifdef __i386__
+COMPILER_OPTIONS += -msse2
+endif
 endif
 
 CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
