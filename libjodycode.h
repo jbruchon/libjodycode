@@ -47,8 +47,8 @@ extern "C" {
 
 /*** cacheinfo ***/
 
-/* Don't use cacheinfo on Windows */
-#ifndef ON_WINDOWS
+/* Don't use cacheinfo on anything but Linux for now */
+#ifdef __linux__
 
 /* Cache information structure
  * Split caches populate i/d, unified caches populate non-i/d */
@@ -68,41 +68,38 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 
 #else
  #define jc_get_proc_cacheinfo(a)
-#endif /* ON_WINDOWS */
+#endif /* __linux__ */
 
 
 /*** jody_hash ***/
-
-/* Width of a jody_hash. Changing this will also require
- * changing the width of tail masks to match. */
-#ifndef JODY_HASH_WIDTH
-#define JODY_HASH_WIDTH 64
-#endif
-
-#if JODY_HASH_WIDTH == 64
-typedef uint64_t jodyhash_t;
-#endif
-#if JODY_HASH_WIDTH == 32
-typedef uint32_t jodyhash_t;
-#endif
-#if JODY_HASH_WIDTH == 16
-typedef uint16_t jodyhash_t;
-#endif
 
 /* Version increments when algorithm changes incompatibly */
 #ifndef JODY_HASH_VERSION
 #define JODY_HASH_VERSION 6
 #endif
 
+/* Width of a jody_hash */
+#define JODY_HASH_WIDTH 64
+typedef uint64_t jodyhash_t;
+
 extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
 		const jodyhash_t start_hash, const size_t count);
+
+
+/*** oom ***/
 
 extern void jc_oom(const char * const restrict msg);
 extern void jc_nullptr(const char * restrict func);
 
+
+/*** paths ***/
+
 extern int jc_collapse_dotdot(char * const path);
 extern int jc_make_relative_link_name(const char * const src,
                 const char * const dest, char * rel_path);
+
+
+/*** sort ***/
 
 extern int jc_numeric_sort(char * restrict c1,
                 char * restrict c2, int sort_direction);
