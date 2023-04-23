@@ -124,7 +124,7 @@ installfiles:
 	$(INSTALL_DATA)	$(PROGRAM_NAME).h             $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
 	$(INSTALL_DATA)	$(PROGRAM_NAME).7             $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
-install: sharedlib staticlib installdirs installfiles
+install: installdirs installfiles
 
 uninstalldirs:
 	-test -e $(DESTDIR)$(LIB_DIR)  && $(RMDIR) $(DESTDIR)$(LIB_DIR)
