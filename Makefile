@@ -89,7 +89,8 @@ LDFLAGS += $(LINK_OPTIONS)
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
 
-OBJS += cacheinfo.o jody_hash.o oom.o paths.o sort.o string.o string_malloc.o
+OBJS += cacheinfo.o jody_hash.o oom.o paths.o size_suffix.o
+OBJS += sort.o string.o string_malloc.o
 OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 

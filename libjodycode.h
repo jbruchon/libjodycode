@@ -99,6 +99,16 @@ extern int jc_make_relative_link_name(const char * const src,
                 const char * const dest, char * rel_path);
 
 
+/*** size_suffix ***/
+/* Suffix definitions (treat as case-insensitive) */
+struct jc_size_suffix {
+  const char * const suffix;
+  const int64_t multiplier;
+};
+
+extern const struct jc_size_suffix jc_size_suffix[];
+
+
 /*** sort ***/
 
 extern int jc_numeric_sort(char * restrict c1,
