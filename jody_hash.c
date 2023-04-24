@@ -22,13 +22,13 @@
  #endif
 #endif
 
-#if !defined(NO_SIMD) && defined(__SSE2__)
+#if !defined NO_SIMD && defined __SSE2__
  #define USE_SSE2
- #if defined(_MSC_VER)
+ #if defined _MSC_VER || defined _WIN32 || defined __MINGW32__
   /* Microsoft C/C++-compatible compiler */
   #include <intrin.h>
   #define aligned_alloc(a,b) _aligned_malloc(b,a)
- #elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+ #elif defined __GNUC__  && (defined __x86_64__  || defined __i386__ )
   /* GCC-compatible compiler, targeting x86/x86-64 */
   #include <x86intrin.h>
  #endif
