@@ -5,7 +5,7 @@
 
 ARCHES="i386 x86-64 uclibc-i386 uclibc-x86-64"
 test -z "$NAME" && NAME="$(basename "$(pwd)")"
-test -e "version.h" && VER="$(grep '#define VER ' version.h | tr -d \\\" | cut -d' ' -f3)"
+test -e "libjodycode.h" && VER="$(grep '#define LIBJODYCODE_VER ' libjodycode.h | tr -d \\\" | cut -d' ' -f3)"
 test -z "$VER" && VER=0
 export NAME
 export VER

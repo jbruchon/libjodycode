@@ -7,7 +7,7 @@ test -z "$PM" && PM=12
 
 NAME="libjodycode"
 
-VER="$(cat version.h | grep '#define VER "' | cut -d\" -f2)"
+VER="$(cat libjodycode.h | grep '#define LIBJODYCODE_VER "' | cut -d\" -f2)"
 echo "Program version: $VER"
 
 TA=__NONE__

@@ -5,8 +5,7 @@
  */
 
 #include "libjodycode.h"
-#include "version.h"
 
-const char *jc_version = VER;
-const char *jc_verdate = VERDATE;
+const char *jc_version = LIBJODYCODE_VER;
+const char *jc_verdate = LIBJODYCODE_VERDATE;
 const int jc_jodyhash_version = JODY_HASH_VERSION;
