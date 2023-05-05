@@ -52,15 +52,15 @@ endif
 # Debugging code inclusion
 ifdef LOUD
 DEBUG=1
-COMPILER_OPTIONS += -DLOUD_DEBUG
+SIMD_CFLAGS += -DLOUD_DEBUG
 endif
 ifdef DEBUG
-COMPILER_OPTIONS += -DDEBUG
+SIMD_CFLAGS += -DDEBUG
 else
-COMPILER_OPTIONS += -DNDEBUG
+SIMD_CFLAGS += -DNDEBUG
 endif
 ifdef HARDEN
-COMPILER_OPTIONS += -Wformat -Wformat-security -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro -Wl,-z,now
+SIMD_CFLAGS += -Wformat -Wformat-security -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro -Wl,-z,now
 endif
 
 # MinGW needs this for printf() conversions to work
@@ -73,12 +73,19 @@ ifdef ON_WINDOWS
 	COMPILER_OPTIONS += -D__USE_MINGW_ANSI_STDIO=1 -DON_WINDOWS=1
 endif
 
-# SIMD SSE2 implementation on x86 32-bit requires -msse2
+# SIMD SSE2/AVX2 implementations may need these extra flags
 ifdef NO_SIMD
-COMPILER_OPTIONS += -DNO_SIMD
+SIMD_CFLAGS += -DNO_SIMD
 else
-ifdef __i386__
-COMPILER_OPTIONS += -msse2
+ifdef NO_SSE2
+SIMD_CFLAGS += -DNO_SSE2
+else
+SIMD_CFLAGS += -msse2
+endif
+ifdef NO_AVX2
+SIMD_CFLAGS += -DNO_AVX2
+else
+SIMD_CFLAGS += -mavx2
 endif
 endif
 
@@ -89,18 +96,21 @@ LDFLAGS += $(LINK_OPTIONS)
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
 
-OBJS += cacheinfo.o jody_hash.o oom.o paths.o size_suffix.o
+OBJS += cacheinfo.o oom.o paths.o size_suffix.o
 OBJS += sort.o string.o string_malloc.o
 OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: sharedlib staticlib
 
-sharedlib: $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) $(LDFLAGS)
+sharedlib: jodyhash $(OBJS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) jody_hash.o $(LDFLAGS)
 
-staticlib: $(OBJS)
-	$(AR) rcs libjodycode.a $(OBJS)
+staticlib: jodyhash $(OBJS)
+	$(AR) rcs libjodycode.a $(OBJS) jody_hash.o
+
+jodyhash: jody_hash.o
+	$(CC) -c $(SIMD_CFLAGS) $(BUILD_CFLAGS) $(CFLAGS) -o jody_hash.o jody_hash.c
 
 #.c.o:
 #	$(CC) -c $(BUILD_CFLAGS) $(CFLAGS) $<
@@ -108,7 +118,7 @@ staticlib: $(OBJS)
 #manual:
 #	gzip -9 < jodycode.8 > jodycode.8.gz
 
-$(PROGRAM_NAME): $(OBJS)
+$(PROGRAM_NAME): jodyhash $(OBJS)
 #	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
 
 installdirs:
