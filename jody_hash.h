@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 /* Version increments when algorithm changes incompatibly */
-#define JODY_HASH_VERSION 6
+#define JODY_HASH_VERSION 7
 
 /* DO NOT modify shifts/contants unless you know what you're doing. They were
  * chosen after lots of testing. Changes will likely cause lots of hash
@@ -59,7 +59,7 @@ static const jodyhash_t tail_mask[] = {
 #if JODY_HASH_WIDTH == 32
 typedef uint32_t jodyhash_t;
 #ifndef JODY_HASH_CONSTANT
-#define JODY_HASH_CONSTANT 0xa682a37eU
+#define JODY_HASH_CONSTANT 0x8748ee5dU
 #endif
 static const jodyhash_t tail_mask[] = {
 	0x00000000,
@@ -92,7 +92,7 @@ static const jodyhash_t tail_mask[] = {
 #define JH_ROR2(a) (jodyhash_t)(a >> JH_SHIFT2 | (a << ((sizeof(jodyhash_t) * 8) - JH_SHIFT2)))
 
 
-extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
+extern jodyhash_t jody_block_hash(jodyhash_t *data,
 		const jodyhash_t start_hash, const size_t count);
 
 #ifdef __cplusplus

@@ -75,14 +75,14 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 
 /* Version increments when algorithm changes incompatibly */
 #ifndef JODY_HASH_VERSION
-#define JODY_HASH_VERSION 6
+#define JODY_HASH_VERSION 7
 #endif
 
 /* Width of a jody_hash */
 #define JODY_HASH_WIDTH 64
 typedef uint64_t jodyhash_t;
 
-extern jodyhash_t jc_block_hash(const jodyhash_t * restrict data,
+extern jodyhash_t jc_block_hash(const jodyhash_t *data,
 		const jodyhash_t start_hash, const size_t count);
 
 
