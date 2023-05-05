@@ -11,6 +11,10 @@
 extern "C" {
 #endif
 
+/* libjodycode version information */
+#define LIBJODYCODE_VER "1.2"
+#define LIBJODYCODE_VERDATE "2023-04-23"
+
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/types.h>
