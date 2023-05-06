@@ -36,12 +36,12 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 			"ymm8", "ymm9", "ymm10", "ymm11", "ymm12", "ymm13", "ymm14", "ymm15");
 	}
 #endif /* __GNUC__ || __clang__ */
-	
+
 	/* Constants preload */
 	vec_const = _mm_load_si128(&vec_constant.v128[0]);
 	vec_ror2  = _mm_load_si128(&vec_constant_ror2.v128[0]);
 	vzero = _mm_setzero_ps();
-	
+
 	/* How much memory do we need to align the data? */
 	vec_allocsize = count & 0xffffffffffffffe0U;
 	/* Only alloc/copy if not already aligned */
@@ -50,14 +50,14 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 		if (!aligned_data) goto oom;
 		memcpy(aligned_data, *data, vec_allocsize);
 	} else aligned_data = (__m128i *)*data;
-	
+
 	for (size_t i = 0; i < (vec_allocsize / 16); i++) {
 		v1  = _mm_load_si128(&aligned_data[i]);
 		v3  = _mm_load_si128(&aligned_data[i]);
 		i++;
 		v4  = _mm_load_si128(&aligned_data[i]);
 		v6  = _mm_load_si128(&aligned_data[i]);
-	
+
 		/* "element2" gets RORed (two logical shifts ORed together) */
 		v1  = _mm_srli_epi64(v1, JODY_HASH_SHIFT);
 		v2  = _mm_slli_epi64(v3, (64 - JODY_HASH_SHIFT));
@@ -67,11 +67,11 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 		v5  = _mm_slli_epi64(v6, (64 - JODY_HASH_SHIFT));
 		v4  = _mm_or_si128(v4, v5);
 		v4  = _mm_xor_si128(v4, vec_ror2);  // XOR against the ROR2 constant
-	
+
 		/* Add the constant to "element" */
 		v3  = _mm_add_epi64(v3,  vec_const);
 		v6  = _mm_add_epi64(v6,  vec_const);
-	
+
 		/* Perform the rest of the hash */
 		for (int j = 0; j < 4; j++) {
 			uint64_t ep1, ep2;
@@ -82,19 +82,19 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 				ep1 = (uint64_t)_mm_cvtsi128_si64(v3);
 				ep2 = (uint64_t)_mm_cvtsi128_si64(v1);
 				break;
-	
+
 				case 1:
 				/* Upper v1-v3 */
 				ep1 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v3))));
 				ep2 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v1))));
 				break;
-	
+
 				case 2:
 				/* Lower v4-v6 */
 				ep1 = (uint64_t)_mm_cvtsi128_si64(v6);
 				ep2 = (uint64_t)_mm_cvtsi128_si64(v4);
 				break;
-	
+
 				case 3:
 				/* Upper v4-v6 */
 				ep1 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v6))));
