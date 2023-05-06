@@ -52,15 +52,15 @@ endif
 # Debugging code inclusion
 ifdef LOUD
 DEBUG=1
-SIMD_CFLAGS += -DLOUD_DEBUG
+CFLAGS += -DLOUD_DEBUG
 endif
 ifdef DEBUG
-SIMD_CFLAGS += -DDEBUG
+CFLAGS += -DDEBUG
 else
-SIMD_CFLAGS += -DNDEBUG
+CFLAGS += -DNDEBUG
 endif
 ifdef HARDEN
-SIMD_CFLAGS += -Wformat -Wformat-security -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro -Wl,-z,now
+CFLAGS += -Wformat -Wformat-security -D_FORTIFY_SOURCE=2 -fstack-protector-strong -Wl,-z,relro -Wl,-z,now
 endif
 
 # MinGW needs this for printf() conversions to work
@@ -73,21 +73,23 @@ ifdef ON_WINDOWS
 	COMPILER_OPTIONS += -D__USE_MINGW_ANSI_STDIO=1 -DON_WINDOWS=1
 endif
 
-# SIMD SSE2/AVX2 implementations may need these extra flags
+# SIMD SSE2/AVX2 jody_hash code
 ifdef NO_SIMD
-SIMD_CFLAGS += -DNO_SIMD
+BUILD_CFLAGS += -DNO_SIMD
 else
+SIMD_OBJS += jody_hash_simd.o
 ifdef NO_SSE2
-SIMD_CFLAGS += -DNO_SSE2
+BUILD_CFLAGS += -DNO_SSE2
 else
-SIMD_CFLAGS += -msse2
+SIMD_OBJS += jody_hash_sse2.o
 endif
 ifdef NO_AVX2
-SIMD_CFLAGS += -DNO_AVX2
+BUILD_CFLAGS += -DNO_AVX2
 else
-SIMD_CFLAGS += -mavx2
+SIMD_OBJS += jody_hash_avx2.o
 endif
 endif
+
 
 CFLAGS += $(COMPILER_OPTIONS) $(CFLAGS_EXTRA)
 LDFLAGS += $(LINK_OPTIONS)
@@ -96,21 +98,27 @@ LDFLAGS += $(LINK_OPTIONS)
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
 
-OBJS += cacheinfo.o oom.o paths.o size_suffix.o
+OBJS += cacheinfo.o jody_hash.o oom.o paths.o size_suffix.o
 OBJS += sort.o string.o string_malloc.o
 OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: sharedlib staticlib
 
-sharedlib: jodyhash $(OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) jody_hash.o $(LDFLAGS)
+sharedlib: $(OBJS) $(SIMD_OBJS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS)
 
-staticlib: jodyhash $(OBJS)
-	$(AR) rcs libjodycode.a $(OBJS) jody_hash.o
+staticlib: $(OBJS) $(SIMD_OBJS)
+	$(AR) rcs libjodycode.a $(OBJS) $(SIMD_OBJS)
 
-jodyhash: jody_hash.o
-	$(CC) -c $(SIMD_CFLAGS) $(BUILD_CFLAGS) $(CFLAGS) -o jody_hash.o jody_hash.c
+jody_hash_simd.o:
+	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_simd.o jody_hash_simd.c
+
+jody_hash_avx2.o: jody_hash_simd.o
+	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_avx2.o jody_hash_avx2.c
+
+jody_hash_sse2.o: jody_hash_simd.o
+	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
 #.c.o:
 #	$(CC) -c $(BUILD_CFLAGS) $(CFLAGS) $<
@@ -159,7 +167,7 @@ stripped: sharedlib staticlib
 	strip --strip-debug libjodycode.a
 
 objsclean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(SIMD_OBJS)
 
 clean: objsclean
 	$(RM) $(PROGRAM_NAME).$(SUFFIX) *.a *~ .*.un~ *.gcno *.gcda *.gcov

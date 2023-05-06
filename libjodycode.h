@@ -86,8 +86,7 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 #define JODY_HASH_WIDTH 64
 typedef uint64_t jodyhash_t;
 
-extern jodyhash_t jc_block_hash(const jodyhash_t *data,
-		const jodyhash_t start_hash, const size_t count);
+extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count);
 
 
 /*** oom ***/
