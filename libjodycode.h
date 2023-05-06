@@ -12,8 +12,8 @@ extern "C" {
 #endif
 
 /* libjodycode version information */
-#define LIBJODYCODE_VER "1.2"
-#define LIBJODYCODE_VERDATE "2023-04-23"
+#define LIBJODYCODE_VER "1.3"
+#define LIBJODYCODE_VERDATE "2023-05-06"
 
 #include <stdio.h>
 #include <stdint.h>
