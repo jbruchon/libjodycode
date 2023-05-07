@@ -28,8 +28,8 @@ LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
 COMPILER_OPTIONS += -DSMA_PASSTHROUGH
 
 UNAME_S=$(shell uname -s)
-VERSION=$(shell grep '\#define VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
-VERSION_MAJOR=$(shell grep '\#define VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
+VERSION=$(shell grep '^.define VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
+VERSION_MAJOR=$(shell grep '^.define VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
