@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Generate package folders with variant builds
 
