@@ -12,11 +12,16 @@ extern "C" {
 #endif
 
 /* libjodycode version information
- * The major version number and API version should always match!
- * API version must change whenever an interface incompatibly changes */
+ * The major/minor version number and API version/revision MUST match!
+ * Major version must change whenever an interface incompatibly changes
+ * Minor version must change when new interfaces are added
+ * Revision version must not change interfaces in any way
+ * Revision is optional in version string, so "2.0" is identical to 2.0.0 */
+#define LIBJODYCODE_API_MAJOR    2
+#define LIBJODYCODE_API_MINOR    0
+#define LIBJODYCODE_API_REVISION 0
 #define LIBJODYCODE_VER "2.0"
 #define LIBJODYCODE_VERDATE "2023-05-08"
-#define LIBJODYCODE_API_VER 2
 
 #include <stdio.h>
 #include <stdint.h>
