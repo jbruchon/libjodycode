@@ -43,7 +43,6 @@ ifeq ($(OS), Windows_NT)
 	ifndef NO_WINDOWS
 		ON_WINDOWS=1
 		SO_SUFFIX=dll
-		LN=mklink /h
 	endif
 endif
 
