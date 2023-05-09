@@ -13,6 +13,22 @@ using the links on my home page (Ko-fi, PayPal, SubscribeStar, Flattr, etc.):
 https://www.jodybruchon.com/
 
 
+Version compatibility
+-------------------------------------------------------------------------------
+In libjodycode 2.0 a new version table was introduced that maintains a separate
+version number for each logical section of the library. If something in the
+library changes in a way that's no longer compatible with previous versions,
+this version table paired with the provided "libjodycode_check.c/.h" files will
+allow the linked program to verify that the sections of the library it actually
+uses have not changed, ignoring the rest. This has a significant advantage over
+the simpler whole-API version system because the program itself can detect if
+the library it's linked to is still compatible enough to safely continue.
+
+The provided version check code reports detailed information about the problem
+in a way that is both understandable by users and informative to maintainers.
+
+
+
 Contact information
 -------------------------------------------------------------------------------
 Bug reports/feature requests: https://github.com/jbruchon/libjodycode/issues

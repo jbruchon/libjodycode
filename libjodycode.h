@@ -19,7 +19,7 @@ extern "C" {
  * Revision is optional in version string, so "2.0" is identical to 2.0.0 */
 #define LIBJODYCODE_API_VERSION    2
 #define LIBJODYCODE_VER "2.0"
-#define LIBJODYCODE_VERDATE "2023-05-08"
+#define LIBJODYCODE_VERDATE "2023-05-09"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect
@@ -113,15 +113,17 @@ extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, c
 
 /*** oom ***/
 
+/* Out-of-memory and null pointer error-exit functions */
 extern void jc_oom(const char * const restrict msg);
 extern void jc_nullptr(const char * restrict func);
 
 
 /*** paths ***/
 
+/* Remove "middle" '..' components in a path: 'foo/../bar/baz' => 'bar/baz' */
 extern int jc_collapse_dotdot(char * const path);
-extern int jc_make_relative_link_name(const char * const src,
-                const char * const dest, char * rel_path);
+/* Given a src and dest pathy, create a relative path name from src to dest */
+extern int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path);
 
 
 /*** size_suffix ***/
@@ -137,12 +139,13 @@ extern const struct jc_size_suffix jc_size_suffix[];
 
 /*** sort ***/
 
-extern int jc_numeric_sort(char * restrict c1,
-                char * restrict c2, int sort_direction);
+/* Numerically-correct string sort with a little extra intelligence */
+extern int jc_numeric_sort(char * restrict c1, char * restrict c2, int sort_direction);
 
 
 /*** string ***/
 
+/* Same as str[n]cmp/str[n]casecmp but only checks for equality */
 extern int jc_strncaseeq(const char *s1, const char *s2, size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, size_t len);
@@ -151,20 +154,25 @@ extern int jc_streq(const char *s1, const char *s2);
 
 /*** strtoepoch ***/
 
+/* Convert a date/time string to seconds since the epoch
+ * Format must be "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" */
 time_t jc_strtoepoch(const char * const datetime);
 
 
 /*** version ***/
 
+/* libjodycode version information */
 extern const char *jc_version;
 extern const char *jc_verdate;
+/* This table is used for API compatibility checks */
+extern const unsigned char jc_api_versiontable[];
 extern const int jc_api_version;
 extern const int jc_jodyhash_version;
-extern const unsigned char jc_api_versiontable[];
 
 
 /*** win_stat ***/
 
+/* For Windows: provide stat-style functionality */
 #ifdef ON_WINDOWS
 struct jc_winstat {
 	uint64_t st_ino;
@@ -198,6 +206,7 @@ extern int jc_win_stat(const char * const filename, struct jc_winstat * const re
 
 /*** win_unicode ***/
 
+/* Print strings in Unicode mode on Windows */
 extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
 
 #ifdef UNICODE

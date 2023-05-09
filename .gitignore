@@ -5,8 +5,8 @@
 *.o
 *.o.*
 *.a
-*.so
-*.dll
+*.so*
+*.dll*
 *.exe
 *.7.gz
 
