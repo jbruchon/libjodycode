@@ -13,3 +13,20 @@ const int jc_api_minor    = LIBJODYCODE_API_MINOR;
 const int jc_api_revision = LIBJODYCODE_API_REVISION;
 
 const int jc_jodyhash_version = JODY_HASH_VERSION;
+
+/* API sub-version info array, terminated with 0
+ * New API sections MUST be added to the end! */
+const char jc_api_versiontable[] = {
+	LIBJODYCODE_CACHEINFO_VER,
+	LIBJODYCODE_JODY_HASH_VER,
+	LIBJODYCODE_OOM_VER,
+	LIBJODYCODE_PATHS_VER,
+	LIBJODYCODE_SIZE_SUFFIX_VER,
+	LIBJODYCODE_SORT_VER,
+	LIBJODYCODE_STRING_VER,
+	LIBJODYCODE_STRTOEPOCH_VER,
+	LIBJODYCODE_VERSION_VER,
+	LIBJODYCODE_WIN_STAT_VER,
+	LIBJODYCODE_WIN_UNICODE_VER,
+	0
+};

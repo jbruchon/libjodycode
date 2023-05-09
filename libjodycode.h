@@ -23,6 +23,23 @@ extern "C" {
 #define LIBJODYCODE_VER "2.0"
 #define LIBJODYCODE_VERDATE "2023-05-08"
 
+/* API sub-version table
+ * This table tells programs about API changes so that programs can detect
+ * an incompatible change and warn gracefully instead of crashing or risking
+ * damage to user data. */
+#define LIBJODYCODE_CACHEINFO_VER 1
+#define LIBJODYCODE_JODY_HASH_VER 1
+#define LIBJODYCODE_OOM_VER 1
+#define LIBJODYCODE_PATHS_VER 1
+#define LIBJODYCODE_SIZE_SUFFIX_VER 1
+#define LIBJODYCODE_SORT_VER 1
+#define LIBJODYCODE_STRING_VER 1
+#define LIBJODYCODE_STRTOEPOCH_VER 1
+#define LIBJODYCODE_VERSION_VER 1
+#define LIBJODYCODE_WIN_STAT_VER 1
+#define LIBJODYCODE_WIN_UNICODE_VER 1
+
+
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/types.h>
