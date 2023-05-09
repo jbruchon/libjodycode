@@ -11,7 +11,7 @@ extern "C" {
 #include "jody_hash.h"
 
 /* Disable SIMD if not 64-bit width or not 64-bit x86 code */
-#if JODY_HASH_WIDTH != 64 || !defined __x86_64__ || (defined NO_SSE2 && defined NO_AVX2)
+#if JODY_HASH_WIDTH != 64 || !defined __x86_64__ || SIZE_MAX == 0xffffffff || (defined NO_SSE2 && defined NO_AVX2)
  #ifndef NO_SSE2
   #define NO_SSE2
  #endif

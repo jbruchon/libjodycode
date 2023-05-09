@@ -104,7 +104,7 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS) $(SIMD_OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS) $(CFLAGS) $(CFLAGS_EXTRA)
 	$(LN)            $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
 
 staticlib: $(OBJS) $(SIMD_OBJS)
