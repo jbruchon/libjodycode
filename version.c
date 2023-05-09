@@ -8,15 +8,13 @@
 
 const char *jc_version = LIBJODYCODE_VER;
 const char *jc_verdate = LIBJODYCODE_VERDATE;
-const int jc_api_major    = LIBJODYCODE_API_MAJOR;
-const int jc_api_minor    = LIBJODYCODE_API_MINOR;
-const int jc_api_revision = LIBJODYCODE_API_REVISION;
+const int jc_api_version = LIBJODYCODE_API_VERSION;
 
 const int jc_jodyhash_version = JODY_HASH_VERSION;
 
 /* API sub-version info array, terminated with 0
  * Valid versions are 1-254. New API sections MUST be added to the end. The
- * maximum value of 255 is used by programs to mean "don't care" */
+ * maximum value of 255 is used by programs to terminate their check array. */
 const unsigned char jc_api_versiontable[] = {
 	LIBJODYCODE_CACHEINFO_VER,
 	LIBJODYCODE_JODY_HASH_VER,
@@ -26,7 +24,6 @@ const unsigned char jc_api_versiontable[] = {
 	LIBJODYCODE_SORT_VER,
 	LIBJODYCODE_STRING_VER,
 	LIBJODYCODE_STRTOEPOCH_VER,
-	LIBJODYCODE_VERSION_VER,
 	LIBJODYCODE_WIN_STAT_VER,
 	LIBJODYCODE_WIN_UNICODE_VER,
 	0

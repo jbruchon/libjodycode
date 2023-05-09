@@ -17,9 +17,7 @@ extern "C" {
  * Minor version must change when new interfaces are added
  * Revision version must not change interfaces in any way
  * Revision is optional in version string, so "2.0" is identical to 2.0.0 */
-#define LIBJODYCODE_API_MAJOR    2
-#define LIBJODYCODE_API_MINOR    0
-#define LIBJODYCODE_API_REVISION 0
+#define LIBJODYCODE_API_VERSION    2
 #define LIBJODYCODE_VER "2.0"
 #define LIBJODYCODE_VERDATE "2023-05-08"
 
@@ -27,16 +25,15 @@ extern "C" {
  * This table tells programs about API changes so that programs can detect
  * an incompatible change and warn gracefully instead of crashing or risking
  * damage to user data. */
-#define LIBJODYCODE_CACHEINFO_VER 1
-#define LIBJODYCODE_JODY_HASH_VER 1
-#define LIBJODYCODE_OOM_VER 1
-#define LIBJODYCODE_PATHS_VER 1
+#define LIBJODYCODE_CACHEINFO_VER   1
+#define LIBJODYCODE_JODY_HASH_VER   1
+#define LIBJODYCODE_OOM_VER         1
+#define LIBJODYCODE_PATHS_VER       1
 #define LIBJODYCODE_SIZE_SUFFIX_VER 1
-#define LIBJODYCODE_SORT_VER 1
-#define LIBJODYCODE_STRING_VER 1
-#define LIBJODYCODE_STRTOEPOCH_VER 1
-#define LIBJODYCODE_VERSION_VER 1
-#define LIBJODYCODE_WIN_STAT_VER 1
+#define LIBJODYCODE_SORT_VER        1
+#define LIBJODYCODE_STRING_VER      1
+#define LIBJODYCODE_STRTOEPOCH_VER  1
+#define LIBJODYCODE_WIN_STAT_VER    1
 #define LIBJODYCODE_WIN_UNICODE_VER 1
 
 
@@ -161,7 +158,9 @@ time_t jc_strtoepoch(const char * const datetime);
 
 extern const char *jc_version;
 extern const char *jc_verdate;
+extern const int jc_api_version;
 extern const int jc_jodyhash_version;
+extern const unsigned char jc_api_versiontable[];
 
 
 /*** win_stat ***/
