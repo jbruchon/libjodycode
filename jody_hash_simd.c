@@ -13,7 +13,7 @@
 #include "jody_hash.h"
 #include "jody_hash_simd.h"
 
-#if defined USE_SSE2 || defined USE_AVX2
+#if (!defined NO_SSE2 || !defined NO_AVX2)
 const union UINT256 vec_constant = {
 	.v64[0] = JODY_HASH_CONSTANT,
 	.v64[1] = JODY_HASH_CONSTANT,

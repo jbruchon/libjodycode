@@ -14,7 +14,6 @@
 #include <string.h>
 #include "jody_hash.h"
 #include "jody_hash_simd.h"
-#include "libjodycode.h"
 
 static const jodyhash_t jh_s_constant = JH_ROR2(JODY_HASH_CONSTANT);
 
@@ -25,7 +24,7 @@ static const jodyhash_t jh_s_constant = JH_ROR2(JODY_HASH_CONSTANT);
  * of any amount of data. If data is not divisible by the size of
  * jodyhash_t, it is MANDATORY that the caller provide a data buffer
  * which is divisible by sizeof(jodyhash_t). */
-extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count)
+extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count)
 {
 	jodyhash_t hash = start_hash;
 	jodyhash_t element, element2;
@@ -34,7 +33,7 @@ extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, c
 	/* Don't bother trying to hash a zero-length block */
 	if (count == 0) return hash;
 
-#ifdef USE_AVX2
+#ifndef NO_AVX2
 #if defined __GNUC__ || defined __clang__
 	__builtin_cpu_init ();
 	if (__builtin_cpu_supports ("avx2")) {
@@ -48,10 +47,10 @@ extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, c
 #endif
 #else
 	length = count / sizeof(jodyhash_t);
-#endif /* USE_AVX2 */
+#endif /* NO_AVX2 */
 
 
-#ifdef USE_SSE2
+#ifndef NO_SSE2
 #if defined __GNUC__ || defined __clang__
 	__builtin_cpu_init ();
 	if (__builtin_cpu_supports ("sse2")) {
@@ -63,9 +62,9 @@ extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, c
 #endif
 #else
 	length = count / sizeof(jodyhash_t);
-#endif /* USE_SSE2 */
+#endif /* NO_SSE2 */
 
-#ifdef USE_AVX2
+#ifndef NO_AVX2
 skip_sse2:
 #endif
 	/* Hash everything (normal) or remaining small tails (SSE2) */

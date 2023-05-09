@@ -11,9 +11,13 @@ extern "C" {
 #include "jody_hash.h"
 
 /* Disable SIMD if not 64-bit width or not 64-bit x86 code */
-#if JODY_HASH_WIDTH != 64 || defined NO_SIMD || !defined __x86_64__ || (defined NO_SSE2 && defined NO_AVX2)
- #undef USE_SSE2
- #undef USE_AVX2
+#if JODY_HASH_WIDTH != 64 || !defined __x86_64__ || (defined NO_SSE2 && defined NO_AVX2)
+ #ifndef NO_SSE2
+  #define NO_SSE2
+ #endif
+ #ifndef NO_AVX2
+  #define NO_AVX2
+ #endif
  #ifndef NO_SIMD
   #define NO_SIMD
  #endif
@@ -21,12 +25,6 @@ extern "C" {
 
 /* Use SIMD by default */
 #if !defined NO_SIMD
- #if defined __SSE2__ && !defined NO_SSE2
-  #define USE_SSE2
- #endif
- #if defined __AVX2__ && !defined NO_AVX2
-  #define USE_AVX2
- #endif
  #if defined _MSC_VER || defined _WIN32 || defined __MINGW32__
   /* Microsoft C/C++-compatible compiler */
   #include <intrin.h>
@@ -39,7 +37,7 @@ extern "C" {
  #endif
 #endif /* !NO_SIMD */
 
-#if defined USE_SSE2 || defined USE_AVX2
+#if !defined NO_SSE2 || !defined NO_AVX2
 union UINT256 {
 	__m256i  v256;
 	__m128i  v128[2];

@@ -91,6 +91,9 @@ static const jodyhash_t tail_mask[] = {
 #define JH_ROL2(a) (jodyhash_t)(a << JH_SHIFT2 | (a >> ((sizeof(jodyhash_t) * 8) - JH_SHIFT2)))
 #define JH_ROR2(a) (jodyhash_t)(a >> JH_SHIFT2 | (a << ((sizeof(jodyhash_t) * 8) - JH_SHIFT2)))
 
+
+extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count);
+
 #ifdef __cplusplus
 }
 #endif
