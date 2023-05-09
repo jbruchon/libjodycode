@@ -11,18 +11,18 @@ CC ?= gcc
 INSTALL = install
 RM      = rm -f
 LN      = ln -sf
-RMDIR	= rmdir -p
+RMDIR   = rmdir -p
 MKDIR   = mkdir -p
 INSTALL_PROGRAM = $(INSTALL) -m 0755
 INSTALL_DATA    = $(INSTALL) -m 0644
-SUFFIX = so
+SO_SUFFIX = so
 API_VERSION = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
 COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
-LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
+LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
 
 UNAME_S       = $(shell uname -s)
 VERSION       = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
@@ -42,7 +42,8 @@ endif
 ifeq ($(OS), Windows_NT)
 	ifndef NO_WINDOWS
 		ON_WINDOWS=1
-		SUFFIX=dll
+		SO_SUFFIX=dll
+		LN=mklink /h
 	endif
 endif
 
@@ -103,7 +104,8 @@ OBJS += $(ADDITIONAL_OBJECTS)
 all: sharedlib staticlib
 
 sharedlib: $(OBJS) $(SIMD_OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS)
+	$(LN)            $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
 
 staticlib: $(OBJS) $(SIMD_OBJS)
 	$(AR) rcs libjodycode.a $(OBJS) $(SIMD_OBJS)
@@ -132,12 +134,12 @@ installdirs:
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
 installfiles:
-	$(INSTALL_DATA)	$(PROGRAM_NAME).so            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
-	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
-	$(LN)		$(PROGRAM_NAME).so.$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
-	$(INSTALL_DATA)	$(PROGRAM_NAME).a             $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
-	$(INSTALL_DATA)	$(PROGRAM_NAME).h             $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
-	$(INSTALL_DATA)	$(PROGRAM_NAME).7             $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+	$(INSTALL_DATA)	$(PROGRAM_NAME).$(SO_SUFFIX)            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
+	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
+	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX)
+	$(INSTALL_DATA) $(PROGRAM_NAME).a  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
+	$(INSTALL_DATA) $(PROGRAM_NAME).h  $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
+	$(INSTALL_DATA) $(PROGRAM_NAME).7  $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 install: installdirs installfiles
 
@@ -147,12 +149,12 @@ uninstalldirs:
 	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
 
 uninstallfiles:
-	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION)
-	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so.$(VERSION_MAJOR)
-	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).so
-	$(RM)	$(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
-	$(RM)	$(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
-	$(RM)	$(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
+	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
+	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX)
+	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
+	$(RM)  $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
+	$(RM)  $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
 
 uninstall: uninstallfiles uninstalldirs
 
@@ -160,14 +162,14 @@ test:
 	./test.sh
 
 stripped: sharedlib staticlib
-	strip --strip-unneeded libjodycode.$(SUFFIX)
+	strip --strip-unneeded libjodycode.$(SO_SUFFIX)
 	strip --strip-debug libjodycode.a
 
 objsclean:
 	$(RM) $(OBJS) $(SIMD_OBJS)
 
 clean: objsclean
-	$(RM) $(PROGRAM_NAME).$(SUFFIX) *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*
