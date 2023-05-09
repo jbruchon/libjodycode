@@ -11,9 +11,12 @@
 extern "C" {
 #endif
 
-/* libjodycode version information */
-#define LIBJODYCODE_VER "1.3"
-#define LIBJODYCODE_VERDATE "2023-05-06"
+/* libjodycode version information
+ * The major version number and API version should always match!
+ * API version must change whenever an interface incompatibly changes */
+#define LIBJODYCODE_VER "2.0"
+#define LIBJODYCODE_VERDATE "2023-05-08"
+#define LIBJODYCODE_API_VER 2
 
 #include <stdio.h>
 #include <stdint.h>
@@ -37,7 +40,7 @@ extern "C" {
 
 #ifdef UNICODE
  #ifndef PATHBUF_SIZE
-  #define PATHBUF_SIZE 8196
+  #define PATHBUF_SIZE 8192
  #endif
 #else
  #ifndef PATHBUF_SIZE
@@ -107,6 +110,7 @@ extern int jc_make_relative_link_name(const char * const src,
 struct jc_size_suffix {
   const char * const suffix;
   const int64_t multiplier;
+  const int shift;
 };
 
 extern const struct jc_size_suffix jc_size_suffix[];
@@ -124,24 +128,6 @@ extern int jc_strncaseeq(const char *s1, const char *s2, size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, size_t len);
 extern int jc_streq(const char *s1, const char *s2);
-
-
-/*** string_malloc - DEPRECATED ***/
-
-#ifdef DEBUG
-extern uintmax_t sma_allocs;
-extern uintmax_t sma_free_ignored;
-extern uintmax_t sma_free_good;
-extern uintmax_t sma_free_merged;
-extern uintmax_t sma_free_replaced;
-extern uintmax_t sma_free_scanned;
-extern uintmax_t sma_free_reclaimed;
-extern uintmax_t sma_free_tails;
-#endif
-
-extern void *jc_string_malloc(size_t len);
-extern void jc_string_free(void * const address);
-extern void jc_string_malloc_destroy(void);
 
 
 /*** strtoepoch ***/

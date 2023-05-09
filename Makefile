@@ -16,7 +16,7 @@ MKDIR   = mkdir -p
 INSTALL_PROGRAM = $(INSTALL) -m 0755
 INSTALL_DATA    = $(INSTALL) -m 0644
 SUFFIX = so
-API_VERSION = 1
+API_VERSION = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
@@ -24,12 +24,9 @@ COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswit
 COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
 LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SUFFIX).$(API_VERSION)
 
-# string_malloc tests show it's too slow; deprecate it by falling back to regular malloc()
-COMPILER_OPTIONS += -DSMA_PASSTHROUGH
-
-UNAME_S=$(shell uname -s)
-VERSION=$(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
-VERSION_MAJOR=$(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
+UNAME_S       = $(shell uname -s)
+VERSION       = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
+VERSION_MAJOR = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
@@ -99,7 +96,7 @@ LDFLAGS += $(LINK_OPTIONS)
 #ADDITIONAL_OBJECTS += getopt.o
 
 OBJS += cacheinfo.o jody_hash.o oom.o paths.o size_suffix.o
-OBJS += sort.o string.o string_malloc.o
+OBJS += sort.o string.o
 OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
