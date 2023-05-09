@@ -15,8 +15,9 @@ const int jc_api_revision = LIBJODYCODE_API_REVISION;
 const int jc_jodyhash_version = JODY_HASH_VERSION;
 
 /* API sub-version info array, terminated with 0
- * New API sections MUST be added to the end! */
-const char jc_api_versiontable[] = {
+ * Valid versions are 1-254. New API sections MUST be added to the end. The
+ * maximum value of 255 is used by programs to mean "don't care" */
+const unsigned char jc_api_versiontable[] = {
 	LIBJODYCODE_CACHEINFO_VER,
 	LIBJODYCODE_JODY_HASH_VER,
 	LIBJODYCODE_OOM_VER,
