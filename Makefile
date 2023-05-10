@@ -28,7 +28,7 @@ UNAME_S       = $(shell uname -s)
 UNAME_M       = $(shell uname -m)
 VERSION       = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
 VERSION_MAJOR = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
-CROSS_DETECT  = $(shell echo "$(CC)" | grep -- '-' | grep -v x86_64 || echo "none")
+CROSS_DETECT  = $(shell true | $(CC) -dM -E - | grep -m 1 __x86_64 || echo "cross")
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
@@ -76,7 +76,7 @@ endif
 ifneq ($(UNAME_M), x86_64)
 NO_SIMD=1
 endif
-ifneq ($(CROSS_DETECT), none)
+ifeq ($(CROSS_DETECT), cross)
 NO_SIMD=1
 endif
 
@@ -111,7 +111,7 @@ OBJS += strtoepoch.o version.o win_stat.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: sharedlib staticlib
-	-@test "$(CROSS_DETECT)" != "none" && echo "WARNING: SIMD disabled: cross-compiler !x86_64 detected (CC = $(CC))" || true
+	-@test "$(CROSS_DETECT)" = "cross" && echo "NOTICE: SIMD disabled: !x86_64 or a cross-compiler detected (CC = $(CC))" || true
 
 sharedlib: $(OBJS) $(SIMD_OBJS)
 	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS) $(CFLAGS) $(CFLAGS_EXTRA)
