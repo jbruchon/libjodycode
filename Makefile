@@ -25,6 +25,7 @@ COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -f
 LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
 
 UNAME_S       = $(shell uname -s)
+UNAME_M       = $(shell uname -m)
 VERSION       = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
 VERSION_MAJOR = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 
@@ -70,18 +71,23 @@ ifdef ON_WINDOWS
 	COMPILER_OPTIONS += -D__USE_MINGW_ANSI_STDIO=1 -DON_WINDOWS=1
 endif
 
+# Do not build SIMD code if not on x86_64
+ifneq ($(UNAME_M), x86_64)
+NO_SIMD=1
+endif
+
 # SIMD SSE2/AVX2 jody_hash code
 ifdef NO_SIMD
-BUILD_CFLAGS += -DNO_SIMD
+COMPILER_OPTIONS += -DNO_SIMD -DNO_SSE2 -DNO_AVX2
 else
 SIMD_OBJS += jody_hash_simd.o
 ifdef NO_SSE2
-BUILD_CFLAGS += -DNO_SSE2
+COMPILER_OPTIONS += -DNO_SSE2
 else
 SIMD_OBJS += jody_hash_sse2.o
 endif
 ifdef NO_AVX2
-BUILD_CFLAGS += -DNO_AVX2
+COMPILER_OPTIONS += -DNO_AVX2
 else
 SIMD_OBJS += jody_hash_avx2.o
 endif
@@ -110,16 +116,16 @@ staticlib: $(OBJS) $(SIMD_OBJS)
 	$(AR) rcs libjodycode.a $(OBJS) $(SIMD_OBJS)
 
 jody_hash_simd.o:
-	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_simd.o jody_hash_simd.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_simd.o jody_hash_simd.c
 
 jody_hash_avx2.o: jody_hash_simd.o
-	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_avx2.o jody_hash_avx2.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_avx2.o jody_hash_avx2.c
 
 jody_hash_sse2.o: jody_hash_simd.o
-	$(CC) $(CFLAGS) $(BUILD_CFLAGS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
 #.c.o:
-#	$(CC) -c $(BUILD_CFLAGS) $(CFLAGS) $<
+#	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $<
 
 #manual:
 #	gzip -9 < jodycode.8 > jodycode.8.gz
