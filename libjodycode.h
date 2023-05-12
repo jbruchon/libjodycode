@@ -18,8 +18,8 @@ extern "C" {
  * Revision version must not change interfaces in any way
  * Revision is optional in version string, so "2.0" is identical to 2.0.0 */
 #define LIBJODYCODE_API_VERSION    2
-#define LIBJODYCODE_VER "2.0"
-#define LIBJODYCODE_VERDATE "2023-05-09"
+#define LIBJODYCODE_VER "2.0.1"
+#define LIBJODYCODE_VERDATE "2023-05-12"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect

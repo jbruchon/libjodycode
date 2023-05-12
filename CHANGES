@@ -1,3 +1,7 @@
+libjodycode 2.0.1
+
+- Makefile fixes for cross-compilation/non-x86 builds (no code/API changes)
+
 libjodycode 2.0
 
 - New API versioning table system and helper code
