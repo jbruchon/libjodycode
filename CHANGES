@@ -1,6 +1,7 @@
 libjodycode 2.0.1
 
 - Makefile fixes for cross-compilation/non-x86 builds (no code/API changes)
+- On Windows, libjodycode.dll now contains embedded version information
 
 libjodycode 2.0
 
