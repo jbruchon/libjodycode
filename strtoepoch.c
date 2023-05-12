@@ -23,7 +23,7 @@
 /* Accepts date[time] strings "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"
  * and returns the number of seconds since the Unix Epoch a la mktime()
  * or returns -1 on any error */
-time_t jc_strtoepoch(const char * const datetime)
+extern time_t jc_strtoepoch(const char * const datetime)
 {
 	time_t secs = 0;  /* 1970-01-01 00:00:00 */
 	const char * restrict p = datetime;

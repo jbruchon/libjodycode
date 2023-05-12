@@ -17,7 +17,7 @@
 #include "libjodycode.h"
 
 /* Convert NT epoch to UNIX epoch */
-time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
+extern time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
 {
 	uint64_t newstamp;
 
@@ -29,7 +29,7 @@ time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
 }
 
 /* Convert UNIX epoch to NT epoch */
-time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
+extern time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
 {
 	uint64_t newstamp;
 
@@ -41,7 +41,7 @@ time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
 }
 
 /* Get stat()-like extra information for a file on Windows */
-int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf)
+extern int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf)
 {
   HANDLE hFile;
   BY_HANDLE_FILE_INFORMATION bhfi;
