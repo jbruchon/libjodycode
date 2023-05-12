@@ -14,6 +14,7 @@
 #include <string.h>
 #include "jody_hash.h"
 #include "jody_hash_simd.h"
+#include "likely_unlikely.h"
 
 static const jodyhash_t jh_s_constant = JH_ROR2(JODY_HASH_CONSTANT);
 
@@ -31,7 +32,7 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash,
 	size_t length = 0;
 
 	/* Don't bother trying to hash a zero-length block */
-	if (count == 0) return hash;
+	if (unlikely(count == 0)) return hash;
 
 #ifndef NO_AVX2
 #if defined __GNUC__ || defined __clang__
