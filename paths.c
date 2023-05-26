@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 /* Collapse dot-dot and single dot path components
@@ -21,13 +21,13 @@ extern int jc_collapse_dotdot(char * const path)
   unsigned int i = 0;
 
   /* Fail if not passed an absolute path */
-  if (*path != '/') return -1;
+  if (unlikely(*path != '/')) return -1;
 
   p = path; out = path;
 
   while (*p != '\0') {
     /* Abort if we're too close to the end of the buffer */
-    if (i >= (PATHBUF_SIZE - 3)) return -2;
+    if (unlikely(i >= (PATHBUF_SIZE - 3))) return -2;
 
     /* Skip repeated slashes */
     while (*p == '/' && *(p + 1) == '/') {
@@ -83,7 +83,7 @@ extern int jc_make_relative_link_name(const char * const src,
   static char p1[PATHBUF_SIZE * 2], p2[PATHBUF_SIZE * 2];
   static char *sp, *dp, *ss;
 
-  if (!src || !dest) goto error_null_param;
+  if (unlikely(!src || !dest)) goto error_null_param;
 
   /* Get working directory path and prefix to pathnames if needed */
   if (*src != '/' || *dest != '/') {
@@ -102,8 +102,8 @@ extern int jc_make_relative_link_name(const char * const src,
   strncat(p2, dest, PATHBUF_SIZE);
 
   /* Collapse . and .. path components */
-  if (jc_collapse_dotdot(p1) != 0) goto error_cdd;
-  if (jc_collapse_dotdot(p2) != 0) goto error_cdd;
+  if (unlikely(jc_collapse_dotdot(p1) != 0)) goto error_cdd;
+  if (unlikely(jc_collapse_dotdot(p2) != 0)) goto error_cdd;
 
   /* Find where paths differ, remembering each slash along the way */
   sp = p1; dp = p2; ss = p1;
@@ -124,14 +124,14 @@ extern int jc_make_relative_link_name(const char * const src,
 
   /* Copy the file name into rel_path and return */
   ss++;
-  while (*ss != '\0') *rel_path++ = *ss++;
+  while (unlikely(*ss != '\0')) *rel_path++ = *ss++;
 
   /* . and .. dirs at end are invalid */
   if (*(rel_path - 1) == '.')
     if (*(rel_path - 2) == '/' ||
         (*(rel_path - 2) == '.' && *(rel_path - 3) == '/'))
       goto error_dir_end;
-  if (*(rel_path - 1) == '/') goto error_dir_end;
+  if (unlikely(*(rel_path - 1) == '/')) goto error_dir_end;
 
   *rel_path = '\0';
   return 0;

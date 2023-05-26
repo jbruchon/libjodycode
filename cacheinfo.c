@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 /* None of this code is useful outside of Linux */
@@ -29,7 +30,7 @@ static size_t read_procfile(const char * const restrict name)
 	FILE *fp;
 	size_t i;
 
-	if (name == NULL) return 0;
+	if (unlikely(name == NULL)) return 0;
 
 	memset(buf, 0, 16);
 	/* Create path */
@@ -53,7 +54,8 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci)
 	char type;
 	char index;
 
-	if (pci == NULL) return;
+	if (unlikely(pci == NULL)) return;
+
 	memset(pci, 0, sizeof(struct jc_proc_cacheinfo));
 	i = strlen(path);
 	if (i > 48) return;

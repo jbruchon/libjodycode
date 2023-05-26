@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <time.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 #define REQ_NUM(a) { if (a < '0' || a > '9') return -1; }
@@ -30,7 +31,7 @@ extern time_t jc_strtoepoch(const char * const datetime)
 	int i;
 	struct tm tm;
 
-	if (datetime == NULL || *datetime == '\0') return -1;
+	if (unlikely(datetime == NULL || *datetime == '\0')) return -1;
 	memset(&tm, 0, sizeof(struct tm));
 
 	/* This code replaces "*10" with shift<<3 + add + add */

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 #ifdef UNICODE
@@ -65,13 +66,13 @@ extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 	static char temp[PATHBUF_SIZE * 2];
 	int len;
 
-	if (!argv) goto error_bad_argv;
+	if (unlikely(!argv)) goto error_bad_argv;
 	for (int counter = 0; counter < argc; counter++) {
 		len = W2M(wargv[counter], &temp);
-		if (len < 1) goto error_wc2mb;
+		if (unlikely(len < 1)) goto error_wc2mb;
 
 		argv[counter] = (char *)malloc((size_t)len + 1);
-		if (!argv[counter]) jc_oom("widearg_to_argv()");
+		if (unlikely(!argv[counter])) jc_oom("widearg_to_argv()");
 		strncpy(argv[counter], temp, (size_t)len + 1);
 	}
 	return;

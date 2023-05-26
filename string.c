@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <unistd.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 /* Like strncasecmp() but only tests for equality */
@@ -14,7 +15,7 @@ extern int jc_strncaseeq(const char *s1, const char *s2, size_t len)
 	size_t i = 0;
 
 	while (i < len) {
-		if (*s1 != *s2) {
+		if (likely(*s1 != *s2)) {
 			unsigned char c1, c2;
 
 			c1 = *(const unsigned char *)s1;
@@ -37,7 +38,7 @@ extern int jc_strncaseeq(const char *s1, const char *s2, size_t len)
 extern int jc_strcaseeq(const char *s1, const char *s2)
 {
 	while (1) {
-		if (*s1 != *s2) {
+		if (likely(*s1 != *s2)) {
 			unsigned char c1, c2;
 
 			c1 = *(const unsigned char *)s1;
@@ -61,9 +62,7 @@ extern int jc_strneq(const char *s1, const char *s2, size_t len)
 {
 	size_t i = 0;
 
-	if (!len) return 0;
-
-	while (*s1 != '\0' && *s2 != '\0') {
+	while (likely(*s1 != '\0' && *s2 != '\0')) {
 		if (*s1 != *s2) return 1;
 		s1++; s2++; i++;
 		if (i == len) return 0;
@@ -76,7 +75,7 @@ extern int jc_strneq(const char *s1, const char *s2, size_t len)
 /* Like strcmp() but only tests for equality */
 extern int jc_streq(const char *s1, const char *s2)
 {
-	while (*s1 != '\0' && *s2 != '\0') {
+	while (likely(*s1 != '\0' && *s2 != '\0')) {
 		if (*s1 != *s2) return 1;
 		s1++; s2++;
 	}

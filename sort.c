@@ -5,6 +5,7 @@
  */
 
 #include <stdlib.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 #define IS_NUM(a) (((a >= '0') && (a <= '9')) ? 1 : 0)
@@ -19,10 +20,10 @@ extern int jc_numeric_sort(char * restrict c1,
   int precompare;
   char *rewind1, *rewind2;
 
-  if (c1 == NULL || c2 == NULL) return -99;
+  if (unlikely(c1 == NULL || c2 == NULL)) return -99;
 
   /* Numerically correct sort */
-  while (*c1 != '\0' && *c2 != '\0') {
+  while (unlikely(*c1 != '\0' && *c2 != '\0')) {
     /* Reset string length counters and rewind points */
     len1 = 0; len2 = 0; rewind1 = c1; rewind2 = c2;
 
@@ -76,7 +77,7 @@ extern int jc_numeric_sort(char * restrict c1,
     }
 
     /* Do normal comparison */
-    if (*c1 == *c2 && *c1 != '\0' && *c2 != '\0') {
+    if (likely(*c1 == *c2 && *c1 != '\0' && *c2 != '\0')) {
       c1++; c2++;
       len1++; len2++;
     /* Put symbols and spaces after everything else */
@@ -98,8 +99,8 @@ extern int jc_numeric_sort(char * restrict c1,
   if (len1 > len2) return sort_direction;
 
   /* Normal comparison - FIXME? length check should already handle these */
-  if (*c1 == '\0' && *c2 != '\0') return -sort_direction;
-  if (*c1 != '\0' && *c2 == '\0') return sort_direction;
+  if (unlikely(*c1 == '\0' && *c2 != '\0')) return -sort_direction;
+  if (unlikely(*c1 != '\0' && *c2 == '\0')) return sort_direction;
 
   /* Fall through: the strings are equal */
   return 0;

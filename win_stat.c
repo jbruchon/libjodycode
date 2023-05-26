@@ -14,6 +14,7 @@
 #include <windows.h>
 #include <limits.h>
 #include <stdint.h>
+#include "likely_unlikely.h"
 #include "libjodycode.h"
 
 /* Convert NT epoch to UNIX epoch */
@@ -23,7 +24,7 @@ extern time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
 
 	memcpy(&newstamp, timestamp, sizeof(uint64_t));
 	newstamp /= 10000000LL;
-	if (newstamp <= 11644473600LL) return 0;
+	if (unlikely(newstamp <= 11644473600LL)) return 0;
 	newstamp -= 11644473600LL;
 	return (time_t)newstamp;
 }
@@ -36,7 +37,7 @@ extern time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
 	memcpy(&newstamp, timestamp, sizeof(uint64_t));
 	newstamp += 11644473600LL;
 	newstamp *= 10000000LL;
-	if (newstamp <= 11644473600LL) return 0;
+	if (unlikely(newstamp <= 11644473600LL)) return 0;
 	return (time_t)newstamp;
 }
 
@@ -50,18 +51,18 @@ extern int jc_win_stat(const char * const filename, struct jc_winstat * const re
 #ifdef UNICODE
   static wchar_t wname2[WPATH_MAX];
 
-  if (!buf) return -127;
+  if (unlikely(!buf)) return -127;
   if (!M2W(filename,wname2)) return -126;
   hFile = CreateFileW(wname2, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 		  FILE_FLAG_BACKUP_SEMANTICS, NULL);
 #else
-  if (!buf) return -127;
+  if (unlikely(!buf)) return -127;
   hFile = CreateFile(filename, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 		  FILE_FLAG_BACKUP_SEMANTICS, NULL);
 #endif
 
-  if (hFile == INVALID_HANDLE_VALUE) goto failure;
-  if (!GetFileInformationByHandle(hFile, &bhfi)) goto failure2;
+  if (unlikely(hFile == INVALID_HANDLE_VALUE)) goto failure;
+  if (unlikely(!GetFileInformationByHandle(hFile, &bhfi))) goto failure2;
 
   buf->st_ino = ((uint64_t)(bhfi.nFileIndexHigh) << 32) + (uint64_t)bhfi.nFileIndexLow;
   buf->st_size = ((int64_t)(bhfi.nFileSizeHigh) << 32) + (int64_t)bhfi.nFileSizeLow;
