@@ -134,6 +134,9 @@ jody_hash_avx2.o: jody_hash_simd.o
 jody_hash_sse2.o: jody_hash_simd.o
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
+apiver:
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -msse2 -o apiver helper_code/libjodycode_apiver.c
+
 #.c.o:
 #	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $<
 
@@ -192,7 +195,8 @@ objsclean:
 	$(RM) $(OBJS) $(SIMD_OBJS)
 
 clean: objsclean
-	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) apiver
+	$(RM) *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*

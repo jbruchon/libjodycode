@@ -8,6 +8,7 @@
 *.so*
 *.dll*
 *.exe
+apiver
 *.7.gz
 
 #
