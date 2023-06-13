@@ -126,13 +126,13 @@ staticlib: $(OBJS) $(SIMD_OBJS)
 	$(AR) rcs libjodycode.a $(OBJS) $(SIMD_OBJS)
 
 jody_hash_simd.o:
-	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_simd.o jody_hash_simd.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -mavx2 -c -o jody_hash_simd.o jody_hash_simd.c
 
 jody_hash_avx2.o: jody_hash_simd.o
-	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -mavx2 -c -o jody_hash_avx2.o jody_hash_avx2.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -mavx2 -c -o jody_hash_avx2.o jody_hash_avx2.c
 
 jody_hash_sse2.o: jody_hash_simd.o
-	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
 #.c.o:
 #	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $<
