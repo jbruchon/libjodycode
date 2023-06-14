@@ -119,7 +119,7 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci)
 
 
 /* This is for testing only */
-#ifdef CACHEINFO_TEST
+#ifdef JC_TEST
 int main(void)
 {
 	static struct jc_proc_cacheinfo pci;
