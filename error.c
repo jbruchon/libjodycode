@@ -3,14 +3,14 @@
 #include <stdio.h>
 
 struct jc_error {
-	char *name;
-	char *desc;
+	const char *name;
+	const char *desc;
 };
 
 
-#define JC_ERRCNT 6
+#define JC_ERRCNT 8
 static const int errcnt = JC_ERRCNT;
-const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
+static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },
 	{ "null_param",  "get_relative_name has NULL parameter" },
 	{ "getcwd",      "couldn't get the current directory" },
@@ -23,7 +23,7 @@ const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 };
 
 
-char *jc_get_errname(int errnum)
+extern const char *jc_get_errname(int errnum)
 {
 	if (errnum > errcnt) return NULL;
 	if (errnum < 0) errnum = -errnum;
@@ -31,7 +31,7 @@ char *jc_get_errname(int errnum)
 }
 
 
-char *jc_get_errdesc(int errnum)
+extern const char *jc_get_errdesc(int errnum)
 {
 	if (errnum > errcnt) return NULL;
 	if (errnum < 0) errnum = -errnum;
@@ -39,7 +39,7 @@ char *jc_get_errdesc(int errnum)
 }
 
 
-int jc_print_error(int errnum)
+extern int jc_print_error(int errnum)
 {
 	if (errnum > errcnt) return -5;
 	if (errnum < 0) errnum = -errnum;

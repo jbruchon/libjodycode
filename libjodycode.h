@@ -102,8 +102,8 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 
 /*** error ***/
 
-extern char *jc_get_errname(int errnum);
-extern char *jc_get_errdesc(int errnum);
+extern const char *jc_get_errname(int errnum);
+extern const char *jc_get_errdesc(int errnum);
 extern int jc_print_error(int errnum);
 
 
