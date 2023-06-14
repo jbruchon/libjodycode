@@ -19,20 +19,19 @@
 static const jodyhash_t jh_s_constant = JH_ROR2(JODY_HASH_CONSTANT);
 
 /* Hash a block of arbitrary size; must be divisible by sizeof(jodyhash_t)
- * The first block should pass a start_hash of zero.
- * All blocks after the first should pass start_hash as the value
+ * The first block should pass an initial hash of zero.
+ * All blocks after the first should pass hash as the value
  * returned by the last call to this function. This allows hashing
  * of any amount of data. If data is not divisible by the size of
  * jodyhash_t, it is MANDATORY that the caller provide a data buffer
  * which is divisible by sizeof(jodyhash_t). */
-extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count)
+extern int jody_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count)
 {
-	jodyhash_t hash = start_hash;
 	jodyhash_t element, element2;
 	size_t length = 0;
 
 	/* Don't bother trying to hash a zero-length block */
-	if (unlikely(count == 0)) return hash;
+	if (unlikely(count == 0)) return 0;
 
 #ifndef NO_AVX2
 #if defined __GNUC__ || defined __clang__
@@ -40,7 +39,7 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash,
 	if (__builtin_cpu_supports ("avx2")) {
 #endif /* __GNUC__ || __clang__ */
 		if (count >= 32) {
-			length = jody_block_hash_avx2(&data, &hash, count);
+			if (jody_block_hash_avx2(&data, hash, count, &length) != 0) return 1;
 			goto skip_sse2;
 		} else length = count / sizeof(jodyhash_t);
 #if defined __GNUC__ || defined __clang__
@@ -56,7 +55,9 @@ extern jodyhash_t jody_block_hash(jodyhash_t *data, const jodyhash_t start_hash,
 	__builtin_cpu_init ();
 	if (__builtin_cpu_supports ("sse2")) {
 #endif /* __GNUC__ || __clang__ */
-		if (count >= 32) length = jody_block_hash_sse2(&data, &hash, count);
+		if (count >= 32) {
+			if (jody_block_hash_sse2(&data, hash, count, &length) != 0) return 1;
+		}
 		else length = count / sizeof(jodyhash_t);
 #if defined __GNUC__ || defined __clang__
 	} else length = count / sizeof(jodyhash_t);
@@ -74,10 +75,10 @@ skip_sse2:
 		element2 = JH_ROR(element);
 		element2 ^= jh_s_constant;
 		element += JODY_HASH_CONSTANT;
-		hash += element;
-		hash ^= element2;
-		hash = JH_ROL2(hash);
-		hash += element;
+		*hash += element;
+		*hash ^= element2;
+		*hash = JH_ROL2(*hash);
+		*hash += element;
 		data++;
 	}
 
@@ -88,13 +89,11 @@ skip_sse2:
 		element2 = JH_ROR(element);
 		element2 ^= jh_s_constant;
 		element += JODY_HASH_CONSTANT;
-		hash += element;
-		hash ^= element2;
-		hash = JH_ROL2(hash);
-		hash += element2;
+		*hash += element;
+		*hash ^= element2;
+		*hash = JH_ROL2(*hash);
+		*hash += element2;
 	}
 
-	return hash;
-	fprintf(stderr, "out of memory\n");
-	exit(EXIT_FAILURE);
+	return 0;
 }

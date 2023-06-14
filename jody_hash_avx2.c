@@ -17,10 +17,8 @@
 
 #ifndef NO_AVX2
 
-size_t jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *start_hash, const size_t count)
+int jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *hash, const size_t count, size_t *length)
 {
-	jodyhash_t hash = *start_hash;
-
 	size_t vec_allocsize;
 	__m256i *aligned_data;
 	/* Regs used in groups of 3; 1=ROR/XOR work, 2=temp, 3=data+constant */
@@ -36,7 +34,7 @@ size_t jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 	/* Only alloc/copy if not already aligned */
 	if (((uintptr_t)*data & (uintptr_t)0x1fULL) != 0) {
 		aligned_data  = (__m256i *)aligned_alloc(32, vec_allocsize);
-		if (!aligned_data) goto oom;
+		if (!aligned_data) return 1;
 		memcpy(aligned_data, *data, vec_allocsize);
 	} else aligned_data = (__m256i *)*data;
 
@@ -75,20 +73,16 @@ size_t jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 				ep2 = (uint64_t)_mm256_extract_epi64(vx1, 3);
 				break;
 			}
-			hash += ep1;
-			hash ^= ep2;
-			hash = JH_ROL2(hash);
-			hash += ep1;
+			*hash += ep1;
+			*hash ^= ep2;
+			*hash = JH_ROL2(*hash);
+			*hash += ep1;
 		}  // End of hash finish loop
 	}  // End of main AVX for loop
 	*data += vec_allocsize / sizeof(jodyhash_t);
 	if (((uintptr_t)*data & (uintptr_t)0x1fULL) != 0) ALIGNED_FREE(aligned_data);
-	*start_hash = hash;
-	return (count - vec_allocsize) / sizeof(jodyhash_t);
-
-oom:
-	fprintf(stderr, "out of memory\n");
-	exit(EXIT_FAILURE);
+	*length = (count - vec_allocsize) / sizeof(jodyhash_t);
+	return 0;
 }
 
 #endif /* NO_AVX2 */

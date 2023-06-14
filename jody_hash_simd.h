@@ -47,8 +47,8 @@ union UINT256 {
 extern const union UINT256 vec_constant, vec_constant_ror2;
 #endif
 
-extern size_t jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *start_hash, const size_t count);
-extern size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const size_t count);
+extern int jody_block_hash_avx2(jodyhash_t **data, jodyhash_t *hash, const size_t count, size_t *length);
+extern int jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *hash, const size_t count, size_t *length);
 
 #ifdef __cplusplus
 }

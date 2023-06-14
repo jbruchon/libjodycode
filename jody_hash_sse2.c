@@ -17,10 +17,8 @@
 
 #ifndef NO_SSE2
 
-size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const size_t count)
+int jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *hash, const size_t count, size_t *length)
 {
-	jodyhash_t hash = *start_hash;
-
 	size_t vec_allocsize;
 	__m128i *aligned_data;
 	__m128i v1, v2, v3, v4, v5, v6;
@@ -46,7 +44,7 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 	/* Only alloc/copy if not already aligned */
 	if (((uintptr_t)*data & (uintptr_t)0x0fULL) != 0) {
 		aligned_data  = (__m128i *)aligned_alloc(16, vec_allocsize);
-		if (!aligned_data) goto oom;
+		if (!aligned_data) return 1;
 		memcpy(aligned_data, *data, vec_allocsize);
 	} else aligned_data = (__m128i *)*data;
 
@@ -100,19 +98,16 @@ size_t jody_block_hash_sse2(jodyhash_t **data, jodyhash_t *start_hash, const siz
 				ep2 = (uint64_t)_mm_cvtsi128_si64(_mm_castps_si128(_mm_movehl_ps(vzero, _mm_castsi128_ps(v4))));
 				break;
 			}
-			hash += ep1;
-			hash ^= ep2;
-			hash = JH_ROL2(hash);
-			hash += ep1;
+			*hash += ep1;
+			*hash ^= ep2;
+			*hash = JH_ROL2(*hash);
+			*hash += ep1;
 			}  // End of hash finish loop
 		}  // End of main SSE for loop
 	*data += vec_allocsize / sizeof(jodyhash_t);
 	if (((uintptr_t)*data & (uintptr_t)0x0fULL) != 0) ALIGNED_FREE(aligned_data);
-	*start_hash = hash;
-	return (count - vec_allocsize) / sizeof(jodyhash_t);
-oom:
-	fprintf(stderr, "out of memory\n");
-	exit(EXIT_FAILURE);
+	*length = (count - vec_allocsize) / sizeof(jodyhash_t);
+	return 0;
 }
 
 #endif /* NO_SSE2 */
