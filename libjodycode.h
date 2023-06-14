@@ -17,16 +17,16 @@ extern "C" {
  * Minor version must change when new interfaces are added
  * Revision version must not change interfaces in any way
  * Revision is optional in version string, so "2.0" is identical to 2.0.0 */
-#define LIBJODYCODE_API_VERSION    2
-#define LIBJODYCODE_VER "2.0.1"
-#define LIBJODYCODE_VERDATE "2023-05-12"
+#define LIBJODYCODE_API_VERSION    3
+#define LIBJODYCODE_VER "3.0"
+#define LIBJODYCODE_VERDATE "2023-06-14"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect
  * an incompatible change and warn gracefully instead of crashing or risking
  * damage to user data. */
 #define LIBJODYCODE_CACHEINFO_VER   1
-#define LIBJODYCODE_JODY_HASH_VER   1
+#define LIBJODYCODE_JODY_HASH_VER   2
 #define LIBJODYCODE_OOM_VER         1
 #define LIBJODYCODE_PATHS_VER       1
 #define LIBJODYCODE_SIZE_SUFFIX_VER 1
@@ -35,6 +35,7 @@ extern "C" {
 #define LIBJODYCODE_STRTOEPOCH_VER  1
 #define LIBJODYCODE_WIN_STAT_VER    1
 #define LIBJODYCODE_WIN_UNICODE_VER 1
+#define LIBJODYCODE_ERROR_VER       1
 
 
 #include <stdio.h>
@@ -97,6 +98,13 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 #endif /* __linux__ */
 
 
+/*** error ***/
+
+extern char *jc_get_errname(int errnum);
+extern char *jc_get_errdesc(int errnum);
+extern int jc_print_error(int errnum);
+
+
 /*** jody_hash ***/
 
 /* Version increments when algorithm changes incompatibly */
@@ -108,7 +116,7 @@ extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci);
 #define JODY_HASH_WIDTH 64
 typedef uint64_t jodyhash_t;
 
-extern jodyhash_t jc_block_hash(jodyhash_t *data, const jodyhash_t start_hash, const size_t count);
+extern int jc_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count);
 
 
 /*** oom ***/

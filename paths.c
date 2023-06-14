@@ -83,11 +83,11 @@ extern int jc_make_relative_link_name(const char * const src,
   static char p1[PATHBUF_SIZE * 2], p2[PATHBUF_SIZE * 2];
   static char *sp, *dp, *ss;
 
-  if (unlikely(!src || !dest)) goto error_null_param;
+  if (unlikely(!src || !dest)) return -1;
 
   /* Get working directory path and prefix to pathnames if needed */
   if (*src != '/' || *dest != '/') {
-    if (!getcwd(p1, PATHBUF_SIZE * 2)) goto error_getcwd;
+    if (!getcwd(p1, PATHBUF_SIZE * 2)) return -2;
     *(p1 + (PATHBUF_SIZE * 2) - 1) = '\0';
     strncat(p1, "/", PATHBUF_SIZE * 2 - 1);
     strncpy(p2, p1, PATHBUF_SIZE * 2);
@@ -102,8 +102,8 @@ extern int jc_make_relative_link_name(const char * const src,
   strncat(p2, dest, PATHBUF_SIZE);
 
   /* Collapse . and .. path components */
-  if (unlikely(jc_collapse_dotdot(p1) != 0)) goto error_cdd;
-  if (unlikely(jc_collapse_dotdot(p2) != 0)) goto error_cdd;
+  if (unlikely(jc_collapse_dotdot(p1) != 0)) return -3;
+  if (unlikely(jc_collapse_dotdot(p2) != 0)) return -3;
 
   /* Find where paths differ, remembering each slash along the way */
   sp = p1; dp = p2; ss = p1;
@@ -130,23 +130,9 @@ extern int jc_make_relative_link_name(const char * const src,
   if (*(rel_path - 1) == '.')
     if (*(rel_path - 2) == '/' ||
         (*(rel_path - 2) == '.' && *(rel_path - 3) == '/'))
-      goto error_dir_end;
-  if (unlikely(*(rel_path - 1) == '/')) goto error_dir_end;
+      return -4;
+  if (unlikely(*(rel_path - 1) == '/')) return -4;
 
   *rel_path = '\0';
   return 0;
-
-error_null_param:
-    fprintf(stderr, "Internal error: get_relative_name has NULL parameter\n");
-    fprintf(stderr, "Report this as a serious bug to the author\n");
-    exit(EXIT_FAILURE);
-error_getcwd:
-    fprintf(stderr, "error: couldn't get the current directory\n");
-    return -1;
-error_cdd:
-    fprintf(stderr, "internal error: jc_collapse_dotdot() call failed\n");
-    return -2;
-error_dir_end:
-    fprintf(stderr, "internal error: get_relative_name() result has directory at end\n");
-    return -3;
 }
