@@ -24,7 +24,9 @@ extern "C" {
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect
  * an incompatible change and warn gracefully instead of crashing or risking
- * damage to user data. */
+ * damage to user data.
+ *
+ * REMINDER: additions must be added to version.c and libjodycode_check.c */
 #define LIBJODYCODE_CACHEINFO_VER   1
 #define LIBJODYCODE_JODY_HASH_VER   2
 #define LIBJODYCODE_OOM_VER         1
@@ -34,7 +36,7 @@ extern "C" {
 #define LIBJODYCODE_STRING_VER      1
 #define LIBJODYCODE_STRTOEPOCH_VER  1
 #define LIBJODYCODE_WIN_STAT_VER    1
-#define LIBJODYCODE_WIN_UNICODE_VER 1
+#define LIBJODYCODE_WIN_UNICODE_VER 2
 #define LIBJODYCODE_ERROR_VER       1
 
 
@@ -220,7 +222,7 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 #ifdef UNICODE
  extern void jc_slash_convert(char *path);
  extern void jc_set_output_modes(unsigned int modes);
- extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv);
+ extern int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv);
 #else
  #define jc_slash_convert(a)
 #endif /* UNICODE */

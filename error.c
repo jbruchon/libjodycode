@@ -16,8 +16,10 @@ const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "getcwd",      "couldn't get the current directory" },
 	{ "cdotdot",     "jc_collapse_dotdot() call failed" },
 	{ "grn_dir_end", "get_relative_name() result has directory at end" },
-	{ "bad_errnum",  "invalid error number" },
-	{ NULL, NULL },
+	{ "bad_errnum",  "invalid error number" },  // 5
+	{ "bad_argv",    "bad argv pointer" },
+	{ "wc2mb_fail",  "WideCharToMultiByte() failed" },
+	{ NULL, NULL },  // 8
 };
 
 

@@ -61,28 +61,21 @@ extern void jc_set_output_modes(unsigned int modes)
 
 
 /* Copy Windows wide character arguments to UTF-8 */
-extern void jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
+extern int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 {
 	static char temp[PATHBUF_SIZE * 2];
 	int len;
 
-	if (unlikely(!argv)) goto error_bad_argv;
+	if (unlikely(!argv)) return -6;
 	for (int counter = 0; counter < argc; counter++) {
 		len = W2M(wargv[counter], &temp);
-		if (unlikely(len < 1)) goto error_wc2mb;
+		if (unlikely(len < 1)) return -7;
 
 		argv[counter] = (char *)malloc((size_t)len + 1);
 		if (unlikely(!argv[counter])) jc_oom("widearg_to_argv()");
 		strncpy(argv[counter], temp, (size_t)len + 1);
 	}
 	return;
-
-error_bad_argv:
-	fprintf(stderr, "fatal: bad argv pointer\n");
-	exit(EXIT_FAILURE);
-error_wc2mb:
-	fprintf(stderr, "fatal: WideCharToMultiByte failed\n");
-	exit(EXIT_FAILURE);
 }
 
 #endif /* UNICODE */
@@ -98,7 +91,7 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 
 	if (stream_mode == _O_U16TEXT) {
 		/* Convert to wide string and send to wide console output */
-		if (!M2W(str, wstr)) return -1;
+		if (!M2W(str, wstr)) return -7;
 		fflush(stream);
 		_setmode(_fileno(stream), stream_mode);
 		if (cr == 2) retval = fwprintf(stream, L"%S%C", wstr, 0);
