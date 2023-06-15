@@ -21,5 +21,6 @@ int main(void)
 	printf("WIN_STAT: %d\n", LIBJODYCODE_WIN_STAT_VER);
 	printf("WIN_UNICODE: %d\n", LIBJODYCODE_WIN_UNICODE_VER);
 	printf("ERROR: %d\n", LIBJODYCODE_ERROR_VER);
+	printf("ALARM: %d\n", LIBJODYCODE_ALARM_VER);
 	return 0;
 }

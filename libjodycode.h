@@ -38,6 +38,7 @@ extern "C" {
 #define LIBJODYCODE_WIN_STAT_VER    1
 #define LIBJODYCODE_WIN_UNICODE_VER 2
 #define LIBJODYCODE_ERROR_VER       1
+#define LIBJODYCODE_ALARM_VER       1
 
 
 #include <stdio.h>
@@ -72,6 +73,13 @@ extern "C" {
 #ifndef WPATH_MAX
  #define WPATH_MAX PATHBUF_SIZE
 #endif
+
+
+/*** alarm ***/
+
+extern int jc_alarm_ring ;
+extern int jc_start_alarm(const unsigned int seconds, const int repeat);
+extern int jc_stop_alarm(void);
 
 
 /*** cacheinfo ***/

@@ -28,6 +28,7 @@ const unsigned char jc_build_api_versiontable[] = {
 	LIBJODYCODE_WIN_STAT_VER,
 	LIBJODYCODE_WIN_UNICODE_VER,
 	LIBJODYCODE_ERROR_VER,
+	LIBJODYCODE_ALARM_VER,
 	255
 };
 
@@ -43,6 +44,7 @@ const char *jc_versiontable_section[] = {
 	"win_stat",
 	"win_unicode",
 	"error",
+	"alarm",
 	NULL
 };
 
