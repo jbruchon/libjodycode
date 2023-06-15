@@ -29,14 +29,14 @@ void CALLBACK jc_catch_alarm(PVOID arg1, BOOLEAN arg2)
 {
 	(void)arg1; (void)arg2;
 	jc_alarm_ring = 1;
-	return 0;
+	return;
 }
 
 
 extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 {
-	int secs = seconds * 1000;
-	int period;
+	unsigned int secs = seconds * 1000;
+	unsigned int period = 0;
 
 	if (repeat != 0) period = seconds;
 	if (!CreateTimerQueueTimer(&hTimer, NULL, (WAITORTIMERCALLBACK)jc_catch_alarm, 0, secs, period, 0))

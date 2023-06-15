@@ -75,7 +75,7 @@ extern int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 		if (unlikely(!argv[counter])) jc_oom("widearg_to_argv()");
 		strncpy(argv[counter], temp, (size_t)len + 1);
 	}
-	return;
+	return 0;
 }
 
 #endif /* UNICODE */
