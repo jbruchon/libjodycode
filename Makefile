@@ -196,8 +196,8 @@ objsclean:
 	$(RM) $(OBJS) $(SIMD_OBJS)
 
 clean: objsclean
-	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) apiver
-	$(RM) *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
+	$(RM) apiver *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*
