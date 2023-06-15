@@ -1,12 +1,12 @@
 # libjodycode Makefile
 
 CFLAGS ?= -O2 -g
-PREFIX = /usr/local
+PREFIX ?= /usr/local
 PROGRAM_NAME = libjodycode
-LIB_DIR = $(PREFIX)/lib
-INC_DIR = $(PREFIX)/include
-MAN_BASE_DIR = $(PREFIX)/share/man
-MAN7_DIR = $(MAN_BASE_DIR)/man7
+LIB_DIR ?= $(PREFIX)/lib
+INC_DIR ?= $(PREFIX)/include
+MAN_BASE_DIR ?= $(PREFIX)/share/man
+MAN7_DIR ?= $(MAN_BASE_DIR)/man7
 CC ?= gcc
 INSTALL = install
 RM      = rm -f
@@ -119,8 +119,9 @@ all: sharedlib staticlib
 	-@test "$(CROSS_DETECT)" = "cross" && echo "NOTICE: SIMD disabled: !x86_64 or a cross-compiler detected (CC = $(CC))" || true
 
 sharedlib: $(OBJS) $(SIMD_OBJS)
-	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX) $(OBJS) $(SIMD_OBJS) $(LDFLAGS) $(CFLAGS) $(CFLAGS_EXTRA)
-	$(LN)            $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
+	$(CC) -shared -o $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(OBJS) $(SIMD_OBJS) $(LDFLAGS) $(CFLAGS) $(CFLAGS_EXTRA)
+	$(LN)            $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
+	$(LN)            $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(PROGRAM_NAME).$(SO_SUFFIX)
 
 staticlib: $(OBJS) $(SIMD_OBJS)
 	$(AR) rcs libjodycode.a $(OBJS) $(SIMD_OBJS)
@@ -137,8 +138,8 @@ jody_hash_sse2.o: jody_hash_simd.o
 apiver:
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -msse2 -o apiver helper_code/libjodycode_apiver.c
 
-#.c.o:
-#	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $<
+.c.o:
+	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $< -o $@
 
 #manual:
 #	gzip -9 < jodycode.8 > jodycode.8.gz
@@ -160,9 +161,9 @@ installdirs:
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
 installfiles:
-	$(INSTALL_DATA)	$(PROGRAM_NAME).$(SO_SUFFIX)            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
+	$(INSTALL_PROGRAM) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
 	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
-	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX)
+	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX)
 	$(INSTALL_DATA) $(PROGRAM_NAME).a  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).a
 	$(INSTALL_DATA) $(PROGRAM_NAME).h  $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
 	$(INSTALL_DATA) $(PROGRAM_NAME).7  $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
