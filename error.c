@@ -19,7 +19,7 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "bad_errnum",  "invalid error number" },  // 5
 	{ "bad_argv",    "bad argv pointer" },  // 6
 	{ "wc2mb_fail",  "WideCharToMultiByte() failed" },  // 7
-	{ "alarm_fail",  "WideCharToMultiByte() failed" },  // 8
+	{ "alarm_fail",  "alarm call failed" },  // 8
 	{ NULL, NULL },  // 9
 };
 
