@@ -67,8 +67,8 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 {
 	struct sigaction sa_run;
 
-	sa_run.sa_handler = jc_catch_alarm;
 	memset(&sa_run, 0, sizeof(struct sigaction));
+	sa_run.sa_handler = jc_catch_alarm;
 	if (repeat != 0) jc_alarm_repeat = 1;
 	if (sigaction(SIGALRM, &sa_run, NULL) != 0) return -8;
 	alarm(seconds);
@@ -80,11 +80,11 @@ extern int jc_stop_alarm(void)
 {
 	struct sigaction sa_stop;
 
+	alarm(0);
 	memset(&sa_stop, 0, sizeof(struct sigaction));
-	sa_stop.sa_handler = SIG_DFL;
+	sa_stop.sa_handler = SIG_IGN;
 	jc_alarm_repeat = 0;
 	if (sigaction(SIGALRM, &sa_stop, NULL) != 0) return -8;
-	alarm(0);
 	return 0;
 }
 #endif /* ON_WINDOWS */
