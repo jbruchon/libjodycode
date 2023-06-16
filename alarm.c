@@ -80,11 +80,11 @@ extern int jc_stop_alarm(void)
 {
 	struct sigaction sa_stop;
 
+	alarm(0);
 	memset(&sa_stop, 0, sizeof(struct sigaction));
 	sa_stop.sa_handler = SIG_IGN;
 	jc_alarm_repeat = 0;
 	if (sigaction(SIGALRM, &sa_stop, NULL) != 0) return -8;
-	alarm(0);
 	return 0;
 }
 #endif /* ON_WINDOWS */
