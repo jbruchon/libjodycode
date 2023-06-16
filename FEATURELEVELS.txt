@@ -1,0 +1,54 @@
+# alarm
+jc_alarm_ring:1
+jc_start_alarm:1
+jc_stop_alarm:1
+
+# cacheinfo
+struct jc_proc_cacheinfo:1
+jc_get_proc_cacheinfo:1
+
+# error
+jc_get_errdesc:1
+jc_get_errname:1
+jc_print_error:1
+
+# jody_hash
+jc_block_hash:1
+
+# oom
+jc_nullptr:1
+jc_oom:1
+
+# paths
+jc_collapse_dotdot:1
+jc_slash_convert:1
+
+# size_suffix
+struct jc_size_suffix:1
+
+# string
+jc_strcaseeq:1
+jc_streq:1
+jc_strncaseeq:1
+jc_strneq:1
+
+# strtoepoch
+jc_strtoepoch:1
+
+# version
+jc_version:1
+jc_verdate:1
+jc_api_versiontable:1
+jc_api_version:1
+jc_jodyhash_version:1
+
+# win_stat
+struct jc_winstat:1
+jc_win_stat:1
+jc_nttime_to_unixtime:1
+jc_unixtime_to_nttime:1
+
+# win_unicode
+jc_set_output_modes:1
+jc_fwprint:1
+jc_widearg_to_argv:1

@@ -27,6 +27,14 @@ the library it's linked to is still compatible enough to safely continue.
 The provided version check code reports detailed information about the problem
 in a way that is both understandable by users and informative to maintainers.
 
+libjodycode 3.0 introduced a new "feature level" number which changes on every
+revision to the public API. Programs can check this number against the number
+that corresponds to the newest library interface that they use. Whenever any
+function or variable is added to the public API this number will increase.
+To find the number your program should store and check against this number,
+find every interface you use documented in FEATURELEVELS.txt and choose the
+highest feature level number out of those.
+
 
 
 Contact information
