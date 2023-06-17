@@ -1,8 +1,8 @@
 #include "winver.h"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,0,0,0
- PRODUCTVERSION 3,0,0,0
+ FILEVERSION 3,0,1,0
+ PRODUCTVERSION 3,0,1,0
  FILEFLAGSMASK 0x3fL
  FILEFLAGS 0x0L
  FILEOS 0x40004L
@@ -16,12 +16,12 @@ BEGIN
 		    VALUE "Comments", "(C) 2014-2023 Jody Bruchon <jody@jodybruchon.com>, published under The MIT License"
 		    VALUE "CompanyName", "Jody Bruchon"
 		    VALUE "FileDescription", "libjodycode C Code Library"
-		    VALUE "FileVersion", "3,0,0,0"
+		    VALUE "FileVersion", "3,0,1,0"
 		    VALUE "InternalName", "libjodycode"
 		    VALUE "LegalCopyright", "(C) 2014-2023 Jody Bruchon <jody@jodybruchon.com>"
 		    VALUE "OriginalFilename", "libjodycode.dll"
 		    VALUE "ProductName", "libjodycode"
-		    VALUE "ProductVersion", "3,0,0,0"
+		    VALUE "ProductVersion", "3,0,1,0"
 		END
     END
     BLOCK "VarFileInfo"

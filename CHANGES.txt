@@ -1,3 +1,7 @@
+libjodycode 3.0.1
+
+- Fix alarms on Windows (no changes for non-Windows systems)
+
 libjodycode 3.0
 
 - Add new APIs (error, alarm) and enhance existing ones
