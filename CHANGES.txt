@@ -1,3 +1,9 @@
+libjodycode 3.0
+
+- Add new APIs (error, alarm) and enhance existing ones
+- No library calls call exit() outside of the OOM functions
+- New "feature level" number for incremental API addition checking
+
 libjodycode 2.0.1
 
 - Makefile fixes for cross-compilation/non-x86 builds (no code/API changes)
