@@ -136,7 +136,11 @@ jody_hash_sse2.o: jody_hash_simd.o
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
 apiver:
-	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -msse2 -o apiver helper_code/libjodycode_apiver.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -o apiver helper_code/libjodycode_apiver.c
+
+vercheck: vercheck.o
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -c -o vercheck.o helper_code/libjodycode_check.c
+	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -L. -Wl,-Bstatic vercheck.o -ljodycode -Wl,-Bdynamic -o vercheck
 
 .c.o:
 	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $< -o $@
@@ -193,11 +197,11 @@ stripped: sharedlib staticlib
 	strip --strip-debug libjodycode.a
 
 objsclean:
-	$(RM) $(OBJS) $(SIMD_OBJS)
+	$(RM) $(OBJS) $(SIMD_OBJS) vercheck.o
 
 clean: objsclean
 	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
-	$(RM) apiver *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) apiver vercheck *.a *~ .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*

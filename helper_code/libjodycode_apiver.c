@@ -8,6 +8,7 @@
 int main(void)
 {
 	printf("API: %d\n", LIBJODYCODE_API_VERSION);
+	printf("FEATURE: %d\n", LIBJODYCODE_API_FEATURE_LEVEL);
 	printf("VER: %s\n", LIBJODYCODE_VER);
 	printf("VERDATE: %s\n", LIBJODYCODE_VERDATE);
 	printf("CACHEINFO: %d\n", LIBJODYCODE_CACHEINFO_VER);
