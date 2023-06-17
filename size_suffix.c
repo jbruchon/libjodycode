@@ -1,3 +1,9 @@
+/* List of data size suffixes
+ *
+ * Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Released under The MIT License
+ */
+
 #include <stddef.h>
 #include <stdint.h>
 #include "libjodycode.h"
@@ -26,4 +32,3 @@ const struct jc_size_suffix jc_size_suffix[] = {
 	{ "EB", 1000000000000000000, -1 },
 	{ NULL, 0, -1 },
 };
-

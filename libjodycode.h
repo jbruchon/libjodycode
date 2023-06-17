@@ -24,7 +24,7 @@ extern "C" {
 #define LIBJODYCODE_API_VERSION       3
 #define LIBJODYCODE_API_FEATURE_LEVEL 1
 #define LIBJODYCODE_VER               "3.0"
-#define LIBJODYCODE_VERDATE           "2023-06-14"
+#define LIBJODYCODE_VERDATE           "2023-06-16"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect

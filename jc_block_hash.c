@@ -1,4 +1,8 @@
-/* jody_hash stub */
+/* Wrapper stub for jody_hash
+ *
+ * Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Released under The MIT License
+ */
 
 #include <sys/types.h>
 #include "jody_hash.h"

@@ -1,5 +1,8 @@
 /* Cross-platform alarms
- * This file is part of libjodycode; see README for license information */
+ *
+ * Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Released under The MIT License
+ */
 
 #ifdef ON_WINDOWS
  #define _WIN32_WINNT 0x0500

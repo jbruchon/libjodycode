@@ -1,12 +1,7 @@
-/* Out of memory error messages, the most complex C functions ever made
- * Licensed either under the Creative Commons 0 license (CC0) or, for countries
- * that are sane enough to actually recognize a public domain, this is in the
- * public domain.
+/* Out-of-memory and NULL pointer error exit calls
  *
- * (It was under The MIT License, as if anything so trivial deserves a license)
- *
- * By Jody Bruchon <jody@jodybruchon.com>
- * (as if anything so trivial will serve my ego)
+ * Copyright (C) 2021-2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Released under The MIT License
  */
 
 #include <stdio.h>

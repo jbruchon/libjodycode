@@ -1,4 +1,8 @@
-/* libjodycode error strings */
+/* libjodycode error strings and printing functions
+ *
+ * Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Released under The MIT License
+ */
 
 #include <stdio.h>
 
