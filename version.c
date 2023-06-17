@@ -27,5 +27,6 @@ const unsigned char jc_api_versiontable[] = {
 	LIBJODYCODE_WIN_STAT_VER,
 	LIBJODYCODE_WIN_UNICODE_VER,
 	LIBJODYCODE_ERROR_VER,
+	LIBJODYCODE_ALARM_VER,
 	0
 };
