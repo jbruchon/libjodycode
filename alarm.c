@@ -41,7 +41,7 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 	unsigned int secs = seconds * 1000;
 	unsigned int period = 0;
 
-	if (repeat != 0) period = seconds;
+	if (repeat != 0) period = secs;
 	if (!CreateTimerQueueTimer(&hTimer, NULL, (WAITORTIMERCALLBACK)jc_catch_alarm, 0, secs, period, 0))
 		return -8;
 	jc_alarm_ring = 1;
