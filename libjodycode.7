@@ -4,13 +4,70 @@
 .SH NAME
 libjodycode \- shared code used by several tools written by Jody Bruchon
 .SH SYNOPSIS
-.B libjodycode
-[
-.I options
-]
-.I DIRECTORIES
-\|.\|.\|.
-
+.nf
+#include <libjodycode.h>
+.sp
+int jc_alarm_ring
+.sp
+int jc_start_alarm(const unsigned int seconds, const int repeat)
+.sp
+int jc_stop_alarm(void)
+.sp
+void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci)
+.sp
+const char *jc_get_errname(int errnum)
+.sp
+const char *jc_get_errdesc(int errnum)
+.sp
+int jc_print_error(int errnum)
+.sp
+int jc_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count)
+.sp
+void jc_oom(const char * const restrict msg)
+.sp
+void jc_nullptr(const char * restrict func)
+.sp
+int jc_collapse_dotdot(char * const path)
+.sp
+int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path)
+.sp
+const struct jc_size_suffix jc_size_suffix[]
+.sp
+int jc_numeric_sort(char * restrict c1, char * restrict c2, int sort_direction)
+.sp
+int jc_strncaseeq(const char *s1, const char *s2, size_t len)
+.sp
+int jc_strcaseeq(const char *s1, const char *s2)
+.sp
+int jc_strneq(const char *s1, const char *s2, size_t len)
+.sp
+int jc_streq(const char *s1, const char *s2)
+.sp
+const char *jc_version
+.sp
+const char *jc_verdate
+.sp
+const int jc_api_version
+.sp
+const int jc_api_featurelevel
+.sp
+const int jc_jodyhash_version
+.sp
+const unsigned char jc_api_versiontable[]
+.sp
+time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
+.sp
+time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
+.sp
+int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf)
+.sp
+int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
+.sp
+void jc_slash_convert(char *path)
+.sp
+void jc_set_output_modes(unsigned int modes)
+.sp
+int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 .SH DESCRIPTION
 libjodycode is a software code library containing code shared among several of
 the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
