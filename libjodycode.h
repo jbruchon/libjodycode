@@ -82,7 +82,7 @@ extern "C" {
 
 /*** alarm ***/
 
-extern int jc_alarm_ring ;
+extern int jc_alarm_ring;
 extern int jc_start_alarm(const unsigned int seconds, const int repeat);
 extern int jc_stop_alarm(void);
 
@@ -187,10 +187,11 @@ time_t jc_strtoepoch(const char * const datetime);
 /* libjodycode version information */
 extern const char *jc_version;
 extern const char *jc_verdate;
+extern const int jc_api_version;
+extern const int jc_api_featurelevel;
+extern const int jc_jodyhash_version;
 /* This table is used for API compatibility checks */
 extern const unsigned char jc_api_versiontable[];
-extern const int jc_api_version;
-extern const int jc_jodyhash_version;
 
 
 /*** win_stat ***/
