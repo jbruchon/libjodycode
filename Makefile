@@ -143,7 +143,7 @@ vercheck:
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -L. -Wl,-Bstatic vercheck.o -ljodycode -Wl,-Bdynamic -o vercheck
 
 .c.o:
-	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $< -o $@
+	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
 #manual:
 #	gzip -9 < jodycode.8 > jodycode.8.gz
