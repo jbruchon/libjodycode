@@ -22,13 +22,18 @@ API_VERSION = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
 COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
-LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
 
 UNAME_S       = $(shell uname -s)
 UNAME_M       = $(shell uname -m)
 VERSION       = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/".*//')
 VERSION_MAJOR = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | sed 's/[^"]*"//;s/\..*//')
 CROSS_DETECT  = $(shell true | $(CC) -dM -E - | grep -m 1 __x86_64 || echo "cross")
+
+ifeq ($(UNAME_S), Darwin)
+	LINK_OPTIONS += -Wl,-install_name,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+else
+	LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+endif
 
 # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
 ifeq ($(UNAME_S), Darwin)
