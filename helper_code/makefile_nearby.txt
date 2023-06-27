@@ -1,0 +1,24 @@
+For easy integration of libjodycode into your build process
+you can use this code stub to link against a built copy in
+../libjodycode; Modify as necessary.
+
+COMPILER_OPTIONS should be added to CFLAGS for each object.
+LINK_OPTIONS should be added to LDFLAGS for the final link.
+
+### Find and use nearby libjodycode by default
+ifndef IGNORE_NEARBY_JC
+ ifneq ("$(wildcard ../libjodycode/libjodycode.h)","")
+  $(info Found and using nearby libjodycode at ../libjodycode)
+  COMPILER_OPTIONS += -I../libjodycode -L../libjodycode
+  ifeq ("$(wildcard ../libjodycode/version.o)","")
+   $(error You must build libjodycode before building winregfs)
+  endif
+ endif
+ ifdef FORCE_JC_DLL
+  LINK_OPTIONS += -l:../libjodycode/libjodycode.dll
+ else
+  LINK_OPTIONS += -ljodycode
+ endif
+endif
+
+
