@@ -8,7 +8,7 @@ pieces of code synced became more annoying, the decision was made to combine
 all of them into a single reusable shared library.
 
 Please consider financially supporting continued development of libjodycode
-using the links on my home page (Ko-fi, PayPal, SubscribeStar, Flattr, etc.):
+using the links on my home page (Ko-fi, PayPal, SubscribeStar, etc.):
 
 https://www.jodybruchon.com/
 
