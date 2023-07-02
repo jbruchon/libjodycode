@@ -31,7 +31,7 @@ static int jc_alarm_repeat = 0;
 void CALLBACK jc_catch_alarm(PVOID arg1, BOOLEAN arg2)
 {
 	(void)arg1; (void)arg2;
-	jc_alarm_ring = 1;
+	jc_alarm_ring++;
 	return;
 }
 
@@ -44,7 +44,7 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 	if (repeat != 0) period = secs;
 	if (!CreateTimerQueueTimer(&hTimer, NULL, (WAITORTIMERCALLBACK)jc_catch_alarm, 0, secs, period, 0))
 		return -8;
-	jc_alarm_ring = 1;
+	jc_alarm_ring++;
 	return 0;
 }
 
@@ -60,7 +60,7 @@ void jc_catch_alarm(const int signum)
 {
 	(void)signum;
 
-	jc_alarm_ring = 1;
+	jc_alarm_ring++;
 	if (jc_alarm_repeat != 0) alarm(1);
 	return;
 }
