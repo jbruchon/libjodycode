@@ -206,7 +206,7 @@ objsclean:
 
 clean: objsclean
 	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
-	$(RM) apiver vercheck *.a *~ .*.un~ *.gcno *.gcda *.gcov
+	$(RM) apiver vercheck *.a *~ helper_code/*~ libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*
