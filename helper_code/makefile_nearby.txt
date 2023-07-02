@@ -1,9 +1,15 @@
-For easy integration of libjodycode into your build process
-you can use this code stub to link against a built copy in
-../libjodycode; Modify as necessary.
+For easy integration of libjodycode into your build process you can use this
+code stub to link against a built copy in ../libjodycode; Modify as necessary.
 
 COMPILER_OPTIONS should be added to CFLAGS for each object.
 LINK_OPTIONS should be added to LDFLAGS for the final link.
+
+Add the static_jc and dynamic_jc rules to be able to build with libjodycode
+as a static inclusion or to link to it dynamically.
+
+Add the libjodycode_hint rule and add it to 'all' to tell the user about the
+static libjodycode make option.
+
 
 ### Find and use nearby libjodycode by default
 ifndef IGNORE_NEARBY_JC
@@ -22,3 +28,11 @@ ifndef IGNORE_NEARBY_JC
 endif
 
 
+dynamic_jc: $(PROGRAM_NAME)
+	$(CC) $(CFLAGS) $(OBJS) -Wl,-Bdynamic $(LDFLAGS) -o $(PROGRAM_NAME)$(SUFFIX)
+
+static_jc: $(PROGRAM_NAME)
+	$(CC) $(CFLAGS) $(OBJS) -Wl,-Bstatic $(LDFLAGS) -Wl,-Bdynamic -o $(PROGRAM_NAME)$(SUFFIX)
+
+libjodycode_hint:
+	$(info hint: if ../libjodycode is built but jdupes won't run, try doing 'make static_jc')
