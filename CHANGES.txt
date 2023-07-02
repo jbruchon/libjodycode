@@ -1,39 +1,43 @@
-libjodycode 3.0.1
+libjodycode 3.1 (feature level 2) (2023-07-02)
+
+- Alarms now increment jc_alarm_ring for each trigger instead of always setting to 1
+
+libjodycode 3.0.1 (2023-06-17)
 
 - Fix alarms on Windows (no changes for non-Windows systems)
 
-libjodycode 3.0
+libjodycode 3.0 (feature level 1) (2023-06-16)
 
 - Add new APIs (error, alarm) and enhance existing ones
 - No library calls call exit() outside of the OOM functions
 - New "feature level" number for incremental API addition checking
 
-libjodycode 2.0.1
+libjodycode 2.0.1 (2023-05-12)
 
 - Makefile fixes for cross-compilation/non-x86 builds (no code/API changes)
 - On Windows, libjodycode.dll now contains embedded version information
 
-libjodycode 2.0
+libjodycode 2.0 (2023-05-08)
 
 - New API versioning table system and helper code
 - size_suffix: add bit shifts to suffix table
 - Add a wrapper so jody_hash updates don't require editing anymore
 - Improved comments in libjodycode.h to document what the functions do
 
-libjodycode 1.3
+libjodycode 1.3 (2023-05-06)
 
 - Update jody_hash to version 7.2
 
-libjodycode 1.2
+libjodycode 1.2 (2023-04-23)
 
 - Add size_suffix constants
 
-libjodycode 1.1
+libjodycode 1.1 (2023-04-17)
 
 - Update jody_hash to version 6
 - string_malloc is now deprecated and only a stub will build by default
 
-libjodycode 1.0
+libjodycode 1.0 (2023-04-09)
 
 - Initial release
 - Includes the following code from other Jody Bruchon projects:

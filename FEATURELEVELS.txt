@@ -1,7 +1,7 @@
 # alarm
-jc_alarm_ring:1
-jc_start_alarm:1
-jc_stop_alarm:1
+jc_alarm_ring:2
+jc_start_alarm:2
+jc_stop_alarm:2
 
 # cacheinfo
 struct jc_proc_cacheinfo:1
