@@ -143,7 +143,7 @@ jody_hash_sse2.o: jody_hash_simd.o
 apiver:
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -o apiver helper_code/libjodycode_apiver.c
 
-vercheck:
+vercheck: helper_code/libjodycode_check.c
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -DJC_TEST -I. -c -o vercheck.o helper_code/libjodycode_check.c
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -L. -Wl,-Bstatic vercheck.o -ljodycode -Wl,-Bdynamic -o vercheck
 
