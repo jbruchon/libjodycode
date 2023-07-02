@@ -22,7 +22,7 @@ const char *jc_build_version = LIBJODYCODE_VER;
 const int jc_build_api_version = LIBJODYCODE_API_VERSION;
 const int jc_build_api_featurelevel = LIBJODYCODE_API_FEATURE_LEVEL;
 
-const int jc_build_min_featurelevel = 2;
+const int jc_build_min_featurelevel = MY_FEATURELEVEL_REQ;
 
 /* API sub-version info array, terminated with 255
  * The user-defined part has moved to libjodycode_check_defs.h
@@ -30,40 +30,52 @@ const int jc_build_min_featurelevel = 2;
 
 /* Build the array data using user definitions */
 #if MY_CACHEINFO_REQ == 255
+ #undef MY_CACHEINFO_REQ
  #define MY_CACHEINFO_REQ LIBJODYCODE_CACHEINFO_VER
 #endif
 #if MY_JODY_HASH_REQ == 255
- #define JODY_HASH LIBJODYCODE_JODY_HASH_VER
+ #undef MY_JODY_HASH_REQ
+ #define MY_JODY_HASH_REQ LIBJODYCODE_JODY_HASH_VER
 #endif
 #if MY_OOM_REQ == 255
- #define OOM LIBJODYCODE_OOM_VER
+ #undef MY_OOM_REQ
+ #define MY_OOM_REQ LIBJODYCODE_OOM_VER
 #endif
 #if MY_PATHS_REQ == 255
- #define PATHS LIBJODYCODE_PATHS_VER
+ #undef MY_PATHS_REQ
+ #define MY_PATHS_REQ LIBJODYCODE_PATHS_VER
 #endif
 #if MY_SIZE_SUFFIX_REQ == 255
- #define SIZE_SUFFIX LIBJODYCODE_SIZE_SUFFIX_VER
+ #undef MY_SIZE_SUFFIX_REQ
+ #define MY_SIZE_SUFFIX_REQ LIBJODYCODE_SIZE_SUFFIX_VER
 #endif
 #if MY_SORT_REQ == 255
- #define SORT LIBJODYCODE_SORT_VER
+ #undef MY_SORT_REQ
+ #define MY_SORT_REQ LIBJODYCODE_SORT_VER
 #endif
 #if MY_STRING_REQ == 255
- #define STRING LIBJODYCODE_STRING_VER
+ #undef MY_STRING_REQ
+ #define MY_STRING_REQ LIBJODYCODE_STRING_VER
 #endif
 #if MY_STRTOEPOCH_REQ == 255
- #define STRTOEPOCH LIBJODYCODE_STRTOEPOCH_VER
+ #undef MY_STRTOEPOCH_REQ
+ #define MY_STRTOEPOCH_REQ LIBJODYCODE_STRTOEPOCH_VER
 #endif
 #if MY_WIN_STAT_REQ == 255
- #define WIN_STAT LIBJODYCODE_WIN_STAT_VER
+ #undef MY_WIN_STAT_REQ
+ #define MY_WIN_STAT_REQ LIBJODYCODE_WIN_STAT_VER
 #endif
 #if MY_WIN_UNICODE_REQ == 255
- #define WIN_UNICODE LIBJODYCODE_WIN_UNICODE_VER
+ #undef MY_WIN_UNICODE_REQ
+ #define MY_WIN_UNICODE_REQ LIBJODYCODE_WIN_UNICODE_VER
 #endif
 #if MY_ERROR_REQ == 255
- #define ERROR LIBJODYCODE_ERROR_VER
+ #undef MY_ERROR_REQ
+ #define MY_ERROR_REQ LIBJODYCODE_ERROR_VER
 #endif
 #if MY_ALARM_REQ == 255
- #define ALARM LIBJODYCODE_ALARM_VER
+ #undef MY_ALARM_REQ
+ #define MY_ALARM_REQ LIBJODYCODE_ALARM_VER
 #endif
 
 
