@@ -1,73 +1,79 @@
-.TH LIBJODYCODE 7
-.\" NAME should be all caps, SECTION should be 1-8, maybe w/ subsection
-.\" other parms are allowed: see man(7), man(1)
+.\" Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+.TH "LIBJODYCODE" "7" "2023-07-05" "3.1" "libjodycode"
 .SH NAME
 libjodycode \- shared code used by several tools written by Jody Bruchon
+
 .SH SYNOPSIS
+.B #include <libjodycode.h>
+
+.SS "Alarm API"
 .nf
-#include <libjodycode.h>
-.sp
-int jc_alarm_ring
-.sp
-int jc_start_alarm(const unsigned int seconds, const int repeat)
-.sp
-int jc_stop_alarm(void)
-.sp
-void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci)
-.sp
-const char *jc_get_errname(int errnum)
-.sp
-const char *jc_get_errdesc(int errnum)
-.sp
-int jc_print_error(int errnum)
-.sp
-int jc_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count)
-.sp
-void jc_oom(const char * const restrict msg)
-.sp
-void jc_nullptr(const char * restrict func)
-.sp
-int jc_collapse_dotdot(char * const path)
-.sp
-int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path)
-.sp
-const struct jc_size_suffix jc_size_suffix[]
-.sp
-int jc_numeric_sort(char * restrict c1, char * restrict c2, int sort_direction)
-.sp
-int jc_strncaseeq(const char *s1, const char *s2, size_t len)
-.sp
-int jc_strcaseeq(const char *s1, const char *s2)
-.sp
-int jc_strneq(const char *s1, const char *s2, size_t len)
-.sp
-int jc_streq(const char *s1, const char *s2)
-.sp
-const char *jc_version
-.sp
-const char *jc_verdate
-.sp
-const int jc_api_version
-.sp
-const int jc_api_featurelevel
-.sp
-const int jc_jodyhash_version
-.sp
-const unsigned char jc_api_versiontable[]
-.sp
-time_t jc_nttime_to_unixtime(const uint64_t * const restrict timestamp)
-.sp
-time_t jc_unixtime_to_nttime(const uint64_t * const restrict timestamp)
-.sp
-int jc_win_stat(const char * const filename, struct jc_winstat * const restrict buf)
-.sp
-int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
-.sp
-void jc_slash_convert(char *path)
-.sp
-void jc_set_output_modes(unsigned int modes)
-.sp
-int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
+.BI "int jc_alarm_ring"
+.BI "int jc_start_alarm(const unsigned int " seconds ", const int " repeat ")"
+.BI "int jc_stop_alarm(void)"
+
+.SS "Cacheinfo API"
+.nf
+.BI "void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *" pci ")"
+
+.SS "Error API"
+.nf
+.BI "const char *jc_get_errname(int " errnum ")"
+.BI "const char *jc_get_errdesc(int " errnum ")"
+.BI "int jc_print_error(int " errnum ")"
+
+.SS "jodyhash API"
+.nf
+.BI "int jc_block_hash(jodyhash_t *" data ", jodyhash_t *" hash ", const size_t " count ")"
+
+.SS "OOM (out-of-memory) API"
+.nf
+.BI "void jc_oom(const char * const restrict " msg ")"
+.BI "void jc_nullptr(const char * restrict " func ")"a
+
+.SS "Paths API"
+.nf
+.BI "int jc_collapse_dotdot(char * const " path ")"
+.BI "int jc_make_relative_link_name(const char * const " src ", const char * const " dest ", char *" rel_path ")"
+
+.SS "Size Suffix API"
+.nf
+.BI "const struct jc_size_suffix jc_size_suffix[]"
+
+.SS "Sort API"
+.nf
+.BI "int jc_numeric_sort(char * restrict " c1 ", char * restrict " c2 ", int " sort_direction ")"
+
+.SS "String API"
+.nf
+.BI "int jc_strncaseeq(const char *" s1 ", const char *" s2 ", size_t " len ")"
+.BI "int jc_strcaseeq(const char *" s1 ", const char *" s2 ")"
+.BI "int jc_strneq(const char *" s1 ", const char *" s2 ", size_t " len ")"
+.BI "int jc_streq(const char *" s1 ", const char *" s2 ")"
+
+.SS "Version API"
+.nf
+.BI "const char *jc_version"
+.BI "const char *jc_verdate"
+.BI "const int jc_api_version"
+.BI "const int jc_api_featurelevel"
+.BI "const int jc_jodyhash_version"
+.BI "const unsigned char jc_api_versiontable[]"
+
+.SS "Windows stat() API"
+.nf
+.BI "time_t jc_nttime_to_unixtime(const uint64_t * const restrict " timestamp ")"
+.BI "time_t jc_unixtime_to_nttime(const uint64_t * const restrict " timestamp ")"
+.BI "int jc_win_stat(const char * const " filename ", struct jc_winstat * const restrict " buf ")"
+
+.SS "Windows Unicode API"
+.nf
+.BI "int jc_fwprint(FILE * const restrict " stream ", const char * const restrict " str ", const int " cr ")"
+.BI "void jc_slash_convert(char *" path ")"
+.BI "void jc_set_output_modes(unsigned int " modes ")"
+.BI "int jc_widearg_to_argv(int " argc ", wchar_t **" wargv ", char **" argv ")"
+
+.PP
 .SH DESCRIPTION
 libjodycode is a software code library containing code shared among several of
 the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
@@ -76,21 +82,16 @@ they were updated. As the number of programs increased and keeping these
 pieces of code synced became more annoying, the decision was made to combine
 all of them into a single reusable shared library.
 
-.SH REPORTING BUGS
+.SH NOTES
+
+libjodycode is created and maintained by Jody Bruchon <jody@jodybruchon.com>
 
 Bug reports/feature requests: https://github.com/jbruchon/libjodycode/issues
-
-All other libjodycode inquiries: contact Jody Bruchon <jody@jodybruchon.com>
-
-.SH SUPPORTING DEVELOPMENT
 
 If you find this software useful, please consider financially supporting
 its development through the author's home page:
 
 https://www.jodybruchon.com/
-
-.SH AUTHOR
-libjodycode is created and maintained by Jody Bruchon <jody@jodybruchon.com>
 
 .SH LICENSE
 
