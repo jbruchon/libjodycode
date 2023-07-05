@@ -12,14 +12,15 @@
 
 #define REQ_NUM(a) { if (a < '0' || a > '9') return -1; }
 #define ATONUM(a,b) (a = b - '0')
-/* Fast multiplies by 100 (*64 + *32 + *4) and 10 (*8 + *2) */
-#ifndef STRTOEPOCH_USE_REAL_MULTIPLY
+/* Fast multiplies by 100 (*64 + *32 + *4) and 10 (*8 + *2)
+ * for platforms where multiply instructions are expensive */
+#ifdef STRTOEPOCH_USE_SHIFT_MULTIPLY
  #define MUL100(a) ((a << 6) + (a << 5) + (a << 2))
  #define MUL10(a) ((a << 3) + a + a)
 #else
  #define MUL100(a) (a * 100)
  #define MUL10(a) (a * 10)
-#endif /* STRTOEPOCH_USE_REAL_MULTIPLY */
+#endif /* STRTOEPOCH_USE_SHIFT_MULTIPLY */
 
 /* Accepts date[time] strings "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"
  * and returns the number of seconds since the Unix Epoch a la mktime()
