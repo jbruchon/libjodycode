@@ -44,6 +44,10 @@ libjodycode \- shared code used by several tools written by Jody Bruchon
 .nf
 .BI "int jc_numeric_sort(char * restrict " c1 ", char * restrict " c2 ", int " sort_direction ")"
 
+.SS "String-to-epoch API"
+.nf
+.BI "time_t jc_strtoepoch(const char * const " datetime ")"
+
 .SS "String API"
 .nf
 .BI "int jc_strncaseeq(const char *" s1 ", const char *" s2 ", size_t " len ")"
