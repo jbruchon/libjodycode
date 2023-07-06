@@ -62,8 +62,8 @@ mkdir -p "$PKGNAME"
 test ! -d "$PKGNAME" && echo "Can't create directory for package" && exit 1
 cp CHANGES.txt README.md LICENSE.txt libjodycode.h $PKGNAME/
 E1=1
-make clean && make -j$PM stripped && cp $NAME$EXT1 $NAME$EXT2 $PKGNAME/ && E1=0
-make clean
+make clean && make -j$PM stripped && cp -R $NAME${EXT1}* $NAME$EXT2 $PKGNAME/ && E1=0
+#make clean
 [ $E1 -gt 0 ] && echo "Error building packages; aborting." && exit 1
 # Make a fat binary on macOS x86_64 if possible
 #if [ "$TA" = "mac64" ] && ld -v 2>&1 | grep -q 'archs:.*i386'
