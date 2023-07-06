@@ -30,19 +30,20 @@ VERSION_MAJOR = $(shell grep -m 1 '^.define LIBJODYCODE_VER ' libjodycode.h | se
 CROSS_DETECT  = $(shell true | $(CC) -dM -E - | grep -m 1 __x86_64 || echo "cross")
 
 ifeq ($(UNAME_S), Darwin)
-	LINK_OPTIONS += -Wl,-install_name,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+ LINK_OPTIONS += -Wl,-install_name,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+ # Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
+ GCCVERSION = $(shell expr `LC_ALL=C gcc -v 2>&1 | grep '[cn][cg] version' | sed 's/[^0-9]*//;s/[ .].*//'` \>= 5)
+ STRIP_UNNEEDED = strip -S
+ STRIP_DEBUG = strip -S
 else
-	LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+ LINK_OPTIONS += -Wl,-soname,$(PROGRAM_NAME).$(SO_SUFFIX).$(API_VERSION)
+ GCCVERSION = 1
+ STRIP_UNNEEDED = strip --strip-unneeded
+ STRIP_DEBUG = strip --strip-debug
 endif
 
-# Don't use unsupported compiler options on gcc 3/4 (Mac OS X 10.5.8 Xcode)
-ifeq ($(UNAME_S), Darwin)
-	GCCVERSION = $(shell expr `LC_ALL=C gcc -v 2>&1 | grep 'gcc version ' | cut -d\  -f3 | cut -d. -f1` \>= 5)
-else
-	GCCVERSION = 1
-endif
 ifeq ($(GCCVERSION), 1)
-	COMPILER_OPTIONS += -Wextra -Wstrict-overflow=5 -Winit-self
+ COMPILER_OPTIONS += -Wextra -Wstrict-overflow=5 -Winit-self
 endif
 
 # Are we running on a Windows OS?
@@ -198,8 +199,8 @@ test:
 	./test.sh
 
 stripped: sharedlib staticlib
-	strip --strip-unneeded libjodycode.$(SO_SUFFIX)
-	strip --strip-debug libjodycode.a
+	$(STRIP_UNNEEDED) libjodycode.$(SO_SUFFIX)
+	$(STRIP_DEBUG) libjodycode.a
 
 objsclean:
 	$(RM) $(OBJS) $(SIMD_OBJS) vercheck.o
