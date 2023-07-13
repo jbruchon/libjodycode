@@ -125,10 +125,11 @@ int main(void)
 	static struct jc_proc_cacheinfo pci;
 	jc_get_proc_cacheinfo(&pci);
 
-	printf("Cache: L1 %d,%d,%d  L2 %d,%d,%d L3 %d,%d,%d\n",
-		pci.l1, pci.l1i, pci.l1d,
-		pci.l2, pci.l2i, pci.l2d,
-		pci.l3, pci.l3i, pci.l3d);
+	printf("Cache info:\n\n");
+	printf("L1  I %4luK, D %4luK, U %4luK\n", pci.l1i >> 10, pci.l1d >> 10, pci.l1 >> 10);
+	printf("L2  I %4luK, D %4luK, U %4luK\n", pci.l2i >> 10, pci.l2d >> 10, pci.l2 >> 10);
+	if ((pci.l3d | pci.l3i | pci.l3) != 0) printf("L3  I %4luK, D %4luK, U %4luK\n", pci.l3i >> 10, pci.l3d >> 10, pci.l3 >> 10);
+	else printf("L3  does not exist\n");
 	return 0;
 }
 #endif

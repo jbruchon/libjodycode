@@ -148,6 +148,9 @@ vercheck: helper_code/libjodycode_check.c
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -DJC_TEST -I. -c -o vercheck.o helper_code/libjodycode_check.c
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -L. -Wl,-Bstatic vercheck.o -ljodycode -Wl,-Bdynamic -o vercheck
 
+cacheinfo:
+	$(CC) cacheinfo.c -DJC_TEST $(CFLAGS) $(LDFLAGS) -o cacheinfo
+
 .c.o:
 	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
@@ -207,7 +210,8 @@ objsclean:
 
 clean: objsclean
 	$(RM) $(PROGRAM_NAME).$(SO_SUFFIX) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
-	$(RM) apiver vercheck *.a *~ helper_code/*~ libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
+	$(RM) apiver cacheinfo vercheck
+	$(RM) *.a *~ helper_code/*~ libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*

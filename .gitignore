@@ -9,6 +9,7 @@
 *.dll*
 *.exe
 apiver
+cacheinfo
 vercheck
 *.7.gz
 
