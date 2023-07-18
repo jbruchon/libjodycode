@@ -20,6 +20,6 @@ extern void jc_nullptr(const char * restrict func)
 {
   static const char n[] = "(NULL)";
   if (func == NULL) func = n;
-  fprintf(stderr, "\ninternal error: NULL pointer passed to %s\n", func);
+  fprintf(stderr, "\ninternal error: NULL pointer caught at %s\n", func);
   exit(EXIT_FAILURE);
 }
