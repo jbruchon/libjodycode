@@ -145,7 +145,7 @@ extern void jc_nullptr(const char * restrict func);
 
 /* Remove "middle" '..' components in a path: 'foo/../bar/baz' => 'bar/baz' */
 extern int jc_collapse_dotdot(char * const path);
-/* Given a src and dest pathy, create a relative path name from src to dest */
+/* Given a src and dest path, create a relative path name from src to dest */
 extern int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path);
 
 

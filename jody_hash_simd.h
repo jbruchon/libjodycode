@@ -25,7 +25,12 @@ extern "C" {
 
 /* Use SIMD by default */
 #if !defined NO_SIMD
- #if defined _MSC_VER || defined _WIN32 || defined __MINGW32__
+ #if defined __APPLE__
+  /* Mac OS X < 10.15 don't support aligned_alloc */
+  #include <x86intrin.h>
+  #define aligned_alloc(a,b) malloc(b)
+  #define ALIGNED_FREE(a) free(a)
+ #elif defined _MSC_VER || defined _WIN32 || defined __MINGW32__
   /* Microsoft C/C++-compatible compiler */
   #include <intrin.h>
   #define aligned_alloc(a,b) _aligned_malloc(b,a)
