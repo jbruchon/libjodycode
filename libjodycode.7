@@ -77,6 +77,15 @@ libjodycode \- shared code used by several tools written by Jody Bruchon
 .BI "void jc_set_output_modes(unsigned int " modes ")"
 .BI "int jc_widearg_to_argv(int " argc ", wchar_t **" wargv ", char **" argv ")"
 
+.SS "Windows Unicode conversion shortcut definitions"
+.nf
+.BI "M2W(char *" a ", JC_WCHAR_T *" b ")"
+convert string a to wide string b using MultiByteToWideChar()
+
+.BI "W2M(JC_WCHAR_T *" a ", char *" b ")"
+convert wide string a to normal string b using WideCharToMultiByte()
+
+
 .PP
 .SH DESCRIPTION
 libjodycode is a software code library containing code shared among several of
