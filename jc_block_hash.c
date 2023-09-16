@@ -5,6 +5,7 @@
  */
 
 #include <sys/types.h>
+#include "libjodycode.h"
 #include "jody_hash.h"
 
 extern int jc_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count)

@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include "libjodycode.h"
 
 struct jc_error {
 	const char *name;
