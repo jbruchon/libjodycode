@@ -1,7 +1,7 @@
 /* Jody Bruchon's helpful code library header
  * Copyright (C) 2014-2023 by Jody Bruchon <jody@jodybruchon.com>
  * Licensed under The MIT License
- * Source code: https://github.com/jbruchon/libjodycode
+ * Source code: https://codeberg.org/jbruchon/libjodycode
  */
 
 #ifndef LIBJODYCODE_H
