@@ -241,4 +241,8 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
  #define jc_slash_convert(a)
 #endif /* UNICODE */
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* LIBJODYCODE_H */
