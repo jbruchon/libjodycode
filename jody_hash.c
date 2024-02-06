@@ -9,12 +9,20 @@
  * Released under The MIT License
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "jody_hash.h"
 #include "jody_hash_simd.h"
 #include "likely_unlikely.h"
+
+/* Rolling hash block size (4K by default) */
+#ifndef ROLLBSIZE
+ #define ROLLBSIZE 4096
+#endif
+#define ROLLBSIZEW (ROLLBSIZE / sizeof(jodyhash_t))
+
 
 static const jodyhash_t jh_s_constant = JH_ROR2(JODY_HASH_CONSTANT);
 
@@ -95,5 +103,28 @@ skip_sse2:
 		*hash += element2;
 	}
 
+	return 0;
+}
+
+
+extern int jody_rolling_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count)
+{
+	jodyhash_t rollhash;
+	size_t blocks = (count & ~((uint64_t)ROLLBSIZE - 1)) / ROLLBSIZE;
+	for (unsigned int i = 0; i < blocks; i++) {
+//fprintf(stderr, "rolling([%u] %p, %016" PRIx64 ", %d)\n", i, (void *)data, *hash, ROLLBSIZE);
+		rollhash = 0;
+		if (jody_block_hash(data, &rollhash, ROLLBSIZE)) return 1;
+		*hash ^= rollhash;
+		data += ROLLBSIZEW;
+	}
+	/* Hash the last block */
+	blocks = count - (blocks * ROLLBSIZE);
+	if (blocks > 0) {
+//fprintf(stderr, "rolltail(%p, %016" PRIx64 ", %d)\n", (void *)data, *hash, ROLLBSIZE);
+		rollhash = 0;
+		if (jody_block_hash(data, &rollhash, blocks)) return 1;
+		*hash ^= rollhash;
+	}
 	return 0;
 }

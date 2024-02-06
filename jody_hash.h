@@ -93,6 +93,7 @@ static const jodyhash_t tail_mask[] = {
 
 
 extern int jody_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count);
+extern int jody_rolling_block_hash(jodyhash_t *data, jodyhash_t *hash, const size_t count);
 
 #ifdef __cplusplus
 }
