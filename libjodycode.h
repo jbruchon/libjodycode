@@ -433,6 +433,9 @@ extern const int jc_api_featurelevel;
 extern const int jc_jodyhash_version;
 extern const int jc_windows_unicode;
 
+#ifdef __linux__
+ extern int jc_get_kernel_version(void);
+#endif
 
 /*** win_unicode ***/
 

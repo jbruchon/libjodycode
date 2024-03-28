@@ -23,7 +23,7 @@
 #ifdef __linux__
  /* Use built-in static dedupe header if requested */
  #include <linux/fs.h>
- #if defined STATIC_DEDUPE_H || !defined FICLONE
+ #ifndef FICLONE
   #define FICLONE _IOW(0x94, 9, int)
  #endif
  #include <sys/ioctl.h>
