@@ -152,7 +152,7 @@ jody_hash_avx2.o: jody_hash_simd.o
 jody_hash_sse2.o: jody_hash_simd.o
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) $(CPPFLAGS) -msse2 -c -o jody_hash_sse2.o jody_hash_sse2.c
 
-apiver:
+apiver: helper_code/libjodycode_apiver.c
 	$(CC) $(CFLAGS) $(COMPILER_OPTIONS) $(WIN_CFLAGS) $(CFLAGS_EXTRA) -I. -o apiver helper_code/libjodycode_apiver.c
 
 vercheck: helper_code/libjodycode_check.c

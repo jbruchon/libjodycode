@@ -11,6 +11,7 @@
  #include <sys/utsname.h>
 #endif
 
+/* Static version info constants embedded in the library */
 const char *jc_version = LIBJODYCODE_VER;
 const char *jc_verdate = LIBJODYCODE_VERDATE;
 const int jc_api_version = LIBJODYCODE_API_VERSION;
