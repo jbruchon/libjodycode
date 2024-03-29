@@ -16,7 +16,7 @@ struct jc_error {
 };
 
 
-#define JC_ERRCNT 13
+#define JC_ERRCNT 14
 static const int errcnt = JC_ERRCNT;
 static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },  // 0 - not a real error
@@ -32,7 +32,8 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "numstrcmp",   "jc_numeric_strcmp() was passed a NULL pointer" },  // 10
 	{ "datetime",    "date/time string is invalid" },  // 11
 	{ "win32api",    "a Win32 API call failed" },  // 12
-	{ NULL, NULL },  // 13
+	{ "kernelver",   "kernel version is too old" },  // 13
+	{ NULL, NULL },  // 14
 };
 
 
