@@ -43,7 +43,7 @@ extern int jc_dedupe(struct jc_fileinfo_batch * const restrict batch)
 		if (unlikely(batch->files[i].dirent == NULL)) goto error_bad_params;
 	}
 
-	if (jc_get_kernel_version() < 3000000) goto error_kernel_version;
+	if (jc_get_kernel_version() < 3012000) goto error_kernel_version;
 
 	errno = 0;
 	src_fd = open(batch->files[0].dirent->d_name, O_RDONLY);
