@@ -8,7 +8,7 @@
 #include "likely_unlikely.h"
 
 /* Like strncasecmp() but only tests for equality */
-int jc_strncaseeq(const char *s1, const char *s2, size_t len)
+int jc_strncaseeq(const char *s1, const char *s2, const size_t len)
 {
 	size_t i = 0;
 
@@ -55,7 +55,7 @@ int jc_strcaseeq(const char *s1, const char *s2)
 
 
 /* Like strncmp() but only tests for equality */
-int jc_strneq(const char *s1, const char *s2, size_t len)
+int jc_strneq(const char *s1, const char *s2, const size_t len)
 {
 	size_t i = 0;
 

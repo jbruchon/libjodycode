@@ -89,7 +89,7 @@ error_nomem:
 
 
 /* Extract d_namlen from struct dirent */
-size_t jc_get_d_namlen(JC_DIRENT *dirent)
+size_t jc_get_d_namlen(const JC_DIRENT * const restrict dirent)
 {
 	if (unlikely(dirent == NULL)) goto error_bad_dirent;
 #ifdef _DIRENT_HAVE_D_NAMLEN
@@ -111,7 +111,7 @@ error_bad_dirent:
 
 
 /* Open a directory; handle Windows doing readdir() equivalent too */
-JC_DIRENT *jc_readdir(JC_DIR *dirp)
+JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp)
 {
 #ifdef ON_WINDOWS
 	int i;
@@ -152,7 +152,7 @@ error_fnf:
 
 #ifdef ON_WINDOWS
 /* De-allocate a directory struct and remove from the list */
-static void jc_destroy_dirp(JC_DIR *dirp)
+static void jc_destroy_dirp(JC_DIR * const restrict dirp)
 {
 	JC_DIR *prev, *cur;
 
@@ -173,7 +173,7 @@ static void jc_destroy_dirp(JC_DIR *dirp)
 
 
 /* Close a directory */
-int jc_closedir(JC_DIR *dirp)
+int jc_closedir(JC_DIR * const restrict dirp)
 {
 	int retval;
 #ifdef ON_WINDOWS

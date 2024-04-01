@@ -93,8 +93,8 @@ struct JC_TIMESPEC {
 	time_t tv_sec;
 	long tv_nsec;
 };
- extern int jc_nttime_to_unixtime(FILETIME *filetime, struct JC_TIMESPEC *unixtime);
- extern int jc_unixtime_to_nttime(struct JC_TIMESPEC *unixtime, FILETIME *filetime);
+ extern int jc_nttime_to_unixtime(const FILETIME * const restrict filetime, struct JC_TIMESPEC * const restrict unixtime);
+ extern int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FILETIME * const restrict filetime);
 #else
  #define JC_TIMESPEC timespec
 #endif  /* ON_WINDOWS */
@@ -259,16 +259,16 @@ typedef struct _JC_DIR_T {
   #define JC_DT_WHT DT_WHT
  #endif /* DT_UNKNOWN */
 #endif /* ON_WINDOWS */
-extern int jc_closedir(JC_DIR *dirp);
+extern int jc_closedir(JC_DIR * const restrict dirp);
 extern JC_DIR *jc_opendir(const char * restrict path);
-extern JC_DIRENT *jc_readdir(JC_DIR *dirp);
+extern JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
 
 
 extern int        jc_access(const char *pathname, int mode);
 extern char      *jc_getcwd(char *pathname, size_t size);
 extern FILE      *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
 extern int        jc_link(const char *path1, const char *path2);
-extern size_t     jc_get_d_namlen(JC_DIRENT *dirent);
+extern size_t     jc_get_d_namlen(const JC_DIRENT * const restrict dirent);
 extern int        jc_rename(const char *oldpath, const char *newpath);
 extern int        jc_remove(const char *pathname);
 
@@ -411,9 +411,9 @@ extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2,
 /*** string ***/
 
 /* Same as str[n]cmp/str[n]casecmp but only checks for equality */
-extern int jc_strncaseeq(const char *s1, const char *s2, size_t len);
+extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
-extern int jc_strneq(const char *s1, const char *s2, size_t len);
+extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
 
 
