@@ -96,17 +96,19 @@ error_datetime:
 
 
 #ifdef ON_WINDOWS
-int jc_nttime_to_unixtime(FILETIME *filetime, struct JC_TIMESPEC *unixtime)
+int jc_nttime_to_unixtime(const FILETIME * const restrict filetime, struct JC_TIMESPEC * const restrict unixtime)
 {
-	uint64_t nttime = ((uint64_t)(filetime->dwHighDateTime) << 32) + filetime->dwLowDateTime;
-	if (unlikely(filetime == NULL || nttime <= NTTIME_CONSTANT || unixtime == NULL)) return -1;
+	uint64_t nttime;
+	if (unlikely(filetime == NULL || unixtime == NULL)) return -1;
+	nttime = ((uint64_t)(filetime->dwHighDateTime) << 32) + filetime->dwLowDateTime;
+	if (unlikely(nttime <= NTTIME_CONSTANT)) return -1;
 	unixtime->tv_sec = (time_t)((nttime - NTTIME_CONSTANT) / NTTIME_NSEC);
 	unixtime->tv_nsec = (long)(((nttime - NTTIME_CONSTANT) % NTTIME_NSEC) * 100);
 	return 0;
 }
 
 
-int jc_unixtime_to_nttime(struct JC_TIMESPEC *unixtime, FILETIME *filetime)
+int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FILETIME * const restrict filetime)
 {
 	uint64_t nttime;
 	if (unlikely(filetime == NULL || unixtime == NULL)) return -1;
