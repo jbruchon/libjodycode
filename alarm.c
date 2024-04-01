@@ -41,7 +41,7 @@ void CALLBACK jc_catch_alarm(PVOID arg1, BOOLEAN arg2)
 }
 
 
-extern int jc_start_alarm(const unsigned int seconds, const int repeat)
+int jc_start_alarm(const unsigned int seconds, const int repeat)
 {
 	unsigned int secs = seconds * 1000;
 	unsigned int period = 0;
@@ -56,7 +56,7 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 }
 
 
-extern int jc_stop_alarm(void)
+int jc_stop_alarm(void)
 {
 	if (CloseHandle(hTimer) == 0) {
 		jc_errno = jc_GetLastError();
@@ -76,7 +76,7 @@ void jc_catch_alarm(const int signum)
 }
 
 
-extern int jc_start_alarm(const unsigned int seconds, const int repeat)
+int jc_start_alarm(const unsigned int seconds, const int repeat)
 {
 	struct sigaction sa_run;
 
@@ -92,7 +92,7 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat)
 }
 
 
-extern int jc_stop_alarm(void)
+int jc_stop_alarm(void)
 {
 	struct sigaction sa_stop;
 

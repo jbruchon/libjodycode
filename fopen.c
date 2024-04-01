@@ -16,7 +16,7 @@
 
 
 /* Open a file, converting the name for Unicode on Windows if necessary */
-extern FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode)
+FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode)
 {
 	FILE *fp;
 #ifdef ON_WINDOWS

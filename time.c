@@ -30,7 +30,7 @@ static int twodigit_atoi(const char * restrict p)
 /* Accepts date[time] strings "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS"
  * and returns the number of seconds since the Unix Epoch a la mktime()
  * or returns -1 on any error */
-extern time_t jc_strtoepoch(const char * const datetime)
+time_t jc_strtoepoch(const char * const datetime)
 {
 	time_t secs = 0;  /* 1970-01-01 00:00:00 */
 	const char * restrict p = datetime;
@@ -96,7 +96,7 @@ error_datetime:
 
 
 #ifdef ON_WINDOWS
-extern int jc_nttime_to_unixtime(FILETIME *filetime, struct JC_TIMESPEC *unixtime)
+int jc_nttime_to_unixtime(FILETIME *filetime, struct JC_TIMESPEC *unixtime)
 {
 	uint64_t nttime = ((uint64_t)(filetime->dwHighDateTime) << 32) + filetime->dwLowDateTime;
 	if (unlikely(filetime == NULL || nttime <= NTTIME_CONSTANT || unixtime == NULL)) return -1;
@@ -106,7 +106,7 @@ extern int jc_nttime_to_unixtime(FILETIME *filetime, struct JC_TIMESPEC *unixtim
 }
 
 
-extern int jc_unixtime_to_nttime(struct JC_TIMESPEC *unixtime, FILETIME *filetime)
+int jc_unixtime_to_nttime(struct JC_TIMESPEC *unixtime, FILETIME *filetime)
 {
 	uint64_t nttime;
 	if (unlikely(filetime == NULL || unixtime == NULL)) return -1;

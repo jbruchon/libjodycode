@@ -21,7 +21,7 @@
 
 #ifdef ON_WINDOWS
 /* Convert slashes to backslashes in a file path */
-extern void jc_slash_convert(char *path)
+void jc_slash_convert(char *path)
 {
 	while (*path != '\0') {
 		if (*path == '/') *path = '\\';
@@ -34,7 +34,7 @@ extern void jc_slash_convert(char *path)
 
 #ifdef UNICODE
 /* Copy a string to a wide string - wstring must be freed by the caller */
-extern int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T **wstring)
+int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T **wstring)
 {
 	if (unlikely(wstring == NULL)) return JC_ENULL;
 	*wstring = (JC_WCHAR_T *)malloc(JC_PATHBUF_SIZE + 4);
@@ -48,7 +48,7 @@ extern int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T *
 
 
 /* Copy Windows wide character arguments to UTF-8 */
-extern int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv)
+int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv)
 {
 	static char temp[JC_PATHBUF_SIZE * 2];
 	int len;
@@ -74,7 +74,7 @@ extern int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv)
 /* Copy WIN32_FIND_FILE data to DIR data for a JC_DIR
  * The first call will allocate a JC_DIR and copy into it
  * Set hFind/ffd to NULL for subsequent calls on the same dirp */
-extern int jc_ffd_to_dirent(JC_DIR **dirp, HANDLE hFind, WIN32_FIND_DATA *ffd)
+int jc_ffd_to_dirent(JC_DIR **dirp, HANDLE hFind, WIN32_FIND_DATA *ffd)
 {
 #ifdef UNICODE
 	char *tempname;

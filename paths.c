@@ -11,7 +11,7 @@
 
 /* Collapse dot-dot and single dot path components
  * This code MUST be passed a full file pathname (starting with '/') */
-extern int jc_collapse_dotdot(char * const path)
+int jc_collapse_dotdot(char * const path)
 {
 	char *p; /* string copy input */
 	char *out; /* string copy output */
@@ -73,7 +73,7 @@ extern int jc_collapse_dotdot(char * const path)
 
 
 /* Create a relative symbolic link path for a destination file */
-extern int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path)
+int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path)
 {
 	static char p1[JC_PATHBUF_SIZE * 2], p2[JC_PATHBUF_SIZE * 2];
 	char *sp, *dp, *ss;

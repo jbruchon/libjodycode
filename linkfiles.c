@@ -31,7 +31,7 @@
 
 
 #ifdef __linux__
-extern int jc_dedupe(struct jc_fileinfo_batch * const restrict batch)
+int jc_dedupe(struct jc_fileinfo_batch * const restrict batch)
 {
 	int i, retval = 0, src_fd = -1, dest_fd = -1;
 
@@ -83,7 +83,7 @@ error_with_errno:
 
 #if 0
 /* linktype: 0=symlink, 1=hardlink, 2=clonefile() */
-extern int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
+int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 {
 	int *srcfile;
 	file_t ** restrict dupelist;

@@ -15,7 +15,7 @@
 
 
 /* sensitive: 0 = case-sensitive, 1 = case-insensitive */
-extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2, const int insensitive)
+int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2, const int insensitive)
 {
 	int precompare;
 	uintptr_t len1, len2;

@@ -18,7 +18,7 @@
 
 
 /* Hard link a file, converting for Windows if necessary */
-extern int jc_link(const char *path1, const char *path2)
+int jc_link(const char *path1, const char *path2)
 {
 	int retval = 0;
 #ifdef UNICODE

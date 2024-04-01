@@ -20,7 +20,7 @@
 
 
 /* Check file exist/read/write, converting for Windows if necessary */
-extern int jc_access(const char *pathname, int mode)
+int jc_access(const char *pathname, int mode)
 {
 	int retval;
 #ifdef UNICODE

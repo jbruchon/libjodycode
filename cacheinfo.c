@@ -46,7 +46,7 @@ static size_t read_procfile(const char * const restrict name)
 }
 
 
-extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo *pci)
+void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
 {
 	char *idx;
 	size_t i;

@@ -16,7 +16,7 @@
 
 
 /* Delete a file, converting for Windows if necessary */
-extern int jc_remove(const char *pathname)
+int jc_remove(const char *pathname)
 {
 	int retval;
 #ifdef UNICODE

@@ -23,7 +23,7 @@
 
 
 /* Get stat()-like extra information for a file on Windows */
-extern int jc_stat(const char *filename, struct JC_STAT *buf)
+int jc_stat(const char *filename, struct JC_STAT *buf)
 {
 	int retval;
 #ifdef ON_WINDOWS

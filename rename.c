@@ -17,7 +17,7 @@
 
 
 /* Rename a file, converting for Windows if necessary */
-extern int jc_rename(const char *oldpath, const char *newpath)
+int jc_rename(const char *oldpath, const char *newpath)
 {
 	int retval;
 #ifdef UNICODE

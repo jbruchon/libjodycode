@@ -21,7 +21,7 @@ const int jc_windows_unicode = LIBJODYCODE_WINDOWS_UNICODE;
 
 
 #ifdef __linux__
-extern int jc_get_kernel_version(void)
+int jc_get_kernel_version(void)
 {
 	const int mult[3] = { 1000000, 1000, 1 };
 	struct utsname utsname;

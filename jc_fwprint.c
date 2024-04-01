@@ -29,7 +29,7 @@
  * 3: set to UTF-16 mode
  * 4: set to UTF-16 mode for terminals, otherwise set to binary mode
  */
-extern void jc_set_output_modes(int out, int err)
+void jc_set_output_modes(int out, int err)
 {
 	switch (out) {
 		default:
@@ -75,7 +75,7 @@ extern void jc_set_output_modes(int out, int err)
 
 
 /* Print a string that is wide on Windows but normal on POSIX */
-extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
+int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr)
 {
 #ifdef UNICODE
 	int retval;
