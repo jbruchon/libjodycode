@@ -50,19 +50,27 @@ int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T **wstrin
 /* Copy Windows wide character arguments to UTF-8 */
 int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv)
 {
-	static char temp[JC_PATHBUF_SIZE * 2];
+	char *temp;
 	int len;
 
 	if (unlikely(!argv)) return JC_ENULL;
+
+	temp = (char *)malloc(JC_PATHBUF_SIZE * 2);
+	if (temp == NULL) return JC_ENOMEM;
+
 	for (int counter = 0; counter < argc; counter++) {
 		len = W2M(wargv[counter], &temp);
 		if (unlikely(len < 1)) {
 			jc_errno = jc_GetLastError();
+			free(temp);
 			return JC_EBADARGV;
 		}
 
 		argv[counter] = (char *)malloc((size_t)len + 1);
-		if (unlikely(!argv[counter])) return JC_EALLOC;
+		if (unlikely(!argv[counter])) {
+			free(temp);
+			return JC_EALLOC;
+		}
 		strncpy_s(argv[counter], (size_t)len + 1, temp, (size_t)len + 1);
 	}
 	return 0;
