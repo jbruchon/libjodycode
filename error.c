@@ -16,24 +16,23 @@ struct jc_error {
 };
 
 
-#define JC_ERRCNT 14
+#define JC_ERRCNT 13
 static const int errcnt = JC_ERRCNT;
 static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },  // 0 - not a real error
-	{ "null",        "function got a bad NULL parameter" },  // 1
-	{ "getcwd",      "couldn't get the current directory" },  // 2
-	{ "cdotdot",     "jc_collapse_dotdot() call failed" },  // 3
-	{ "grn_dir_end", "get_relative_name() result has directory at end" },  // 4
-	{ "bad_errnum",  "invalid error number" },  // 5
-	{ "bad_argv",    "bad argv pointer" },  // 6
-	{ "mb_wc_fail",  "a multibyte/wide char conversion failed" },  // 7
-	{ "alarm_fail",  "alarm call failed" },  // 8
-	{ "alloc_fail",  "memory allocation failed" },  // 9
-	{ "numstrcmp",   "jc_numeric_strcmp() was passed a NULL pointer" },  // 10
-	{ "datetime",    "date/time string is invalid" },  // 11
-	{ "win32api",    "a Win32 API call failed" },  // 12
-	{ "kernelver",   "kernel version is too old" },  // 13
-	{ NULL, NULL },  // 14
+	{ "null",        "function received a bad NULL parameter" },  // 1
+	{ "cdotdot",     "jc_collapse_dotdot() call failed" },  // 2
+	{ "grn_dir_end", "get_relative_name() result has directory at end" },  // 3
+	{ "bad_errnum",  "invalid error number" },  // 4
+	{ "bad_argv",    "bad argv pointer" },  // 5
+	{ "mb_wc_fail",  "a multibyte/wide char conversion failed" },  // 6
+	{ "alarm_fail",  "alarm call failed" },  // 7
+	{ "alloc_fail",  "memory allocation failed" },  // 8
+	{ "numstrcmp",   "jc_numeric_strcmp() was passed a NULL pointer" },  // 9
+	{ "datetime",    "date/time string is invalid" },  // 10
+	{ "win32api",    "a Win32 API call failed" },  // 11
+	{ "kernelver",   "kernel version is too old" },  // 12
+	{ NULL, NULL },  // 13
 };
 
 

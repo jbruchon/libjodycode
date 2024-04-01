@@ -82,7 +82,8 @@ int jc_make_relative_link_name(const char * const src, const char * const dest, 
 
 	/* Get working directory path and prefix to pathnames if needed */
 	if (*src != '/' || *dest != '/') {
-		if (!jc_getcwd(p1, JC_PATHBUF_SIZE * 2)) return JC_EGETCWD;
+		jc_errno = 0;
+		if (!jc_getcwd(p1, JC_PATHBUF_SIZE * 2)) return jc_errno;
 		*(p1 + (JC_PATHBUF_SIZE * 2) - 1) = '\0';
 #ifdef ON_WINDOWS
 		strncat_s(p1, JC_PATHBUF_SIZE * 2, "/", JC_PATHBUF_SIZE * 2 - 1);

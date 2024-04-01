@@ -334,18 +334,17 @@ extern int jc_print_error(int errnum);
 
 #define JC_ENOERROR   1024
 #define JC_ENULL      1025
-#define JC_EGETCWD    1026
-#define JC_ECDOTDOT   1027
-#define JC_EGRNEND    1028
-#define JC_EBADERR    1029
-#define JC_EBADARGV   1030
-#define JC_EMBWC      1031
-#define JC_EALARM     1032
-#define JC_EALLOC     1033
-#define JC_ENUMSTRCMP 1034
-#define JC_EDATETIME  1035
-#define JC_EWIN32API  1036
-#define JC_EKERNVER  1037
+#define JC_ECDOTDOT   1026
+#define JC_EGRNEND    1027
+#define JC_EBADERR    1028
+#define JC_EBADARGV   1029
+#define JC_EMBWC      1030
+#define JC_EALARM     1031
+#define JC_EALLOC     1032
+#define JC_ENUMSTRCMP 1033
+#define JC_EDATETIME  1034
+#define JC_EWIN32API  1035
+#define JC_EKERNVER   1036
 
 
 /*** jc_fwprint ***/
