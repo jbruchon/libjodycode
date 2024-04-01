@@ -29,7 +29,7 @@
  * 3: set to UTF-16 mode
  * 4: set to UTF-16 mode for terminals, otherwise set to binary mode
  */
-void jc_set_output_modes(int out, int err)
+void jc_set_output_modes(const int out, const int err)
 {
 	switch (out) {
 		default:

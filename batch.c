@@ -11,7 +11,7 @@
 #include "likely_unlikely.h"
 
 /* allocs: 0 = just the batch, 1 = with dirents, 2 = with stats, 3 = with both */
-struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, int stat, int namlen)
+struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen)
 {
 	struct jc_fileinfo_batch *batch;
 	struct JC_STAT *stats;
@@ -45,7 +45,7 @@ error_cleanup:
 }
 
 
-void jc_fileinfo_batch_free(struct jc_fileinfo_batch *batch)
+void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch)
 {
 	if (unlikely(batch == NULL)) return;
 

@@ -293,8 +293,8 @@ struct jc_fileinfo_batch {
 	struct jc_fileinfo files[];
 };
 
-extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, int stat, int namlen);
-extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch *batch);
+extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen);
+extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch);
 
 
 /*** cacheinfo ***/
@@ -454,7 +454,7 @@ extern const int jc_windows_unicode;
 
  extern int jc_ffd_to_dirent(JC_DIR **dirp, HANDLE hFind, WIN32_FIND_DATA *ffd);
  extern void jc_slash_convert(char *path);
- extern void jc_set_output_modes(int out, int err);
+ extern void jc_set_output_modes(const int out, const int err);
 
  /* These are used for Unicode output and string work on Windows only */
  #ifdef UNICODE
