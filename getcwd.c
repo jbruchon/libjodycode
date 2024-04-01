@@ -18,7 +18,7 @@
 
 
 /* Check file exist/read/write, converting for Windows if necessary */
-char *jc_getcwd(char *pathname, size_t size)
+char *jc_getcwd(char * const restrict pathname, const size_t size)
 {
 	char *retval;
 #ifdef UNICODE
