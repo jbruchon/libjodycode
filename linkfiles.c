@@ -21,7 +21,6 @@
 #endif /* __APPLE__ */
 
 #ifdef __linux__
- /* Use built-in static dedupe header if requested */
  #include <linux/fs.h>
  #ifndef FICLONE
   #define FICLONE _IOW(0x94, 9, int)

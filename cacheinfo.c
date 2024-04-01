@@ -46,8 +46,9 @@ static size_t read_procfile(const char * const restrict name)
 }
 
 
-void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
+struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup)
 {
+	static struct jc_proc_cacheinfo *pci;
 	char *idx;
 	size_t i;
 	size_t size;
@@ -55,31 +56,39 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
 	char type;
 	char index;
 
-	if (unlikely(pci == NULL)) return;
+	if (unlikely(cleanup != 0)) {
+		if (likely(pci != NULL)) free(pci);
+		return NULL;
+	}
 
-	memset(pci, 0, sizeof(struct jc_proc_cacheinfo));
+	if (pci != NULL) return pci;
+
 	i = strlen(path);
-	if (i > 48) return;
+	if (i > 48) return NULL;
 	idx = path + i;
 	pathidx = idx + 1;
 	*pathidx = '/'; pathidx++;
+
+	pci = (struct jc_proc_cacheinfo *)malloc(sizeof(struct jc_proc_cacheinfo));
+	if (pci == NULL) return NULL;
+	memset(pci, 0, sizeof(struct jc_proc_cacheinfo));
 
 	for (index = '0'; index < '9'; index++) {
 		*idx = index;
 
 		/* Get the level for this index */
-		if (read_procfile("level") == 0) break;
-		if (*buf < '1' || *buf > '3') break;
+		if (read_procfile("level") == 0) goto error;
+		if (*buf < '1' || *buf > '3') goto error;
 		else level = (*buf) + 1 - '1';
 
 		/* Get the size */
-		if (read_procfile("size") == 0) break;
+		if (read_procfile("size") == 0) goto error;
 		size = (size_t)atoi(buf) * 1024;
-		if (size == 0) break;
+		if (size == 0) goto error;
 
 		/* Get the type */
-		if (read_procfile("type") == 0) break;
-		if (*buf != 'U' && *buf != 'I' && *buf != 'D') break;
+		if (read_procfile("type") == 0) goto error;
+		if (*buf != 'U' && *buf != 'I' && *buf != 'D') goto error;
 		type = *buf;
 
 		/* Act on it */
@@ -89,7 +98,7 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
 				case 1: pci->l1d = size; break;
 				case 2: pci->l2d = size; break;
 				case 3: pci->l3d = size; break;
-				default: return;
+				default: goto error;
 			};
 			break;
 			case 'I':
@@ -97,7 +106,7 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
 				case 1: pci->l1i = size; break;
 				case 2: pci->l2i = size; break;
 				case 3: pci->l3i = size; break;
-				default: return;
+				default: goto error;
 			};
 			break;
 			case 'U':
@@ -105,15 +114,19 @@ void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci)
 				case 1: pci->l1 = size; break;
 				case 2: pci->l2 = size; break;
 				case 3: pci->l3 = size; break;
-				default: return;
+				default: goto error;
 			};
 			break;
-			default: return;
+			default: break;
 		}
 
 		/* Continue to next index */
 	}
-	return;
+	return pci;
+
+error:
+	if (pci != NULL) free(pci);
+	return NULL;
 }
 
 #endif /* __linux__ */

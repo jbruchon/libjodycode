@@ -316,7 +316,7 @@ struct jc_proc_cacheinfo {
 	size_t l3d;
 };
 
-extern void jc_get_proc_cacheinfo(struct jc_proc_cacheinfo * const restrict pci);
+extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
 
 #else
  #define jc_get_proc_cacheinfo(a)

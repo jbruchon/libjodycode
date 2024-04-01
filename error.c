@@ -65,7 +65,7 @@ int jc_print_error(int errnum)
 #ifdef JC_TEST
 int main(void)
 {
-	static int i;
+	int i;
 
 	for (i = 0; i < errcnt; i++) printf("[%d] %s: %s\n", i, jc_get_errname(i), jc_get_errdesc(i));
 	for (i = 0; i < errcnt; i++) jc_print_error(i);
