@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "likely_unlikely.h"
 #include "libjodycode.h"
@@ -75,22 +76,31 @@ int jc_collapse_dotdot(char * const path)
 /* Create a relative symbolic link path for a destination file */
 int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path)
 {
-	static char p1[JC_PATHBUF_SIZE * 2], p2[JC_PATHBUF_SIZE * 2];
+	char *p1, *p2;
 	char *sp, *dp, *ss;
+	int retval;
 
 	if (unlikely(!src || !dest)) return JC_ENULL;
+
+	p1 = (char *)malloc(JC_PATHBUF_SIZE + 8);
+	if (unlikely(p1 == NULL)) return JC_ENOMEM;
+	p2 = (char *)malloc(JC_PATHBUF_SIZE + 8);
+	if (unlikely(p2 == NULL)) { free(p1); return JC_ENOMEM; }
 
 	/* Get working directory path and prefix to pathnames if needed */
 	if (*src != '/' || *dest != '/') {
 		jc_errno = 0;
-		if (!jc_getcwd(p1, JC_PATHBUF_SIZE * 2)) return jc_errno;
-		*(p1 + (JC_PATHBUF_SIZE * 2) - 1) = '\0';
+		if (!jc_getcwd(p1, JC_PATHBUF_SIZE)) {
+			retval = jc_errno;
+			goto finish;
+		}
+		*(p1 + JC_PATHBUF_SIZE - 1) = '\0';
 #ifdef ON_WINDOWS
-		strncat_s(p1, JC_PATHBUF_SIZE * 2, "/", JC_PATHBUF_SIZE * 2 - 1);
-		strncpy_s(p2, JC_PATHBUF_SIZE * 2, p1, JC_PATHBUF_SIZE * 2);
+		strncat_s(p1, JC_PATHBUF_SIZE, "/", JC_PATHBUF_SIZE - 1);
+		strncpy_s(p2, JC_PATHBUF_SIZE, p1, JC_PATHBUF_SIZE);
 #else
-		strncat(p1, "/", JC_PATHBUF_SIZE * 2 - 1);
-		strncpy(p2, p1, JC_PATHBUF_SIZE * 2);
+		strncat(p1, "/", JC_PATHBUF_SIZE - 1);
+		strncpy(p2, p1, JC_PATHBUF_SIZE);
 #endif
 	}
 
@@ -100,16 +110,18 @@ int jc_make_relative_link_name(const char * const src, const char * const dest, 
 
 	/* Concatenate working directory to relative paths */
 #ifdef ON_WINDOWS
-	strncat_s(p1, JC_PATHBUF_SIZE * 2, src, JC_PATHBUF_SIZE);
-	strncat_s(p2, JC_PATHBUF_SIZE * 2, dest, JC_PATHBUF_SIZE);
+	strncat_s(p1, JC_PATHBUF_SIZE, src, JC_PATHBUF_SIZE);
+	strncat_s(p2, JC_PATHBUF_SIZE, dest, JC_PATHBUF_SIZE);
 #else
 	strncat(p1, src, JC_PATHBUF_SIZE);
 	strncat(p2, dest, JC_PATHBUF_SIZE);
 #endif
 
 	/* Collapse . and .. path components */
-	if (unlikely(jc_collapse_dotdot(p1) != 0)) return JC_ECDOTDOT;
-	if (unlikely(jc_collapse_dotdot(p2) != 0)) return JC_ECDOTDOT;
+	if (unlikely(jc_collapse_dotdot(p1) != 0 || jc_collapse_dotdot(p2) != 0)) {
+		retval = JC_ECDOTDOT;
+		goto finish;
+	}
 
 	/* Find where paths differ, remembering each slash along the way */
 	sp = p1; dp = p2; ss = p1;
@@ -118,7 +130,10 @@ int jc_make_relative_link_name(const char * const src, const char * const dest, 
 		sp++; dp++;
 	}
 	/* If paths are 100% identical then the files are the same file */
-	if (*sp == '\0' && *dp == '\0') return 1;
+	if (*sp == '\0' && *dp == '\0') {
+		retval = 1;
+		goto finish;
+	}
 
 	/* Replace dirs in destination path with dot-dot */
 	while (*dp != '\0') {
@@ -134,10 +149,13 @@ int jc_make_relative_link_name(const char * const src, const char * const dest, 
 
 	/* . and .. dirs at end are invalid */
 	if (*(rel_path - 1) == '.')
-		if (*(rel_path - 2) == '/' || (*(rel_path - 2) == '.' && *(rel_path - 3) == '/'))
-			return JC_EGRNEND;
-	if (unlikely(*(rel_path - 1) == '/')) return JC_EGRNEND;
+		if (*(rel_path - 2) == '/' || (*(rel_path - 2) == '.' && *(rel_path - 3) == '/') || unlikely(*(rel_path - 1) == '/')) {
+			retval = JC_EGRNEND;
+		}
 
 	*rel_path = '\0';
-	return 0;
+
+finish:
+	free(p1); free(p2);
+	return retval;
 }

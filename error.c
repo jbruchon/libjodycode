@@ -16,13 +16,13 @@ struct jc_error {
 };
 
 
-#define JC_ERRCNT 13
+#define JC_ERRCNT 14
 static const int errcnt = JC_ERRCNT;
 static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },  // 0 - not a real error
 	{ "null",        "function received a bad NULL parameter" },  // 1
 	{ "cdotdot",     "jc_collapse_dotdot() call failed" },  // 2
-	{ "grn_dir_end", "get_relative_name() result has directory at end" },  // 3
+	{ "grn_end_dir", "get_relative_name() result has directory at end" },  // 3
 	{ "bad_errnum",  "invalid error number" },  // 4
 	{ "bad_argv",    "bad argv pointer" },  // 5
 	{ "mb_wc_fail",  "a multibyte/wide char conversion failed" },  // 6
@@ -32,7 +32,8 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "datetime",    "date/time string is invalid" },  // 10
 	{ "win32api",    "a Win32 API call failed" },  // 11
 	{ "kernelver",   "kernel version is too old" },  // 12
-	{ NULL, NULL },  // 13
+	{ "no_memory",   "memory allocation failed (out of memory)" }, // 13
+	{ NULL, NULL },  // 14
 };
 
 

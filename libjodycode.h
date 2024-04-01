@@ -345,6 +345,7 @@ extern int jc_print_error(int errnum);
 #define JC_EDATETIME  1034
 #define JC_EWIN32API  1035
 #define JC_EKERNVER   1036
+#define JC_ENOMEM     1037
 
 
 /*** jc_fwprint ***/
