@@ -41,7 +41,7 @@ int main(void)
 	strcpy(batch->files[26].dirent->d_name, "0");
 	strcpy(batch->files[27].dirent->d_name, "1");
 
-	if (jc_dedupe(batch) != 0) printf("failure\n");
+	if (jc_linkfiles(batch, REFLINK) != 0) printf("failure\n");
 	else printf("success\n");
 
 	jc_fileinfo_batch_free(batch);

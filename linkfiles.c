@@ -29,12 +29,14 @@
 #endif /* __linux__ */
 
 
-#ifdef __linux__
-int jc_dedupe(struct jc_fileinfo_batch * const restrict batch)
+int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_e_link linktype)
 {
-	int i, retval = 0, src_fd = -1, dest_fd = -1;
+	int i, retval = 0;
+#ifdef __linux__
+	int src_fd = -1, dest_fd = -1;
+#endif /* __linux__ */
 
-	if (unlikely(batch == NULL || batch->count < 2)) goto error_bad_params;
+	if (unlikely(batch == NULL || batch->count < 2 || linktype > 2 || linktype < 0)) goto error_bad_params;
 
 	/* All batch statuses default to general failure */
 	for (i = 1; i < batch->count; i++) {
@@ -42,30 +44,55 @@ int jc_dedupe(struct jc_fileinfo_batch * const restrict batch)
 		if (unlikely(batch->files[i].dirent == NULL)) goto error_bad_params;
 	}
 
-	if (jc_get_kernel_version() < 3012000) goto error_kernel_version;
+#ifdef __linux__
+	if (unlikely(jc_get_kernel_version() < 3012000)) goto error_kernel_version;
+#endif /* __linux__ */
 
 	errno = 0;
-	src_fd = open(batch->files[0].dirent->d_name, O_RDONLY);
-	if (unlikely(src_fd < 0)) goto error_with_errno;
 
-	for (i = 1; i < batch->count; i++) {
+	for (i = 0; i < batch->count; i++) {
 		errno = 0;
-		dest_fd = open(batch->files[i].dirent->d_name, O_RDWR);
-		batch->files[i].status = errno;
-		if (unlikely(dest_fd < 0)) {
-			jc_errno = EIO;
-			retval = -1;
-			continue;
+
+#ifndef ENABLE_CLONEFILE_LINK
+		if (linktype == 2) {
+ #ifdef __linux__
+		/* Linux FICLONE (reflink copy) */
+			if (src_fd < 0) {
+				src_fd = open(batch->files[0].dirent->d_name, O_RDONLY);
+				if (src_fd < 0) {
+					jc_errno = EIO;
+					retval = -1;
+				}
+				batch->files[i].status = errno;
+				continue;
+			}
+			dest_fd = open(batch->files[i].dirent->d_name, O_RDWR);
+			batch->files[i].status = errno;
+			if (unlikely(dest_fd < 0)) {
+				jc_errno = EIO;
+				retval = -1;
+				continue;
+			}
+			errno = 0;
+			if (ioctl(dest_fd, FICLONE, src_fd) == -1) {
+				jc_errno = EIO;
+				retval = -1;
+			}
+			batch->files[i].status = errno;
+			close(dest_fd);
+ #else /* not __linux__ or ENABLE_CLONEFILE_LINK */
+			jc_errno = ENOTSUP;
+			return -1;
+ #endif /* __linux__ */
 		}
-		errno = 0;
-		if (ioctl(dest_fd, FICLONE, src_fd) == -1) {
-			jc_errno = EIO;
-			retval = -1;
-		}
-		batch->files[i].status = errno;
-		close(dest_fd);
+#endif /* ENABLE_CLONEFILE_LINK */
+		/* TODO: hard link, clonefile link, symlink */
 	}
-	close(src_fd);
+#ifdef __linux__
+	/* Cleanup after reflink copy */
+	if (src_fd >= 0) close(src_fd);
+#endif /* __linux__ */
+
 	return retval;
 
 error_kernel_version:
@@ -74,18 +101,13 @@ error_kernel_version:
 error_bad_params:
 	jc_errno = EFAULT;
 	return -1;
-error_with_errno:
-	jc_errno = errno;
-	return -1;
 }
-#endif /* __linux__ */
 
 #if 0
-/* linktype: 0=symlink, 1=hardlink, 2=clonefile() */
+/* linktype: 0=soft (symbolic), 1=hard, 2=clone/reflink */
 int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 {
 	int *srcfile;
-	file_t ** restrict dupelist;
 	unsigned int x = 0;
 	size_t name_len = 0;
 	int i, success;
@@ -238,10 +260,10 @@ int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 				 * the compression flag on dstfile in favor of the one from srcfile */
 				dupfile_preserved_flags = s.st_flags & ~(unsigned int)UF_COMPRESSED;
 				dupfile_original_flags = s.st_flags;
-				dupfile_original_tval[0].tv_sec = s.st_atime;
-				dupfile_original_tval[0].tv_usec = 0;
-				dupfile_original_tval[1].tv_sec = s.st_mtime;
-				dupfile_original_tval[1].tv_usec = 0;
+				dupfile_original_tval[0].tv_sec = s.st_atim.tv_sec;
+				dupfile_original_tval[0].tv_usec = s.st_atim.tv_usec;
+				dupfile_original_tval[1].tv_sec = s.st_mtim.tv_sec;
+				dupfile_original_tval[1].tv_usec = s.st_mtim.tv_usec;
 			}
 #endif
 

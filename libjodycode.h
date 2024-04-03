@@ -363,16 +363,15 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 #define JODY_HASH_WIDTH 64
 typedef uint64_t jodyhash_t;
 
-enum jc_e_hash { NORMAL, ROLLING };
+enum jc_e_hash { NORMAL = 0, ROLLING = 1 };
 
-extern int jc_block_hash(enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count);
+extern int jc_block_hash(const enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count);
 
 
 /*** linkfiles ***/
 
-#ifdef __linux__
-extern int jc_dedupe(struct jc_fileinfo_batch *batch);
-#endif /* __linux__ */
+enum jc_e_link { SYMLINK = 0, HARDLINK = 1, REFLINK = 2 };
+extern int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_e_link linktype);
 
 
 /*** oom ***/

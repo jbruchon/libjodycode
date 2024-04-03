@@ -8,7 +8,7 @@
 #include "libjodycode.h"
 #include "jody_hash.h"
 
-int jc_block_hash(enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count)
+int jc_block_hash(const enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count)
 {
 	switch (type) {
 	default:
