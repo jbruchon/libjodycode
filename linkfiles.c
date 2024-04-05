@@ -53,8 +53,18 @@ int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_
 	for (i = 0; i < batch->count; i++) {
 		errno = 0;
 
+		switch (linktype) {
+		case 0:
+			if (batch->files[0].stat->st_mode != JC_DT_LNK) goto error_bad_params;
+			if (batch->files[0].dirent->d_type != JC_DT_LNK) goto error_bad_params;
+			break;
+
+		default:
+		case 1:
+			break;
+
 #ifndef ENABLE_CLONEFILE_LINK
-		if (linktype == 2) {
+		case 2:
  #ifdef __linux__
 		/* Linux FICLONE (reflink copy) */
 			if (src_fd < 0) {
@@ -84,9 +94,10 @@ int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_
 			jc_errno = ENOTSUP;
 			return -1;
  #endif /* __linux__ */
-		}
+			break;
 #endif /* ENABLE_CLONEFILE_LINK */
-		/* TODO: hard link, clonefile link, symlink */
+		}
+		/* TODO: hard link + clonefile link, symlink */
 	}
 #ifdef __linux__
 	/* Cleanup after reflink copy */
