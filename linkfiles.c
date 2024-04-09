@@ -29,6 +29,85 @@
 #endif /* __linux__ */
 
 
+#define TEMPORARY_SUFFIX "._link_.tmp";
+static const char *tempsuffix = TEMPORARY_SUFFIX;
+static const size_t templen = sizeof TEMPORARY_SUFFIX;
+
+
+static char *alloc_tempname(const JC_DIRENT * const restrict dirent)
+{
+	char *tempname = NULL;
+	size_t len;
+
+	len = jc_get_d_namlen(dirent);
+	if (len == 0) goto error_params;
+	tempname = (char *)malloc(len + templen);
+	if (tempname == NULL) goto error_oom;
+	memcpy(tempname, dirent->d_name, len);
+	memcpy(tempname + len, tempsuffix, templen);
+	return tempname;
+
+error_params:
+	jc_errno = EFAULT;
+	return NULL;
+error_oom:
+	jc_errno = ENOMEM;
+	return NULL;
+}
+
+
+/* Rename a file to a temporary name for safe linking */
+int safe_rename_for_link(const struct jc_fileinfo * const restrict file, const char **newname)
+{
+	char *tempname = NULL;
+
+	if (unlikely(file == NULL)) goto error_params;
+
+	tempname = alloc_tempname(file->dirent);
+	if (tempname == NULL) goto error_params;
+	errno = 0;
+	if (unlikely(jc_rename(file->dirent->d_name, tempname) == -1)) goto error_with_errno;
+
+	if (newname == NULL) free(tempname);
+	else *newname = tempname;
+
+	return 0;
+
+error_params:
+	jc_errno = EFAULT;
+	return -1;
+error_with_errno:
+	if (tempname != NULL) free(tempname);
+	jc_errno = errno;
+	return -1;
+}
+
+int safe_rename_revert(const struct jc_fileinfo * const restrict file, char *newname)
+{
+	char *tempname;
+
+	if (unlikely(file == NULL)) goto error_params;
+
+	if (newname == NULL) {
+		tempname = alloc_tempname(file->dirent);
+		if (tempname == NULL) goto error_params;
+	} else tempname = newname;
+	errno = 0;
+	if (unlikely(jc_rename(tempname, file->dirent->d_name) == -1)) goto error_with_errno;
+	free(tempname);
+
+	return 0;
+
+error_params:
+	jc_errno = EFAULT;
+	return -1;
+error_with_errno:
+	if (tempname != NULL) free(tempname);
+	jc_errno = errno;
+	return -1;
+}
+
+
 int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_e_link linktype)
 {
 	int i, retval = 0;
@@ -274,10 +353,6 @@ int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 			name_len = strlen(dupelist[x]->d_name) + 11;
 			if (name_len > PATHBUF_SIZE) continue;
 			/* Assemble a temporary file name */
-			strcpy(tempname, dupelist[x]->d_name);
-			strcat(tempname, "._link_.tmp");
-			/* Rename the destination file to the temporary name */
-			i = jc_rename(dupelist[x]->d_name, tempname);
 			if (i != 0) {
 				fprintf(stderr, "warning: cannot move link target to a temporary name, not linking:\n-//-> ");
 				jc_fwprint(stderr, dupelist[x]->d_name, 1);
