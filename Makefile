@@ -162,6 +162,9 @@ vercheck: helper_code/libjodycode_check.c
 cacheinfo:
 	$(CC) cacheinfo.c -DJC_TEST $(CFLAGS) $(LDFLAGS) -o cacheinfo
 
+lnk: tests/linkfiles_dedupe.c
+	$(CC) -Wall -Wextra -pedantic $(CFLAGS) $(LDFLAGS) -I. -std=gnu11 tests/linkfiles_dedupe.c libjodycode.a -o lnk
+
 .c.o:
 	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
