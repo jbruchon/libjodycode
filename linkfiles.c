@@ -16,7 +16,7 @@
  #include <copyfile.h>
  #ifndef NO_CLONEFILE
   #include <sys/clonefile.h>
-  #define ENABLE_CLONEFILE_LINK 1
+  #define ENABLE_CLONEFILE 1
  #endif /* NO_CLONEFILE */
 #endif /* __APPLE__ */
 
@@ -32,9 +32,6 @@
 int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_e_link linktype)
 {
 	int i, retval = 0;
-#ifdef __linux__
-	int src_fd = -1, dest_fd = -1;
-#endif /* __linux__ */
 
 	if (unlikely(batch == NULL || batch->count < 2 || linktype > 2 || linktype < 0)) goto error_bad_params;
 
@@ -48,61 +45,56 @@ int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_
 	if (unlikely(jc_get_kernel_version() < 3012000)) goto error_kernel_version;
 #endif /* __linux__ */
 
-	errno = 0;
+	/* TODO: hard link + clonefile link, symlink */
 
-	for (i = 0; i < batch->count; i++) {
-		errno = 0;
+	switch (linktype) {
+	/* "Soft" (symbolic) link */
+	case 0:
+		if (batch->files[0].stat->st_mode != JC_DT_LNK) goto error_bad_params;
+		if (batch->files[0].dirent->d_type != JC_DT_LNK) goto error_bad_params;
+		break;
 
-		switch (linktype) {
-		case 0:
-			if (batch->files[0].stat->st_mode != JC_DT_LNK) goto error_bad_params;
-			if (batch->files[0].dirent->d_type != JC_DT_LNK) goto error_bad_params;
-			break;
+	/* Hard link */
+	default:
+	case 1:
+		break;
 
-		default:
-		case 1:
-			break;
-
-#ifndef ENABLE_CLONEFILE_LINK
-		case 2:
- #ifdef __linux__
+	/* Clone link or reflink */
+	case 2:
+#if defined __linux__ && defined FICLONE
 		/* Linux FICLONE (reflink copy) */
-			if (src_fd < 0) {
-				src_fd = open(batch->files[0].dirent->d_name, O_RDONLY);
-				if (src_fd < 0) {
-					jc_errno = EIO;
-					retval = -1;
-				}
-				batch->files[i].status = errno;
-				continue;
-			}
-			dest_fd = open(batch->files[i].dirent->d_name, O_RDWR);
-			batch->files[i].status = errno;
-			if (unlikely(dest_fd < 0)) {
-				jc_errno = EIO;
-				retval = -1;
-				continue;
-			}
+		int src_fd, dest_fd;
+		if (batch->files[0].dirent == NULL) goto error_bad_params;
+		errno = 0;
+		src_fd = open(batch->files[0].dirent->d_name, O_RDONLY);
+		if (unlikely(src_fd < 0)) {
+			batch->files[0].status = errno;
+			jc_errno = EIO;
+			return -1;
+		}
+		for (i = 1; i < batch->count; i++) {
 			errno = 0;
-			if (ioctl(dest_fd, FICLONE, src_fd) == -1) {
-				jc_errno = EIO;
-				retval = -1;
-			}
+			dest_fd = open(batch->files[i].dirent->d_name, O_RDWR);
+			if (unlikely(dest_fd < 0)) goto error_ficlone;
+			errno = 0;
+			if (unlikely(ioctl(dest_fd, FICLONE, src_fd) == -1)) goto error_ficlone;
 			batch->files[i].status = errno;
 			close(dest_fd);
- #else /* not __linux__ or ENABLE_CLONEFILE_LINK */
-			jc_errno = ENOTSUP;
-			return -1;
- #endif /* __linux__ */
-			break;
-#endif /* ENABLE_CLONEFILE_LINK */
+			continue;
+
+error_ficlone:
+			batch->files[i].status = errno;
+			if (errno != 0) jc_errno = EIO;
+			retval = -1;
+			continue;
 		}
-		/* TODO: hard link + clonefile link, symlink */
-	}
-#ifdef __linux__
-	/* Cleanup after reflink copy */
-	if (src_fd >= 0) close(src_fd);
+		close(src_fd);
+#else /* not __linux__ */
+		jc_errno = ENOTSUP;
+		return -1;
 #endif /* __linux__ */
+		break;
+	}
 
 	return retval;
 

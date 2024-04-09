@@ -8,6 +8,7 @@ int main(void)
 {
 	struct jc_fileinfo_batch *batch;
 	const int filecnt = 28;
+	int i;
 
 	batch = jc_fileinfo_batch_alloc(filecnt, 0, 3);
 	if (batch == NULL) return -1;
@@ -41,8 +42,12 @@ int main(void)
 	strcpy(batch->files[26].dirent->d_name, "0");
 	strcpy(batch->files[27].dirent->d_name, "1");
 
-	if (jc_linkfiles(batch, REFLINK) != 0) printf("failure\n");
-	else printf("success\n");
+
+	i = jc_linkfiles(batch, REFLINK);
+	if (i != 0) {
+		printf("failure: %d\n", i);
+		for (int j = 0; j < filecnt; j++) printf("file %d: %d\n", j, batch->files[j].status);
+	} else printf("success\n");
 
 	jc_fileinfo_batch_free(batch);
 	return 0;
