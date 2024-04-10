@@ -57,7 +57,7 @@ error_oom:
 
 
 /* Rename a file to a temporary name for safe linking */
-int safe_rename_for_link(const struct jc_fileinfo * const restrict file, const char **newname)
+static int safe_rename_for_link(const struct jc_fileinfo * const restrict file, const char **newname)
 {
 	char *tempname = NULL;
 
@@ -82,7 +82,8 @@ error_with_errno:
 	return -1;
 }
 
-int safe_rename_revert(const struct jc_fileinfo * const restrict file, char *newname)
+
+static int safe_rename_revert(const struct jc_fileinfo * const restrict file, char *newname)
 {
 	char *tempname;
 
