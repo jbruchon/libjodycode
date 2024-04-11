@@ -88,6 +88,7 @@ extern "C" {
 
 
 /*** time ***/
+
 #ifdef ON_WINDOWS
 struct JC_TIMESPEC {
 	time_t tv_sec;
@@ -442,11 +443,17 @@ extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2,
 
 /*** string ***/
 
-/* Same as str[n]cmp/str[n]casecmp but only checks for equality */
+/* string type with length prefix */
+typedef struct _jc_str_t {
+	uint16_t len;
+	char str[1];
+} jc_str_t;
+
 extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
+extern jc_str_t *jc_str_init(const char * const string);
 
 
 /*** strtoepoch ***/

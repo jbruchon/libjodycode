@@ -130,8 +130,8 @@ int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_
 	switch (linktype) {
 	/* "Soft" (symbolic) link */
 	case 0:
-		if (batch->files[0].stat->st_mode != JC_DT_LNK) goto error_bad_params;
-		if (batch->files[0].dirent->d_type != JC_DT_LNK) goto error_bad_params;
+		if (unlikely(batch->files[0].stat->st_mode == JC_DT_LNK)) goto error_bad_params;
+		if (unlikely(batch->files[0].dirent->d_type == JC_DT_LNK)) goto error_bad_params;
 		break;
 
 	/* Hard link */
