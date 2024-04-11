@@ -111,7 +111,7 @@ error_bad_dirent:
 
 
 /* Open a directory; handle Windows doing readdir() equivalent too */
-JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp)
+JC_DIRENT *jc_readdir(JC_DIR *dirp)
 {
 #ifdef ON_WINDOWS
 	int i;
