@@ -15,7 +15,7 @@ struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int s
 {
 	struct jc_fileinfo_batch *batch;
 	struct JC_STAT *stats;
-	JC_DIRENT *dirents;
+	struct JC_DIRENT *dirents;
 	int i;
 
 	if (unlikely(filecnt <= 0)) return NULL;
@@ -31,10 +31,10 @@ struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int s
 			batch->files[i].stat = (struct JC_STAT *)((uintptr_t)stats + (uintptr_t)(((int)sizeof(struct JC_STAT) * i)));
 	}
 	if (namlen != 0) {
-		dirents = calloc(1, (size_t)(((int)sizeof(JC_DIRENT) + namlen) * filecnt));
+		dirents = calloc(1, (size_t)(((int)sizeof(struct JC_DIRENT) + namlen) * filecnt));
 		if (dirents == NULL) goto error_cleanup;
 		for (i = 0; i < filecnt; i++)
-			batch->files[i].dirent = (JC_DIRENT *)((uintptr_t)dirents + (uintptr_t)(((int)sizeof(JC_DIRENT) + namlen) * i));
+			batch->files[i].dirent = (struct JC_DIRENT *)((uintptr_t)dirents + (uintptr_t)(((int)sizeof(struct JC_DIRENT) + namlen) * i));
 	}
 
 	return batch;

@@ -89,7 +89,7 @@ error_nomem:
 
 
 /* Extract d_namlen from struct dirent */
-size_t jc_get_d_namlen(const JC_DIRENT * const restrict dirent)
+size_t jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent)
 {
 	if (unlikely(dirent == NULL)) goto error_bad_dirent;
 #ifdef _DIRENT_HAVE_D_NAMLEN
@@ -111,7 +111,7 @@ error_bad_dirent:
 
 
 /* Open a directory; handle Windows doing readdir() equivalent too */
-JC_DIRENT *jc_readdir(JC_DIR *dirp)
+struct JC_DIRENT *jc_readdir(JC_DIR *dirp)
 {
 #ifdef ON_WINDOWS
 	int i;
@@ -139,7 +139,7 @@ error_fnf:
 
 #else  /* Non-Windows */
 
-	JC_DIRENT *retval;
+	struct JC_DIRENT *retval;
 
 	errno = 0;
 	retval = readdir(dirp);

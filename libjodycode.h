@@ -241,20 +241,20 @@ extern int jc_stat(const char * const filename, struct JC_STAT * const restrict 
  * Must be hijacked because FindFirstFileW() does one readdir() equivalent too
  * When the first file is returned, this entry is removed from the linked list */
 #ifdef ON_WINDOWS
-typedef struct _JC_DIRENT_T {
+ struct JC_DIRENT {
 	uint64_t d_ino;
 	uint32_t d_namlen;  /* we already do a strlen() so may as well pass it on */
 	unsigned char d_type;
 	char d_name[];
-} JC_DIRENT;
+ };
 
-typedef struct _JC_DIR_T {
+ typedef struct _JC_DIR_T {
 	struct _JC_DIR_T *next;
 	int cached;
 	HANDLE hFind;
 	WIN32_FIND_DATA ffd;
-	JC_DIRENT dirent;
-} JC_DIR;
+	struct JC_DIRENT dirent;
+ } JC_DIR;
  #define JC_DIRENT_HAVE_D_NAMLEN
  #define JC_DIRENT_HAVE_D_TYPE
  #define JC_DT_BLK 6
@@ -280,7 +280,7 @@ typedef struct _JC_DIR_T {
   #define JC_DIRENT_HAVE_D_OFF
  #endif
  #define JC_DIR DIR
- #define JC_DIRENT struct dirent
+ #define JC_DIRENT dirent
  #ifdef DT_UNKNOWN  /* Cheap way to detect d_type support in the preprocessor */
   #define JC_DT_BLK DT_BLK
   #define JC_DT_CHR DT_CHR
@@ -295,14 +295,14 @@ typedef struct _JC_DIR_T {
 #endif /* ON_WINDOWS */
 extern int jc_closedir(JC_DIR * const restrict dirp);
 extern JC_DIR *jc_opendir(const char * restrict path);
-extern JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
+extern struct JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
 
 
 extern int        jc_access(const char *pathname, int mode);
 extern char      *jc_getcwd(char * const restrict pathname, const size_t size);
 extern FILE      *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
 extern int        jc_link(const char *path1, const char *path2);
-extern size_t     jc_get_d_namlen(const JC_DIRENT * const restrict dirent);
+extern size_t     jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent);
 extern int        jc_rename(const char *oldpath, const char *newpath);
 extern int        jc_remove(const char *pathname);
 
@@ -318,7 +318,7 @@ extern int jc_stop_alarm(void);
 
 struct jc_fileinfo {
 	struct JC_STAT *stat;
-	JC_DIRENT *dirent;
+	struct JC_DIRENT *dirent;
 	int status;
 };
 
