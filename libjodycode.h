@@ -82,8 +82,9 @@ extern "C" {
  #endif
  #define jc_GetLastError() (int32_t)GetLastError()
 #else
-#include <dirent.h>
-#include <unistd.h>
+ #include <dirent.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
 #endif /* ON_WINDOWS */
 
 
@@ -267,6 +268,8 @@ extern int jc_stat(const char * const filename, struct JC_STAT * const restrict 
  #define JC_DT_UNKNOWN 0
  #define JC_DT_WHT 14
 #else
+ #define JC_DIR DIR
+ #define JC_DIRENT dirent
  #ifdef _DIRENT_HAVE_D_NAMLEN
   #define JC_DIRENT_HAVE_D_NAMLEN
  #endif
@@ -279,8 +282,6 @@ extern int jc_stat(const char * const filename, struct JC_STAT * const restrict 
  #ifdef _DIRENT_HAVE_D_OFF
   #define JC_DIRENT_HAVE_D_OFF
  #endif
- #define JC_DIR DIR
- #define JC_DIRENT dirent
  #ifdef DT_UNKNOWN  /* Cheap way to detect d_type support in the preprocessor */
   #define JC_DT_BLK DT_BLK
   #define JC_DT_CHR DT_CHR
