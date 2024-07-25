@@ -173,7 +173,7 @@ installdirs:
 	test -e $(DESTDIR)$(INC_DIR) || $(MKDIR) $(DESTDIR)$(INC_DIR)
 	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
 
-installfiles:
+installfiles: installdirs
 	$(INSTALL_PROGRAM) $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)            $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION)
 	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR)
 	$(LN)           $(PROGRAM_NAME).$(SO_SUFFIX).$(VERSION_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME).$(SO_SUFFIX)
