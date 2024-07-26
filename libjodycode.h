@@ -23,8 +23,8 @@ extern "C" {
  * version information for compatibility. See README for more information. */
 #define LIBJODYCODE_API_VERSION       3
 #define LIBJODYCODE_API_FEATURE_LEVEL 2
-#define LIBJODYCODE_VER               "3.1"
-#define LIBJODYCODE_VERDATE           "2023-07-02"
+#define LIBJODYCODE_VER               "3.1.1"
+#define LIBJODYCODE_VERDATE           "2024-07-25"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect
