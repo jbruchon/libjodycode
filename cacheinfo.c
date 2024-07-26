@@ -42,13 +42,14 @@ static size_t read_procfile(const char * const restrict name)
 	i = fread(buf, 1, 16, fp);
 	if (ferror(fp)) return 0;
 	fclose(fp);
+	*(buf + 15) = '\0';
 	return i;
 }
 
 
 struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup)
 {
-	static struct jc_proc_cacheinfo *pci;
+	static struct jc_proc_cacheinfo *pci = NULL;
 	char *idx;
 	size_t i;
 	size_t size;
@@ -69,15 +70,14 @@ struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup)
 	pathidx = idx + 1;
 	*pathidx = '/'; pathidx++;
 
-	pci = (struct jc_proc_cacheinfo *)malloc(sizeof(struct jc_proc_cacheinfo));
+	pci = (struct jc_proc_cacheinfo *)calloc(1, sizeof(struct jc_proc_cacheinfo));
 	if (pci == NULL) return NULL;
-	memset(pci, 0, sizeof(struct jc_proc_cacheinfo));
 
 	for (index = '0'; index < '9'; index++) {
 		*idx = index;
 
 		/* Get the level for this index */
-		if (read_procfile("level") == 0) goto error;
+		if (read_procfile("level") == 0) goto finish;
 		if (*buf < '1' || *buf > '3') goto error;
 		else level = (*buf) + 1 - '1';
 
@@ -122,6 +122,8 @@ struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup)
 
 		/* Continue to next index */
 	}
+finish:
+	if (unlikely(pci->l1d == 0 && pci->l1i == 0 && pci->l1 == 0)) goto error;
 	return pci;
 
 error:
