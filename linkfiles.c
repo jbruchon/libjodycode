@@ -178,9 +178,11 @@ error_ficlone:
 
 	return retval;
 
+#ifdef __linux__
 error_kernel_version:
 	jc_errno = JC_EKERNVER;
 	return -1;
+#endif  /* __linux__ */
 error_bad_params:
 	jc_errno = EFAULT;
 	return -1;

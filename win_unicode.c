@@ -48,31 +48,41 @@ int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T **wstrin
 
 
 /* Copy Windows wide character arguments to UTF-8 */
-int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv)
+int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char ***cargv)
 {
 	char *temp;
 	int len;
 
-	if (unlikely(!argv)) return JC_ENULL;
+	if (unlikely(cargv == NULL || wargv == NULL)) return JC_ENULL;
 
-	temp = (char *)malloc(JC_PATHBUF_SIZE * 2);
+	*cargv = (char **)calloc(1, sizeof(char *) * (size_t)argc);
+	if (*cargv == NULL) return JC_ENOMEM;
+
+	temp = (char *)calloc(1, JC_PATHBUF_SIZE + 2);
 	if (temp == NULL) return JC_ENOMEM;
 
 	for (int counter = 0; counter < argc; counter++) {
-		len = W2M(wargv[counter], &temp);
+fwprintf(stderr, L"arg %d: %S\n", counter, wargv[counter]);
+		len = W2M_SIZED(wargv[counter], &temp, JC_PATHBUF_SIZE);
+fprintf(stderr, "len: %d\n", len);
+fprintf(stderr, "temp = '%s'\n", temp);
 		if (unlikely(len < 1)) {
 			jc_errno = jc_GetLastError();
 			free(temp);
 			return JC_EBADARGV;
 		}
 
-		argv[counter] = (char *)malloc((size_t)len + 1);
-		if (unlikely(!argv[counter])) {
+		(*cargv)[counter] = (char *)malloc((size_t)len + 2);
+		if (unlikely(*cargv[counter] == NULL)) {
 			free(temp);
 			return JC_EALLOC;
 		}
-		strncpy_s(argv[counter], (size_t)len + 1, temp, (size_t)len + 1);
+fprintf(stderr, "strncpy(%p[%d], %p, %ld)\n", *cargv[counter], counter, temp, (size_t)len + 1);
+fprintf(stderr, "temp = '%s'\n", temp);
+		strncpy_s(*cargv[counter], (size_t)len + 1, temp, _TRUNCATE);
 	}
+	/* fix up __argv so getopt etc. don't crash */
+	__argv = *cargv;
 	return 0;
 }
 #endif /* UNICODE */

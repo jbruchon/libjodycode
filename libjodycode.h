@@ -50,7 +50,7 @@ extern "C" {
 
 #ifdef UNICODE
  #ifndef JC_PATHBUF_SIZE
-  #define JC_PATHBUF_SIZE 65536
+  #define JC_PATHBUF_SIZE 4096
  #endif
 #else
  #ifndef JC_PATHBUF_SIZE
@@ -75,10 +75,10 @@ extern "C" {
   #define M2W_SIZED(a,b,c) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, c)
  #endif
  #ifndef W2M
-  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, NULL)
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, FALSE)
  #endif
  #ifndef W2M_SIZED
-  #define W2M_SIZED(a,b,c) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, c, NULL, NULL)
+  #define W2M_SIZED(a,b,c) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, c, NULL, FALSE)
  #endif
  #define jc_GetLastError() (int32_t)GetLastError()
 #else
@@ -499,7 +499,7 @@ extern const int jc_windows_unicode;
  /* These are used for Unicode output and string work on Windows only */
  #ifdef UNICODE
   extern int jc_string_to_wstring(const char * const restrict string, JC_WCHAR_T **wstring);
-  extern int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char **argv);
+  extern int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char ***cargv);
  #endif /* UNICODE */
 #else
  #define jc_slash_convert(a)
