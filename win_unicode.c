@@ -52,37 +52,34 @@ int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char ***cargv)
 {
 	char *temp;
 	int len;
+	char **new_argv;
 
 	if (unlikely(cargv == NULL || wargv == NULL)) return JC_ENULL;
 
-	*cargv = (char **)calloc(1, sizeof(char *) * (size_t)argc);
-	if (*cargv == NULL) return JC_ENOMEM;
+	new_argv = (char **)calloc(1, sizeof(char *) * (size_t)argc);
+	if (new_argv == NULL) return JC_ENOMEM;
 
 	temp = (char *)calloc(1, JC_PATHBUF_SIZE + 2);
 	if (temp == NULL) return JC_ENOMEM;
 
 	for (int counter = 0; counter < argc; counter++) {
-fwprintf(stderr, L"arg %d: %S\n", counter, wargv[counter]);
-		len = W2M_SIZED(wargv[counter], &temp, JC_PATHBUF_SIZE);
-fprintf(stderr, "len: %d\n", len);
-fprintf(stderr, "temp = '%s'\n", temp);
+		len = W2M_SIZED(wargv[counter], temp, JC_PATHBUF_SIZE);
 		if (unlikely(len < 1)) {
 			jc_errno = jc_GetLastError();
 			free(temp);
 			return JC_EBADARGV;
 		}
 
-		(*cargv)[counter] = (char *)malloc((size_t)len + 2);
-		if (unlikely(*cargv[counter] == NULL)) {
+		new_argv[counter] = (char *)malloc((size_t)len + 2);
+		if (unlikely(new_argv[counter] == NULL)) {
 			free(temp);
 			return JC_EALLOC;
 		}
-fprintf(stderr, "strncpy(%p[%d], %p, %ld)\n", *cargv[counter], counter, temp, (size_t)len + 1);
-fprintf(stderr, "temp = '%s'\n", temp);
-		strncpy_s(*cargv[counter], (size_t)len + 1, temp, _TRUNCATE);
+		strncpy_s(new_argv[counter], (size_t)len + 1, temp, _TRUNCATE);
 	}
 	/* fix up __argv so getopt etc. don't crash */
-	__argv = *cargv;
+	__argv = new_argv;
+	*cargv = new_argv;
 	return 0;
 }
 #endif /* UNICODE */
