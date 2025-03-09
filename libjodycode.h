@@ -1,5 +1,5 @@
 /* Jody Bruchon's helpful code library header
- * Copyright (C) 2014-2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Licensed under The MIT License
  * Source code: https://codeberg.org/jbruchon/libjodycode
  */
@@ -24,7 +24,7 @@ extern "C" {
 #define LIBJODYCODE_API_VERSION       3
 #define LIBJODYCODE_API_FEATURE_LEVEL 2
 #define LIBJODYCODE_VER               "3.1.1"
-#define LIBJODYCODE_VERDATE           "2024-07-25"
+#define LIBJODYCODE_VERDATE           "2025-03-08"
 
 /* API sub-version table
  * This table tells programs about API changes so that programs can detect

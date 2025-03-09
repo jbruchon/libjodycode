@@ -1,6 +1,6 @@
 /* Cross-platform alarms
  *
- * Copyright (C) 2023 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 
