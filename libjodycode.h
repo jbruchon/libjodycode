@@ -1,5 +1,5 @@
 /* Jody Bruchon's helpful code library header
- * Copyright (C) 2014-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Licensed under The MIT License
  * Source code: https://codeberg.org/jbruchon/libjodycode
  */
@@ -24,7 +24,7 @@ extern "C" {
 #define LIBJODYCODE_API_VERSION       4
 #define LIBJODYCODE_API_FEATURE_LEVEL 4
 #define LIBJODYCODE_VER               "4.0"
-#define LIBJODYCODE_VERDATE           "2024-02-09"
+#define LIBJODYCODE_VERDATE           "2025-03-08"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else
@@ -48,18 +48,7 @@ extern "C" {
 #include <stdint.h>
 #include <sys/types.h>
 
-#ifdef UNICODE
- #ifndef JC_PATHBUF_SIZE
-  #define JC_PATHBUF_SIZE 4096
- #endif
-#else
- #ifndef JC_PATHBUF_SIZE
-  #define JC_PATHBUF_SIZE 32768
- #endif
-#endif
-#ifndef WPATH_MAX
- #define WPATH_MAX JC_PATHBUF_SIZE
-#endif
+#define JC_PATHBUF_SIZE 32768
 
 #ifdef ON_WINDOWS
  #ifndef WIN32_LEAN_AND_MEAN
@@ -69,13 +58,13 @@ extern "C" {
  #include <direct.h>
  /* Unicode conversion on Windows */
  #ifndef M2W
-  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, WPATH_MAX)
+  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, JC_PATHBUF_SIZE)
  #endif
  #ifndef M2W_SIZED
   #define M2W_SIZED(a,b,c) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, c)
  #endif
  #ifndef W2M
-  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, FALSE)
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, JC_PATHBUF_SIZE, NULL, FALSE)
  #endif
  #ifndef W2M_SIZED
   #define W2M_SIZED(a,b,c) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, c, NULL, FALSE)
