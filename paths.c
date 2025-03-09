@@ -27,7 +27,7 @@ extern int jc_collapse_dotdot(char * const path)
 
   while (*p != '\0') {
     /* Abort if we're too close to the end of the buffer */
-    if (unlikely(i >= (PATHBUF_SIZE - 3))) return -2;
+    if (unlikely(i >= (JC_PATHBUF_SIZE - 3))) return -2;
 
     /* Skip repeated slashes */
     while (*p == '/' && *(p + 1) == '/') {
@@ -80,17 +80,17 @@ extern int jc_collapse_dotdot(char * const path)
 extern int jc_make_relative_link_name(const char * const src,
                 const char * const dest, char * rel_path)
 {
-  static char p1[PATHBUF_SIZE * 2], p2[PATHBUF_SIZE * 2];
+  static char p1[JC_PATHBUF_SIZE * 2 + 4], p2[JC_PATHBUF_SIZE * 2 + 4];
   static char *sp, *dp, *ss;
 
   if (unlikely(!src || !dest)) return -1;
 
   /* Get working directory path and prefix to pathnames if needed */
   if (*src != '/' || *dest != '/') {
-    if (!getcwd(p1, PATHBUF_SIZE * 2)) return -2;
-    *(p1 + (PATHBUF_SIZE * 2) - 1) = '\0';
-    strncat(p1, "/", PATHBUF_SIZE * 2 - 1);
-    strncpy(p2, p1, PATHBUF_SIZE * 2);
+    if (!getcwd(p1, JC_PATHBUF_SIZE * 2)) return -2;
+    *(p1 + (JC_PATHBUF_SIZE * 2) - 1) = '\0';
+    strncat(p1, "/", JC_PATHBUF_SIZE * 2 - 1);
+    strncpy(p2, p1, JC_PATHBUF_SIZE * 2);
   }
 
   /* If an absolute path is provided, use it as-is */
@@ -98,8 +98,8 @@ extern int jc_make_relative_link_name(const char * const src,
   if (*dest == '/') *p2 = '\0';
 
   /* Concatenate working directory to relative paths */
-  strncat(p1, src, PATHBUF_SIZE);
-  strncat(p2, dest, PATHBUF_SIZE);
+  strncat(p1, src, JC_PATHBUF_SIZE);
+  strncat(p2, dest, JC_PATHBUF_SIZE);
 
   /* Collapse . and .. path components */
   if (unlikely(jc_collapse_dotdot(p1) != 0)) return -3;

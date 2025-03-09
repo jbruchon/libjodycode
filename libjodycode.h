@@ -50,6 +50,9 @@ extern "C" {
 #include <stdint.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#define JC_PATHBUF_SIZE 4096
+
 #ifdef ON_WINDOWS
 #ifndef WIN32_LEAN_AND_MEAN
  #define WIN32_LEAN_AND_MAN
@@ -57,27 +60,15 @@ extern "C" {
 #include <windows.h>
  /* Unicode conversion on Windows */
  #ifndef M2W
-  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, WPATH_MAX)
+  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, JC_PATHBUF_SIZE * 2)
  #endif
  #ifndef W2M
-  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, WPATH_MAX, NULL, NULL)
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, JC_PATHBUF_SIZE * 2, NULL, NULL)
  #endif
 #else
  #include <sys/stat.h>
 #endif /* ON_WINDOWS */
 
-#ifdef UNICODE
- #ifndef PATHBUF_SIZE
-  #define PATHBUF_SIZE 8192
- #endif
-#else
- #ifndef PATHBUF_SIZE
-  #define PATHBUF_SIZE 4096
- #endif
-#endif
-#ifndef WPATH_MAX
- #define WPATH_MAX PATHBUF_SIZE
-#endif
 
 
 /*** alarm ***/

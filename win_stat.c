@@ -49,7 +49,7 @@ extern int jc_win_stat(const char * const filename, struct jc_winstat * const re
   uint64_t timetemp;
 
 #ifdef UNICODE
-  static wchar_t wname2[WPATH_MAX];
+  static wchar_t wname2[JC_PATHBUF_SIZE + 4];
 
   if (unlikely(!buf)) return -127;
   if (!M2W(filename,wname2)) return -126;

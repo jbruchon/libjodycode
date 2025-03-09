@@ -16,7 +16,7 @@
 #include <io.h>
 static int out_mode = _O_TEXT;
 static int err_mode = _O_TEXT;
-static wchar_t wstr[PATHBUF_SIZE];
+static wchar_t wstr[JC_PATHBUF_SIZE + 4];
 
 /* Convert slashes to backslashes in a file path */
 extern void jc_slash_convert(char *path)
@@ -63,7 +63,7 @@ extern void jc_set_output_modes(unsigned int modes)
 /* Copy Windows wide character arguments to UTF-8 */
 extern int jc_widearg_to_argv(int argc, wchar_t **wargv, char **argv)
 {
-	static char temp[PATHBUF_SIZE * 2];
+	static char temp[JC_PATHBUF_SIZE * 2 + 4];
 	int len;
 
 	if (unlikely(!argv)) return -6;
