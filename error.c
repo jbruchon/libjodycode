@@ -1,6 +1,6 @@
 /* libjodycode: error strings and printing functions
  *
- * Copyright (C) 2023-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2023-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

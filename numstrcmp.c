@@ -1,7 +1,7 @@
 /* libjodycode: numerically correct string comparison
  * that "sorts" symbols and spaces AFTER alphanumeric characters
  *
- * Copyright (C) 2014-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

@@ -1,6 +1,6 @@
 /* libjodycode: directory calls`
  *
- * Copyright (C) 2014-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

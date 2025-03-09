@@ -54,7 +54,7 @@ Have a bug report or questions? contact Jody Bruchon <jody@jodybruchon.com>
 
 Legal information and software license
 -------------------------------------------------------------------------------
-libjodycode is Copyright (C) 2014-2024 by Jody Bruchon <jody@jodybruchon.com>
+libjodycode is Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
 
 The MIT License
 

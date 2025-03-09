@@ -198,7 +198,7 @@ int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 	int i, success;
 #ifndef NO_SYMLINKS
 	unsigned int symsrc;
-	char rel_path[PATHBUF_SIZE];
+	char rel_path[JC_PATHBUF_SIZE + 4];
 #endif
 #if defined ON_WINDOWS || defined ENABLE_CLONEFILE_LINK
 	struct JC_STAT s;
@@ -354,7 +354,7 @@ int jc_linkfiles(struct jc_fileinfo_batch *batch, const int linktype)
 
 			/* Make sure the name will fit in the buffer before trying */
 			name_len = strlen(dupelist[x]->d_name) + 11;
-			if (name_len > PATHBUF_SIZE) continue;
+			if (name_len > JC_PATHBUF_SIZE) continue;
 			/* Assemble a temporary file name */
 			if (i != 0) {
 				fprintf(stderr, "warning: cannot move link target to a temporary name, not linking:\n-//-> ");

@@ -1,5 +1,5 @@
 /* libjodycode: non-standard string functions
- * Copyright (C) 2015-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2015-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

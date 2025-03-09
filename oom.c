@@ -1,6 +1,6 @@
 /* libjodycoe: out-of-memory and NULL pointer error exits
  *
- * Copyright (C) 2021-2024 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2021-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 
