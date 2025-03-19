@@ -80,17 +80,17 @@ extern int jc_collapse_dotdot(char * const path)
 extern int jc_make_relative_link_name(const char * const src,
                 const char * const dest, char * rel_path)
 {
-  static char p1[JC_PATHBUF_SIZE * 2 + 4], p2[JC_PATHBUF_SIZE * 2 + 4];
+  static char p1[JC_PATHBUF_SIZE + 4], p2[JC_PATHBUF_SIZE + 4];
   static char *sp, *dp, *ss;
 
   if (unlikely(!src || !dest)) return -1;
 
   /* Get working directory path and prefix to pathnames if needed */
   if (*src != '/' || *dest != '/') {
-    if (!getcwd(p1, JC_PATHBUF_SIZE * 2)) return -2;
-    *(p1 + (JC_PATHBUF_SIZE * 2) - 1) = '\0';
-    strncat(p1, "/", JC_PATHBUF_SIZE * 2 - 1);
-    strncpy(p2, p1, JC_PATHBUF_SIZE * 2);
+    if (!getcwd(p1, JC_PATHBUF_SIZE)) return -2;
+    *(p1 + (JC_PATHBUF_SIZE) - 1) = '\0';
+    strncat(p1, "/", JC_PATHBUF_SIZE - 1);
+    strncpy(p2, p1, JC_PATHBUF_SIZE);
   }
 
   /* If an absolute path is provided, use it as-is */

@@ -23,7 +23,7 @@ extern "C" {
  * version information for compatibility. See README for more information. */
 #define LIBJODYCODE_API_VERSION       3
 #define LIBJODYCODE_API_FEATURE_LEVEL 2
-#define LIBJODYCODE_VER               "3.1.1"
+#define LIBJODYCODE_VER               "3.1.2"
 #define LIBJODYCODE_VERDATE           "2025-03-08"
 
 /* API sub-version table
@@ -60,10 +60,10 @@ extern "C" {
 #include <windows.h>
  /* Unicode conversion on Windows */
  #ifndef M2W
-  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, JC_PATHBUF_SIZE * 2)
+  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, JC_PATHBUF_SIZE)
  #endif
  #ifndef W2M
-  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, JC_PATHBUF_SIZE * 2, NULL, NULL)
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, JC_PATHBUF_SIZE, NULL, NULL)
  #endif
 #else
  #include <sys/stat.h>

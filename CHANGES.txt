@@ -1,3 +1,7 @@
+libjodycode 3.1.1 (2024-04-01)
+
+- Several minor bug fixes and build fixes
+
 libjodycode 3.1 (feature level 2) (2023-07-02)
 
 - Alarms now increment jc_alarm_ring for each trigger instead of always setting to 1
