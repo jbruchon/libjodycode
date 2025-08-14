@@ -86,14 +86,13 @@ int jc_streq(const char *s1, const char *s2)
 
 
 /* Convert a plain C string into a jc_str with size prefix */
-jc_str_t *jc_str_init(const char * const string)
+jc_str_t *jc_str_init(const char * const string, size_t len)
 {
 	jc_str_t *jstr;
-	size_t len;
 
 	if (string == NULL) return NULL;
 
-	len = strlen(string);
+	if (len == 0) len = strlen(string);
 	if (len > UINT16_MAX) return NULL;
 	jstr = (jc_str_t *)malloc(sizeof(jc_str_t) + len + 1);
 	if (jstr == NULL) return NULL;
