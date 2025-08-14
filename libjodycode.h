@@ -24,7 +24,7 @@ extern "C" {
 #define LIBJODYCODE_API_VERSION       4
 #define LIBJODYCODE_API_FEATURE_LEVEL 4
 #define LIBJODYCODE_VER               "4.0"
-#define LIBJODYCODE_VERDATE           "2025-03-08"
+#define LIBJODYCODE_VERDATE           "2025-08-14"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else
@@ -443,7 +443,7 @@ extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
-extern jc_str_t *jc_str_init(const char * const string);
+extern jc_str_t *jc_str_init(const char * const string, size_t len);
 
 
 /*** strtoepoch ***/

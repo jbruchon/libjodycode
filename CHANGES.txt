@@ -1,3 +1,19 @@
+libjodycode 4.0 (feature level 4) (2025-08-14)
+
+- Add loads of new jc_* functions and constants
+- Add jc_errno to replace errno
+- Completely remove API feature tables
+- Fixes for building on macOS and Hurd
+- Add rolling hash capability to jc_block_hash()
+- Add jc_get_d_namlen() to enable strlen() skips for directory objects
+- Add file linking functions with batch processing (incomplete, do not use yet)
+- Time functions now have nanosecond precision on Windows
+- Add jc_str_t data type (string prefixed with its own length)
+
+libjodycode 3.1.1 (2024-04-01)
+
+- Several minor bug fixes and build fixes
+
 libjodycode 3.1 (feature level 2) (2023-07-02)
 
 - Alarms now increment jc_alarm_ring for each trigger instead of always setting to 1
