@@ -1,4 +1,4 @@
-libjodycode 4.0 (feature level 4) (2025-08-14)
+libjodycode 4.0 (feature level 4) (2025-08-15)
 
 - Add loads of new jc_* functions and constants
 - Add jc_errno to replace errno
@@ -9,6 +9,8 @@ libjodycode 4.0 (feature level 4) (2025-08-14)
 - Add file linking functions with batch processing (incomplete, do not use yet)
 - Time functions now have nanosecond precision on Windows
 - Add jc_str_t data type (string prefixed with its own length)
+- Add jc_close() stub function
+- jc_get_proc_cacheinfo() is a stub function on non-Linux for future use
 
 libjodycode 3.1.1 (2024-04-01)
 
