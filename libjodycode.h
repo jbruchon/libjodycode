@@ -291,6 +291,7 @@ extern struct JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
 extern int        jc_access(const char *pathname, int mode);
 extern char      *jc_getcwd(char * const restrict pathname, const size_t size);
 extern FILE      *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
+extern int        jc_fclose(FILE *stream);
 extern int        jc_link(const char *path1, const char *path2);
 extern size_t     jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent);
 extern int        jc_rename(const char *oldpath, const char *newpath);

@@ -49,3 +49,9 @@ FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode)
 #endif  /* ON_WINDOWS */
 	return fp;
 }
+
+
+int jc_fclose(FILE *stream)
+{
+	return fclose(stream);
+}
