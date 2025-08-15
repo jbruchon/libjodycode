@@ -24,7 +24,7 @@ extern "C" {
 #define LIBJODYCODE_API_VERSION       4
 #define LIBJODYCODE_API_FEATURE_LEVEL 4
 #define LIBJODYCODE_VER               "4.0"
-#define LIBJODYCODE_VERDATE           "2025-08-14"
+#define LIBJODYCODE_VERDATE           "2025-08-15"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else
@@ -324,9 +324,6 @@ extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict bat
 
 /*** cacheinfo ***/
 
-/* Don't use cacheinfo on anything but Linux for now */
-#ifdef __linux__
-
 /* Cache information structure
  * Split caches populate i/d, unified caches populate non-i/d */
 struct jc_proc_cacheinfo {
@@ -342,10 +339,6 @@ struct jc_proc_cacheinfo {
 };
 
 extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
-
-#else
- #define jc_get_proc_cacheinfo(a)
-#endif /* __linux__ */
 
 
 /*** error ***/

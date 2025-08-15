@@ -14,6 +14,34 @@
 #include "likely_unlikely.h"
 #include "libjodycode.h"
 
+
+/* For non-Linux systems, use a default dummy set of numbers.
+ * This opens up the possibility of future implementation on Windows and macOS. */
+#ifndef __linux__
+static const struct jc_proc_cacheinfo static_cacheinfo = {
+	.l1 = 0, .l1i = 0, .l1d = 0,
+	.l2 = 0, .l2i = 0, .l2d = 0,
+	.l3 = 0, .l3i = 0, .l3d = 0
+};
+
+struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup)
+{
+	static struct jc_proc_cacheinfo *pci = NULL;
+
+	if (unlikely(cleanup != 0)) {
+		if (likely(pci != NULL)) free(pci);
+		return NULL;
+	}
+
+	pci = (struct jc_proc_cacheinfo *)calloc(1, sizeof(struct jc_proc_cacheinfo));
+	if (pci == NULL) return NULL;
+
+	memcpy(pci, &static_cacheinfo, sizeof(struct jc_proc_cacheinfo));
+	return pci;
+}
+#endif /* not __linux */
+
+
 /* None of this code is useful outside of Linux */
 #ifdef __linux__
 
