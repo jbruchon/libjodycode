@@ -225,7 +225,7 @@ objsclean:
 clean: objsclean
 	$(RM) $(PROGRAM_NAME)$(SO_SUFFIX) $(PROGRAM_NAME)$(SO_VER_MAJOR) $(PROGRAM_NAME)$(SO_VER_FULL)
 	$(RM) $(PROGRAM_NAME)$(LIB_SUFFIX) apiver cacheinfo vercheck
-	$(RM) *~ helper_code/*~ libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
+	$(RM) *~ helper_code/*~ libjodycode.a libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
 	$(RM) *.pkg.tar.*
