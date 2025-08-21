@@ -36,10 +36,10 @@ int jc_link(const char *path1, const char *path2)
 		jc_errno = ENOMEM;
 		return -1;
 	}
-	if (CreateHardLinkW((LPCWSTR)widename2, (LPCWSTR)widename1, NULL) != 0) retval = -1;
+	if (CreateHardLinkW((LPCWSTR)widename2, (LPCWSTR)widename1, NULL) == 0) retval = -1;
 	free(widename1); free(widename2);
  #else
-	if (CreateHardLink(path2, path1, NULL) != 0) retval = -1;
+	if (CreateHardLink(path2, path1, NULL) == 0) retval = -1;
  #endif  /* UNICODE */
 	if (retval != 0) jc_errno = jc_GetLastError();
 #else
