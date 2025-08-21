@@ -1,3 +1,6 @@
+libjodycode 4.0.1 (2025-08-21)
+- Fix jc_link() return value on Windows
+
 libjodycode 4.0 (feature level 4) (2025-08-15)
 
 - Add loads of new jc_* functions and constants
