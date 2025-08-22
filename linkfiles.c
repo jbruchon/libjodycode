@@ -142,6 +142,7 @@ int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_
 	/* Clone link or reflink */
 	case 2:
 #if defined __linux__ && defined FICLONE
+		{
 		/* Linux FICLONE (reflink copy) */
 		int src_fd, dest_fd;
 		if (batch->files[0].dirent == NULL) goto error_bad_params;
@@ -169,6 +170,7 @@ error_ficlone:
 			continue;
 		}
 		close(src_fd);
+		}
 #else /* not __linux__ */
 		jc_errno = ENOTSUP;
 		return -1;
