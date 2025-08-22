@@ -8,6 +8,7 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
 #include "jody_hash.h"
 
 /* Disable SIMD if not 64-bit width or not 64-bit x86 code */
