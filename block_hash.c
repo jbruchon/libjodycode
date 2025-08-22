@@ -5,8 +5,8 @@
  */
 
 #include <sys/types.h>
-#include "libjodycode.h"
 #include "jody_hash.h"
+#include "libjodycode.h"
 
 int jc_block_hash(const enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count)
 {

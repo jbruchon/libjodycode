@@ -372,14 +372,11 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 
 /*** jody_hash ***/
 
-/* Version increments when algorithm changes incompatibly */
-#ifndef JODY_HASH_VERSION
+#ifndef JODY_HASH_H
  #define JODY_HASH_VERSION 7
+ #define JODY_HASH_WIDTH 64
+ typedef uint64_t jodyhash_t;
 #endif
-
-/* Width of a jody_hash */
-#define JODY_HASH_WIDTH 64
-typedef uint64_t jodyhash_t;
 
 enum jc_e_hash { NORMAL = 0, ROLLING = 1 };
 
