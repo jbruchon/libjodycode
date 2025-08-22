@@ -13,6 +13,7 @@ using the links on my home page (Ko-fi, PayPal, SubscribeStar, etc.):
 https://www.jodybruchon.com/
 
 
+
 Version compatibility
 -------------------------------------------------------------------------------
 libjodycode 3.0 introduced a new "feature level" number which changes on every
@@ -39,6 +40,16 @@ somewhere early in `main()`. Set verbose to 1 to output detailed error info
 via `fprintf(stderr, ...)` if a bad version is found. Set bail to 1 to have
 the check code immediately exit if a bad version is found instead of returning
 to the caller with a non-zero return value.
+
+
+
+Building information
+-------------------------------------------------------------------------------
+Some parts of libjodycode use C11 aligned_alloc(). Some users have ancient
+toolchains only supporting C99 properly. libjodycode now includes support code
+to allow C99 compilation. To build using C99 instead of C11, use USE_C99:
+
+`make USE_C99=1`
 
 
 

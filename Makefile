@@ -21,7 +21,7 @@ LIB_SUFFIX = .a
 # Make Configuration
 COMPILER_OPTIONS = -Wall -Wwrite-strings -Wcast-align -Wstrict-aliasing -Wstrict-prototypes -Wpointer-arith -Wundef
 COMPILER_OPTIONS += -Wshadow -Wfloat-equal -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2
-COMPILER_OPTIONS += -std=gnu11 -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
+COMPILER_OPTIONS += -D_FILE_OFFSET_BITS=64 -fstrict-aliasing -pipe -fPIC
 
 UNAME_S       = $(shell uname -s)
 UNAME_M       = $(shell uname -m)
@@ -60,6 +60,14 @@ endif
 
 ifeq ($(GCCVERSION), 1)
  COMPILER_OPTIONS += -Wextra -Wstrict-overflow=5 -Winit-self
+endif
+
+# C standard selection
+ifndef USE_C99
+COMPILER_OPTIONS += -std=gnu11
+else
+COMPILER_OPTIONS += -std=gnu99
+OBJS += c99_aligned_alloc.o
 endif
 
 # Debugging code inclusion
