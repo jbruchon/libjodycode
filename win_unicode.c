@@ -85,6 +85,36 @@ int jc_widearg_to_argv(int argc, JC_WCHAR_T **wargv, char ***cargv)
 #endif /* UNICODE */
 
 
+/* Set up a Unicode terminal on Windows and detect if stdout is a terminal
+ * On non-Windows, only detects if stdout is TTY, other arguments ignored */
+int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *stdout_tty)
+{
+#ifdef ON_WINDOWS
+ #ifndef UNICODE
+	(void)argc; (void)wargv; (void)argv;
+ #endif
+	/* Windows buffers our std output; don't let it do that */
+	if (setvbuf(stdout, NULL, _IONBF, 0) != 0 || setvbuf(stderr, NULL, _IONBF, 0) != 0)
+		return JC_ESETVBUF;
+	if (stdout_tty != NULL &&_isatty(_fileno(stdout))) *stdout_tty = 1;
+#else
+	if (stdout_tty != NULL && isatty(fileno(stdout))) *stdout_tty = 1;
+#endif /* ON_WINDOWS */
+
+#ifdef UNICODE
+	int wa_err;
+	if (wargv == NULL || argv == NULL) return JC_ENULL;
+	/* Create a UTF-8 **argv from the wide version */
+	*argv = (char **)malloc(sizeof(char *) * (size_t)argc);
+	if (!*argv) return JC_ENOMEM;
+	wa_err = jc_widearg_to_argv(argc, wargv, argv);
+	if (wa_err != 0) return wa_err;
+	jc_set_output_modes(JC_MODE_UTF16_TTY, JC_MODE_UTF16_TTY);
+#endif /* UNICODE */
+	return 0;
+}
+
+
 #ifdef ON_WINDOWS
 /* Copy WIN32_FIND_FILE data to DIR data for a JC_DIR
  * The first call will allocate a JC_DIR and copy into it

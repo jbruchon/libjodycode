@@ -350,7 +350,7 @@ extern int jc_print_error(int errnum);
 
 #define JC_ERRORCODE_START 1024
 
-#define JC_ENOERROR   1024
+#define JC_ENOERROR   1024  // 0
 #define JC_ENULL      1025
 #define JC_ECDOTDOT   1026
 #define JC_EGRNEND    1027
@@ -360,10 +360,11 @@ extern int jc_print_error(int errnum);
 #define JC_EALARM     1031
 #define JC_EALLOC     1032
 #define JC_ENUMSTRCMP 1033
-#define JC_EDATETIME  1034
+#define JC_EDATETIME  1034  // 10
 #define JC_EWIN32API  1035
 #define JC_EKERNVER   1036
 #define JC_ENOMEM     1037
+#define JC_ESETVBUF   1038
 
 
 /*** jc_fwprint ***/
@@ -485,6 +486,7 @@ extern const int jc_windows_unicode;
  #define jc_slash_convert(a)
  #define jc_set_output_modes(a,b)
 #endif
+extern int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *stdout_tty);
 
 #ifdef __cplusplus
 }

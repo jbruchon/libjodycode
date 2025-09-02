@@ -16,7 +16,7 @@ struct jc_error {
 };
 
 
-#define JC_ERRCNT 14
+#define JC_ERRCNT 15
 static const int errcnt = JC_ERRCNT;
 static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },  // 0 - not a real error
@@ -33,7 +33,8 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "win32api",    "a Win32 API call failed" },  // 11
 	{ "kernelver",   "kernel version is too old" },  // 12
 	{ "no_memory",   "memory allocation failed (out of memory)" }, // 13
-	{ NULL, NULL },  // 14
+	{ "vbuf_fail",   "setvbuf() call failed" }, //14
+	{ NULL, NULL },  // 15
 };
 
 

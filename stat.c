@@ -63,7 +63,7 @@ int jc_stat(const char *filename, struct JC_STAT *buf)
 #endif
 	return retval;
 
-#ifdef ON_WINDOWS
+#ifdef UNICODE
 error_string:
 #endif
 error_null_buffer:
