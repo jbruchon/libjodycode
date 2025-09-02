@@ -1,4 +1,4 @@
-/* libjodycode: directory calls`
+/* libjodycode: directory calls
  *
  * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
@@ -16,6 +16,9 @@
 #include <string.h>
 #include "likely_unlikely.h"
 #include "libjodycode.h"
+#ifdef ON_WINDOWS
+ JC_DIR *dirp_head = NULL;
+#endif
 
 
 /* Open a directory; handle Windows doing readdir() equivalent too */

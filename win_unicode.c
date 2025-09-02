@@ -16,7 +16,6 @@
  #define WIN32_LEAN_AND_MEAN
  #include <windows.h>
  #include <io.h>
- JC_DIR *dirp_head = NULL;
 #endif  /* ON_WINDOWS */
 
 #ifdef ON_WINDOWS
