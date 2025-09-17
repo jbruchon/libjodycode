@@ -118,6 +118,22 @@ int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
 }
 
 
+int jc_strtcmp(const jc_str_t *s1, const jc_str_t *s2)
+{
+	int cmp;
+	size_t max;
+
+	max = s1->len;
+	if (s2->len < max) max = s2->len;
+	cmp = memcmp(s1->str, s2->str, max);
+	if (cmp == 0) {
+		if (s1->len != s2->len) return s1->len > max ? 1 : -1;
+		return 0;
+	}
+	return cmp;
+}
+
+
 /* Convert a plain C string into a jc_str with size prefix */
 jc_str_t *jc_str_init(const char *string, size_t len)
 {
