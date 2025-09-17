@@ -77,7 +77,65 @@ extern "C" {
 #endif /* ON_WINDOWS */
 
 
+/* File modes and wchar_t type */
+/* Uther things depend on this, keep it at the top */
+#if defined _WIN32 || defined __WIN32 || defined ON_WINDOWS
+ #ifdef UNICODE
+  #define JC_WCHAR_T wchar_t
+  #define JC_FILE_MODE_RDONLY L"rb"
+  #define JC_FILE_MODE_WRONLY L"wb"
+  #define JC_FILE_MODE_RW L"w+b"
+  #define JC_FILE_MODE_RW_EXISTING L"r+b"
+  #define JC_FILE_MODE_WRONLY_APPEND L"ab"
+  #define JC_FILE_MODE_RW_APPEND L"a+b"
+  #define JC_FILE_MODE_RDONLY_SEQ L"rbS"
+  #define JC_FILE_MODE_WRONLY_SEQ L"wbS"
+  #define JC_FILE_MODE_RW_SEQ L"w+bS"
+  #define JC_FILE_MODE_RW_EXISTING_SEQ L"r+bS"
+  #define JC_FILE_MODE_WRONLY_APPEND_SEQ L"abS"
+  #define JC_FILE_MODE_RW_APPEND_SEQ L"a+bS"
+ #else /* Windows, not UNICODE */
+  #define JC_WCHAR_T char
+  #define JC_FILE_MODE_RDONLY "rb"
+  #define JC_FILE_MODE_WRONLY "wb"
+  #define JC_FILE_MODE_RW "w+b"
+  #define JC_FILE_MODE_RW_EXISTING "r+b"
+  #define JC_FILE_MODE_WRONLY_APPEND "ab"
+  #define JC_FILE_MODE_RW_APPEND "a+b"
+  #define JC_FILE_MODE_RDONLY_SEQ "rbS"
+  #define JC_FILE_MODE_WRONLY_SEQ "wbS"
+  #define JC_FILE_MODE_RW_SEQ "w+bS"
+  #define JC_FILE_MODE_RW_EXISTING_SEQ "r+bS"
+  #define JC_FILE_MODE_WRONLY_APPEND_SEQ "abS"
+  #define JC_FILE_MODE_RW_APPEND_SEQ "a+bS"
+ #endif
+ #define JC_F_OK 0
+ #define JC_R_OK 4
+ #define JC_W_OK 2
+ #define JC_X_OK 6
+#else /* Not Windows */
+ #define JC_WCHAR_T char
+ #define JC_FILE_MODE_RDONLY "rb"
+ #define JC_FILE_MODE_WRONLY "wb"
+ #define JC_FILE_MODE_RW "w+b"
+ #define JC_FILE_MODE_RW_EXISTING "r+b"
+ #define JC_FILE_MODE_WRONLY_APPEND "ab"
+ #define JC_FILE_MODE_RW_APPEND "a+b"
+ #define JC_FILE_MODE_RDONLY_SEQ "rb"
+ #define JC_FILE_MODE_WRONLY_SEQ "wb"
+ #define JC_FILE_MODE_RW_SEQ "w+b"
+ #define JC_FILE_MODE_RW_EXISTING_SEQ "r+b"
+ #define JC_FILE_MODE_WRONLY_APPEND_SEQ "ab"
+ #define JC_FILE_MODE_RW_APPEND_SEQ "a+b"
+ #define JC_F_OK F_OK
+ #define JC_R_OK R_OK
+ #define JC_W_OK W_OK
+ #define JC_X_OK X_OK
+#endif /* Windows */
+
+
 /*** time ***/
+/* This is out of order because other things depend on it */
 
 #ifdef ON_WINDOWS
 struct JC_TIMESPEC {
@@ -92,6 +150,7 @@ struct JC_TIMESPEC {
 
 
 /*** stat ***/
+/* This is out of order because other things depend on it */
 
 #ifdef ON_WINDOWS
 struct JC_STAT {
@@ -168,61 +227,55 @@ struct JC_STAT {
  #define JC_S_ISREG(st_mode) S_ISREG(st_mode)
  #define JC_S_ISLNK(st_mode) S_ISLNK(st_mode)
 #endif /* ON_WINDOWS */
-
-#if defined _WIN32 || defined __WIN32 || defined ON_WINDOWS
- #ifdef UNICODE
-  #define JC_WCHAR_T wchar_t
-  #define JC_FILE_MODE_RDONLY L"rb"
-  #define JC_FILE_MODE_WRONLY L"wb"
-  #define JC_FILE_MODE_RW L"w+b"
-  #define JC_FILE_MODE_RW_EXISTING L"r+b"
-  #define JC_FILE_MODE_WRONLY_APPEND L"ab"
-  #define JC_FILE_MODE_RW_APPEND L"a+b"
-  #define JC_FILE_MODE_RDONLY_SEQ L"rbS"
-  #define JC_FILE_MODE_WRONLY_SEQ L"wbS"
-  #define JC_FILE_MODE_RW_SEQ L"w+bS"
-  #define JC_FILE_MODE_RW_EXISTING_SEQ L"r+bS"
-  #define JC_FILE_MODE_WRONLY_APPEND_SEQ L"abS"
-  #define JC_FILE_MODE_RW_APPEND_SEQ L"a+bS"
- #else /* Windows, not UNICODE */
-  #define JC_WCHAR_T char
-  #define JC_FILE_MODE_RDONLY "rb"
-  #define JC_FILE_MODE_WRONLY "wb"
-  #define JC_FILE_MODE_RW "w+b"
-  #define JC_FILE_MODE_RW_EXISTING "r+b"
-  #define JC_FILE_MODE_WRONLY_APPEND "ab"
-  #define JC_FILE_MODE_RW_APPEND "a+b"
-  #define JC_FILE_MODE_RDONLY_SEQ "rbS"
-  #define JC_FILE_MODE_WRONLY_SEQ "wbS"
-  #define JC_FILE_MODE_RW_SEQ "w+bS"
-  #define JC_FILE_MODE_RW_EXISTING_SEQ "r+bS"
-  #define JC_FILE_MODE_WRONLY_APPEND_SEQ "abS"
-  #define JC_FILE_MODE_RW_APPEND_SEQ "a+bS"
- #endif
- #define JC_F_OK 0
- #define JC_R_OK 4
- #define JC_W_OK 2
- #define JC_X_OK 6
-#else /* Not Windows */
- #define JC_WCHAR_T char
- #define JC_FILE_MODE_RDONLY "rb"
- #define JC_FILE_MODE_WRONLY "wb"
- #define JC_FILE_MODE_RW "w+b"
- #define JC_FILE_MODE_RW_EXISTING "r+b"
- #define JC_FILE_MODE_WRONLY_APPEND "ab"
- #define JC_FILE_MODE_RW_APPEND "a+b"
- #define JC_FILE_MODE_RDONLY_SEQ "rb"
- #define JC_FILE_MODE_WRONLY_SEQ "wb"
- #define JC_FILE_MODE_RW_SEQ "w+b"
- #define JC_FILE_MODE_RW_EXISTING_SEQ "r+b"
- #define JC_FILE_MODE_WRONLY_APPEND_SEQ "ab"
- #define JC_FILE_MODE_RW_APPEND_SEQ "a+b"
- #define JC_F_OK F_OK
- #define JC_R_OK R_OK
- #define JC_W_OK W_OK
- #define JC_X_OK X_OK
-#endif /* Windows */
 extern int jc_stat(const char * const filename, struct JC_STAT * const restrict buf);
+
+
+/*** access ***/
+
+extern int jc_access(const char *pathname, int mode);
+
+
+/*** alarm ***/
+
+extern int jc_alarm_ring;
+extern int jc_start_alarm(const unsigned int seconds, const int repeat);
+extern int jc_stop_alarm(void);
+
+
+/*** batch ***/
+
+struct jc_fileinfo {
+	struct JC_STAT *stat;
+	struct JC_DIRENT *dirent;
+	int status;
+};
+
+struct jc_fileinfo_batch {
+	int count;
+	struct jc_fileinfo files[];
+};
+
+extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen);
+extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch);
+
+
+/*** cacheinfo ***/
+
+/* Cache information structure
+ * Split caches populate i/d, unified caches populate non-i/d */
+struct jc_proc_cacheinfo {
+	size_t l1;
+	size_t l1i;
+	size_t l1d;
+	size_t l2;
+	size_t l2i;
+	size_t l2d;
+	size_t l3;
+	size_t l3i;
+	size_t l3d;
+};
+
+extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
 
 
 /*** dir ***/
@@ -283,62 +336,10 @@ extern int jc_stat(const char * const filename, struct JC_STAT * const restrict 
   #define JC_DT_WHT DT_WHT
  #endif /* DT_UNKNOWN */
 #endif /* ON_WINDOWS */
-extern int jc_closedir(JC_DIR * const restrict dirp);
 extern JC_DIR *jc_opendir(const char * restrict path);
+extern size_t jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent);
 extern struct JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
-
-
-extern int        jc_access(const char *pathname, int mode);
-extern char      *jc_getcwd(char * const restrict pathname, const size_t size);
-extern FILE      *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
-extern int        jc_fclose(FILE *stream);
-extern int        jc_link(const char *path1, const char *path2);
-extern size_t     jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent);
-extern int        jc_rename(const char *oldpath, const char *newpath);
-extern int        jc_remove(const char *pathname);
-
-
-/*** alarm ***/
-
-extern int jc_alarm_ring;
-extern int jc_start_alarm(const unsigned int seconds, const int repeat);
-extern int jc_stop_alarm(void);
-
-
-/*** batch ***/
-
-struct jc_fileinfo {
-	struct JC_STAT *stat;
-	struct JC_DIRENT *dirent;
-	int status;
-};
-
-struct jc_fileinfo_batch {
-	int count;
-	struct jc_fileinfo files[];
-};
-
-extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen);
-extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch);
-
-
-/*** cacheinfo ***/
-
-/* Cache information structure
- * Split caches populate i/d, unified caches populate non-i/d */
-struct jc_proc_cacheinfo {
-	size_t l1;
-	size_t l1i;
-	size_t l1d;
-	size_t l2;
-	size_t l2i;
-	size_t l2d;
-	size_t l3;
-	size_t l3i;
-	size_t l3d;
-};
-
-extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
+extern int jc_closedir(JC_DIR * const restrict dirp);
 
 
 /*** error ***/
@@ -367,8 +368,20 @@ extern int jc_print_error(int errnum);
 #define JC_ESETVBUF   1038
 
 
+/*** fopen ***/
+
+extern FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
+extern int jc_fclose(FILE *stream);
+
+
 /*** jc_fwprint ***/
+
 extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
+
+
+/*** getcwd ***/
+
+extern char *jc_getcwd(char * const restrict pathname, const size_t size);
 
 
 /*** jody_hash ***/
@@ -380,8 +393,12 @@ extern int jc_fwprint(FILE * const restrict stream, const char * const restrict 
 #endif
 
 enum jc_e_hash { NORMAL = 0, ROLLING = 1 };
-
 extern int jc_block_hash(const enum jc_e_hash type, jodyhash_t *data, jodyhash_t *hash, const size_t count);
+
+
+/*** link ***/
+
+extern int jc_link(const char *path1, const char *path2);
 
 
 /*** linkfiles ***/
@@ -405,7 +422,18 @@ extern int jc_collapse_dotdot(char * const path);
 extern int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path);
 
 
+/*** rename ***/
+
+extern int jc_rename(const char *oldpath, const char *newpath);
+
+
+/*** remove ***/
+
+extern int jc_remove(const char *pathname);
+
+
 /*** size_suffix ***/
+
 /* Suffix definitions (treat as case-insensitive) */
 struct jc_size_suffix {
   const char * const suffix;
@@ -425,9 +453,11 @@ extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2,
 
 /*** string ***/
 
+extern const char *jc_emptystring;
+
 /* string type with length prefix */
 typedef struct _jc_str_t {
-	uint16_t len;
+	size_t len;
 	char str[1];
 } jc_str_t;
 
@@ -435,7 +465,11 @@ extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
-extern jc_str_t *jc_str_init(const char * const string, size_t len);
+extern int jc_strteq(const jc_str_t *s1, const jc_str_t *s2);
+extern int jc_strtneq(const jc_str_t *s1, const jc_str_t *s2, const size_t len);
+extern int jc_strtcaseeq(const jc_str_t *s1, const jc_str_t *s2);
+extern int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len);
+extern jc_str_t *jc_str_init(const char *string, size_t len);
 
 
 /*** strtoepoch ***/
@@ -458,6 +492,7 @@ extern const int jc_windows_unicode;
 #ifdef __linux__
  extern int jc_get_kernel_version(void);
 #endif
+
 
 /*** win_unicode ***/
 
@@ -487,6 +522,7 @@ extern const int jc_windows_unicode;
  #define jc_set_output_modes(a,b)
 #endif
 extern int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *stdout_tty);
+
 
 #ifdef __cplusplus
 }

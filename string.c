@@ -10,6 +10,8 @@
 #include "libjodycode.h"
 #include "likely_unlikely.h"
 
+const char *jc_emptystring = '\0';
+
 
 /* Like strncasecmp() but only tests for equality */
 int jc_strncaseeq(const char *s1, const char *s2, const size_t len)
@@ -85,32 +87,54 @@ int jc_streq(const char *s1, const char *s2)
 }
 
 
+/* jc_streq() for jc_str_t strings */
+int jc_strteq(const jc_str_t *s1, const jc_str_t *s2)
+{
+	if (s1->len == s2->len) return jc_streq(s1->str, s2->str);
+	return 1;
+}
+
+
+/* jc_strneq() for jc_str_t strings */
+int jc_strtneq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
+{
+	if (len >= s1->len && len >= s2->len) return jc_strteq(s1, s2);
+	return jc_strneq(s1->str, s2->str, len);
+}
+
+
+/* jc_strtcaseeq() for jc_str_t strings */
+int jc_strtcaseeq(const jc_str_t *s1, const jc_str_t *s2)
+{
+	if (s1->len == s2->len) return jc_strcaseeq(s1->str, s2->str);
+	return 1;
+}
+
+
+int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
+{
+	if (len >= s1->len && len >= s2->len) return jc_strtcaseeq(s1, s2);
+	return jc_strncaseeq(s1->str, s2->str, len);
+}
+
+
 /* Convert a plain C string into a jc_str with size prefix */
-jc_str_t *jc_str_init(const char * const string, size_t len)
+jc_str_t *jc_str_init(const char *string, size_t len)
 {
 	jc_str_t *jstr;
 
-	if (string == NULL) return NULL;
+	if (unlikely(string == NULL || len == 0)) {
+		len = 0;
+		string = jc_emptystring;
+	} else {
+		if (len == 0) len = strlen(string);
+		if (len > UINT32_MAX) return NULL;
+	}
 
-	if (len == 0) len = strlen(string);
-	if (len > UINT16_MAX) return NULL;
 	jstr = (jc_str_t *)malloc(sizeof(jc_str_t) + len + 1);
 	if (jstr == NULL) return NULL;
-	jstr->len = (uint16_t)len;
+	jstr->len = len;
 	memcpy(jstr->str, string, len + 1);
 
 	return jstr;
 }
-
-#if 0
-/* Like strcmp() but only tests for equality */
-int jc_streq_fast(const jc_str_t *s1, const jc_str_t *s2)
-{
-	while (likely(*s1 != '\0' && *s2 != '\0')) {
-		if (*s1 != *s2) return 1;
-		s1++; s2++;
-	}
-	if (*s1 != *s2) return 1;
-	return 0;
-}
-#endif
