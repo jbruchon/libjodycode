@@ -71,14 +71,39 @@ int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
 int jc_strtcmp(const jc_str_t *s1, const jc_str_t *s2)
 {
 	int cmp;
-	size_t max;
+	size_t max = s1->len;
 
-	max = s1->len;
 	if (s2->len < max) max = s2->len;
 	cmp = memcmp(s1->str, s2->str, max);
-	if (cmp == 0) {
-		if (s1->len != s2->len) return s1->len > max ? 1 : -1;
-		return 0;
-	}
+	if (cmp == 0 && s1->len != s2->len)
+		return s1->len > s2->len ? 1 : -1;
 	return cmp;
+}
+
+
+int jc_strtncmp(const jc_str_t *s1, const jc_str_t *s2, size_t len)
+{
+	int cmp;
+	int limited = 0;
+	size_t max = len;
+
+	if (s1->len < max) { max = s1->len; limited = 1; }
+	if (s2->len < max) { max = s2->len; limited = 1; }
+	cmp = memcmp(s1->str, s2->str, max);
+	if (cmp == 0 && limited == 1 && s1->len != s2->len)
+		return s1->len > s2->len ? 1 : -1;
+
+	return cmp;
+}
+
+
+int jc_strtcasecmp(const jc_str_t *s1, const jc_str_t *s2)
+{
+	return strcasecmp(s1->str, s2->str);
+}
+
+
+int jc_strtncasecmp(const jc_str_t *s1, const jc_str_t *s2, size_t len)
+{
+	return strncasecmp(s1->str, s2->str, len);
 }
