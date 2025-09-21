@@ -6,6 +6,16 @@ libjodycode \- shared code used by several tools written by Jody Bruchon
 .SH SYNOPSIS
 .B #include <libjodycode.h>
 
+.SH DESCRIPTION
+libjodycode is a software code library containing code shared among several of
+the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
+zeromerge. These shared pieces of code were copied between each program as
+they were updated. As the number of programs increased and keeping these
+pieces of code synced became more annoying, the decision was made to combine
+all of them into a single reusable shared library.
+
+.SH APPLICATION USAGE
+
 .SS "Standard C library swap-in calls"
 .nf
 .BI "int jc_access(const char *" pathname ", int " mode ")"
@@ -24,7 +34,7 @@ libjodycode \- shared code used by several tools written by Jody Bruchon
 .nf
 .BI "int jc_start_alarm(const unsigned int " seconds ", const int " repeat ")"
 .BI "int jc_stop_alarm(void)"
-.IP "int jc_alarm_ring"
+.IP int\ jc_alarm_ring
 Number of alarm triggers that have occurred; writable by the program
 
 .SS "Batch file list API"
@@ -45,13 +55,13 @@ Number of alarm triggers that have occurred; writable by the program
 .BI "const char *jc_get_errname(int " errnum ")"
 .BI "const char *jc_get_errdesc(int " errnum ")"
 .BI "int jc_print_error(int " errnum ")"
-.IP int32_t jc_errno
+.IP int32_t\ jc_errno
 libjodycode equivalent to C library's errno
 
 .SS "jodyhash API"
 .nf
 .BI "int jc_block_hash(const enum jc_e_hash " type ", jodyhash_t *" data ", jodyhash_t *" hash ", const size_t " count ")"
-.IP enum jc_e_hash
+.IP enum\ jc_e_hash
 Selects hash type to perform, NORMAL or ROLLING
 .IP #define JODY_HASH_VERSION
 Version of \fIjody_hash\fP the library currently uses
@@ -59,7 +69,7 @@ Version of \fIjody_hash\fP the library currently uses
 .SS "Linkfiles API"
 .nf
 .BI "int jc_linkfiles(struct jc_fileinfo_batch * const restrict " batch ", const enum jc_e_link " linktype ")"
-.IP enum jc_e_link
+.IP enum\ jc_e_link
 Selects type of link to perform: SYMLINK, HARDLINK, or REFLINK
 
 .SS "OOM (out-of-memory) API"
@@ -87,11 +97,15 @@ Selects type of link to perform: SYMLINK, HARDLINK, or REFLINK
 .BI "int jc_strcaseeq(const char *" s1 ", const char *" s2 ")"
 .BI "int jc_strneq(const char *" s1 ", const char *" s2 ", const size_t " len ")"
 .BI "int jc_streq(const char *" s1 ", const char *" s2 ")"
+.BI "jc_str_t *jc_str_init(const char *" string ", size_t " len ")"
 .BI "int jc_strteq(const jc_str_t *" s1 ", const jc_str_t *" s2 ")"
 .BI "int jc_strtneq(const jc_str_t *" s1 ", const jc_str_t *" s2 ", const size_t " len ")"
 .BI "int jc_strtcaseeq(const jc_str_t *" s1 ", const jc_str_t *" s2 ")"
 .BI "int jc_strtncaseeq(const jc_str_t *" s1 ", const jc_str_t *" s2 ", const size_t " len ")"
-.BI "jc_str_t *jc_str_init(const char *" string ", size_t " len ")"
+.BI "int jc_strtcmp(const jc_str_t *" s1 ", const jc_str_t * " s2 " ")"
+.BI "int jc_strtncmp(const jc_str_t *" s1 ", const jc_str_t * " s2 ", size_t " len " ")"
+.BI "int jc_strtcasecmp(const jc_str_t *" s1 ", const jc_str_t *" s2 " ")"
+.BI "int jc_strtncasecmp(const jc_str_t *" s1 ", const jc_str_t *" s2 ", size_t " len ")"
 .IP jc_str_t
 Structure for a string with its length prefixed as a 32-bit unsigned integer
 
@@ -194,28 +208,16 @@ convert string a to wide string b using MultiByteToWideChar()
 .BI "W2M(JC_WCHAR_T *" a ", char *" b ")"
 convert wide string a to normal string b using WideCharToMultiByte()
 
-
-.PP
-.SH DESCRIPTION
-libjodycode is a software code library containing code shared among several of
-the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
-zeromerge. These shared pieces of code were copied between each program as
-they were updated. As the number of programs increased and keeping these
-pieces of code synced became more annoying, the decision was made to combine
-all of them into a single reusable shared library.
-
 .SH NOTES
 
 libjodycode is created and maintained by Jody Bruchon <jody@jodybruchon.com>
 
-General information, help, and tech info: https://www.jdupes.com/
+General information, help, and tech info: http://www.jdupes.com/
 
 Development, source code, releases: https://codeberg.org/jbruchon/libjodycode
 
 If you find this software useful, please consider financially supporting
-its development through the author's home page:
-
-https://www.jodybruchon.com/
+its development through the author's home page: https://www.jodybruchon.com/
 
 .SH LICENSE
 

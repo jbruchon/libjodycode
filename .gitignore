@@ -13,7 +13,7 @@
 apiver
 cacheinfo
 vercheck
-*.7.gz
+*.3.gz
 
 #
 # Never ignore these

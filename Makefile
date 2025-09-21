@@ -6,7 +6,7 @@ PROGRAM_NAME = libjodycode
 LIB_DIR ?= $(PREFIX)/lib
 INC_DIR ?= $(PREFIX)/include
 MAN_BASE_DIR ?= $(PREFIX)/share/man
-MAN7_DIR ?= $(MAN_BASE_DIR)/man7
+MAN3_DIR ?= $(MAN_BASE_DIR)/man3
 CC ?= gcc
 INSTALL = install
 RM      = rm -f
@@ -140,7 +140,7 @@ OBJS += remove.o rename.o size_suffix.o stat.o
 OBJS += string.o str_t.o time.o version.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
-all: sharedlib staticlib
+all: manual sharedlib staticlib
 	-@test "$(CROSS_DETECT)" = "cross" && echo "NOTICE: SIMD disabled: !x86_64 or a cross-compiler detected (CC = $(CC))" || true
 
 sharedlib: $(OBJS) $(SIMD_OBJS)
@@ -176,11 +176,8 @@ lnk: tests/linkfiles_dedupe.c
 .c.o:
 	$(CC) -c $(COMPILER_OPTIONS) $(CFLAGS) $(CPPFLAGS) $< -o $@
 
-#manual:
-#	gzip -9 < jodycode.8 > jodycode.8.gz
-
-$(PROGRAM_NAME): jodyhash $(OBJS)
-#	$(CC) $(CFLAGS) $(LDFLAGS) -o $(PROGRAM_NAME) $(OBJS)
+manual:
+	gzip -9 < libjodycode.3 > libjodycode.3.gz
 
 winres.o: winres.rc winres.manifest.xml
 	./tune_winres.sh
@@ -193,22 +190,22 @@ winres_xp.o: winres_xp.rc
 installdirs:
 	test -e $(DESTDIR)$(LIB_DIR) || $(MKDIR) $(DESTDIR)$(LIB_DIR)
 	test -e $(DESTDIR)$(INC_DIR) || $(MKDIR) $(DESTDIR)$(INC_DIR)
-	test -e $(DESTDIR)$(MAN7_DIR) || $(MKDIR) $(DESTDIR)$(MAN7_DIR)
+	test -e $(DESTDIR)$(MAN3_DIR) || $(MKDIR) $(DESTDIR)$(MAN3_DIR)
 
 installfiles: installdirs
 	$(INSTALL_PROGRAM) $(PROGRAM_NAME)$(SO_VER_FULL) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(SO_VER_FULL)
 	-test "$(ON_WINDOWS)" != "1" && $(LN) $(PROGRAM_NAME)$(SO_VER_FULL) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(SO_VER_MAJOR)
 	-test "$(ON_WINDOWS)" != "1" && $(LN) $(PROGRAM_NAME)$(SO_VER_MAJOR) $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(SO_SUFFIX)
 	$(INSTALL_DATA) $(PROGRAM_NAME)$(LIB_SUFFIX)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(LIB_SUFFIX)
-	$(INSTALL_DATA) $(PROGRAM_NAME).h  $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
-	$(INSTALL_DATA) $(PROGRAM_NAME).7  $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+	$(INSTALL_DATA) $(PROGRAM_NAME).h $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
+	$(INSTALL_DATA) $(PROGRAM_NAME).3.gz $(DESTDIR)$(MAN3_DIR)/$(PROGRAM_NAME).3.gz
 
 install: installdirs installfiles
 
 uninstalldirs:
 	-test -e $(DESTDIR)$(LIB_DIR)  && $(RMDIR) $(DESTDIR)$(LIB_DIR)
 	-test -e $(DESTDIR)$(INC_DIR)  && $(RMDIR) $(DESTDIR)$(INC_DIR)
-	-test -e $(DESTDIR)$(MAN7_DIR) && $(RMDIR) $(DESTDIR)$(MAN7_DIR)
+	-test -e $(DESTDIR)$(MAN3_DIR) && $(RMDIR) $(DESTDIR)$(MAN3_DIR)
 
 uninstallfiles:
 	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(SO_VER_FULL)
@@ -216,7 +213,7 @@ uninstallfiles:
 	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(SO_SUFFIX)
 	$(RM)  $(DESTDIR)$(LIB_DIR)/$(PROGRAM_NAME)$(LIB_SUFFIX)
 	$(RM)  $(DESTDIR)$(INC_DIR)/$(PROGRAM_NAME).h
-	$(RM)  $(DESTDIR)$(MAN7_DIR)/$(PROGRAM_NAME).7
+	$(RM)  $(DESTDIR)$(MAN3_DIR)/$(PROGRAM_NAME).3.gz
 
 uninstall: uninstallfiles uninstalldirs
 
@@ -232,7 +229,7 @@ objsclean:
 
 clean: objsclean
 	$(RM) $(PROGRAM_NAME)$(SO_SUFFIX) $(PROGRAM_NAME)$(SO_VER_MAJOR) $(PROGRAM_NAME)$(SO_VER_FULL)
-	$(RM) $(PROGRAM_NAME)$(LIB_SUFFIX) apiver cacheinfo vercheck
+	$(RM) $(PROGRAM_NAME)$(LIB_SUFFIX) apiver cacheinfo vercheck $(PROGRAM_NAME).3.gz
 	$(RM) *~ helper_code/*~ libjodycode.a libjodycode.so.* libjodycode.dll.* .*.un~ *.gcno *.gcda *.gcov
 
 distclean: objsclean clean
