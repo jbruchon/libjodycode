@@ -456,20 +456,20 @@ extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2,
 extern const char *jc_emptystring;
 
 /* string type with length prefix */
-typedef struct _jc_str_t {
+typedef struct _JC_STR_T {
 	size_t len;
 	char str[1];
-} jc_str_t;
+} JC_STR_T;
 
 extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
-extern int jc_strteq(const jc_str_t *s1, const jc_str_t *s2);
-extern int jc_strtneq(const jc_str_t *s1, const jc_str_t *s2, const size_t len);
-extern int jc_strtcaseeq(const jc_str_t *s1, const jc_str_t *s2);
-extern int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len);
-extern jc_str_t *jc_str_init(const char *string, size_t len);
+extern int jc_strteq(const JC_STR_T *s1, const JC_STR_T *s2);
+extern int jc_strtneq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len);
+extern int jc_strtcaseeq(const JC_STR_T *s1, const JC_STR_T *s2);
+extern int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len);
+extern JC_STR_T *jc_str_init(const char *string, size_t len);
 
 
 /*** strtoepoch ***/

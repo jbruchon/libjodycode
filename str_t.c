@@ -1,4 +1,4 @@
-/* libjodycode: jc_str_t string functions
+/* libjodycode: JC_STR_T string functions
  * Copyright (C) 2015-2025 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
@@ -14,9 +14,9 @@ const char *jc_emptystring = '\0';
 
 
 /* Convert a plain C string into a jc_str with size prefix */
-jc_str_t *jc_str_init(const char *string, size_t len)
+JC_STR_T *jc_str_init(const char *string, size_t len)
 {
-	jc_str_t *jstr;
+	JC_STR_T *jstr;
 
 	if (unlikely(string == NULL || len == 0)) {
 		len = 0;
@@ -26,7 +26,7 @@ jc_str_t *jc_str_init(const char *string, size_t len)
 		if (len > UINT32_MAX) return NULL;
 	}
 
-	jstr = (jc_str_t *)malloc(sizeof(jc_str_t) + len + 1);
+	jstr = (JC_STR_T *)malloc(sizeof(JC_STR_T) + len + 1);
 	if (jstr == NULL) return NULL;
 	jstr->len = len;
 	memcpy(jstr->str, string, len + 1);
@@ -35,40 +35,40 @@ jc_str_t *jc_str_init(const char *string, size_t len)
 }
 
 
-/* jc_streq() for jc_str_t strings */
-int jc_strteq(const jc_str_t *s1, const jc_str_t *s2)
+/* jc_streq() for JC_STR_T strings */
+int jc_strteq(const JC_STR_T *s1, const JC_STR_T *s2)
 {
 	if (s1->len == s2->len) return jc_streq(s1->str, s2->str);
 	return 1;
 }
 
 
-/* jc_strneq() for jc_str_t strings */
-int jc_strtneq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
+/* jc_strneq() for JC_STR_T strings */
+int jc_strtneq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len)
 {
 	if (len >= s1->len && len >= s2->len) return jc_strteq(s1, s2);
 	return jc_strneq(s1->str, s2->str, len);
 }
 
 
-/* jc_strtcaseeq() for jc_str_t strings */
-int jc_strtcaseeq(const jc_str_t *s1, const jc_str_t *s2)
+/* jc_strtcaseeq() for JC_STR_T strings */
+int jc_strtcaseeq(const JC_STR_T *s1, const JC_STR_T *s2)
 {
 	if (s1->len == s2->len) return jc_strcaseeq(s1->str, s2->str);
 	return 1;
 }
 
 
-/* jc_strncaseeq() for jc_str_t strings */
-int jc_strtncaseeq(const jc_str_t *s1, const jc_str_t *s2, const size_t len)
+/* jc_strncaseeq() for JC_STR_T strings */
+int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len)
 {
 	if (len >= s1->len && len >= s2->len) return jc_strtcaseeq(s1, s2);
 	return jc_strncaseeq(s1->str, s2->str, len);
 }
 
 
-/* strcmp() for jc_str_t strings */
-int jc_strtcmp(const jc_str_t *s1, const jc_str_t *s2)
+/* strcmp() for JC_STR_T strings */
+int jc_strtcmp(const JC_STR_T *s1, const JC_STR_T *s2)
 {
 	int cmp;
 	size_t max = s1->len;
@@ -81,7 +81,7 @@ int jc_strtcmp(const jc_str_t *s1, const jc_str_t *s2)
 }
 
 
-int jc_strtncmp(const jc_str_t *s1, const jc_str_t *s2, size_t len)
+int jc_strtncmp(const JC_STR_T *s1, const JC_STR_T *s2, size_t len)
 {
 	int cmp;
 	int limited = 0;
@@ -97,13 +97,13 @@ int jc_strtncmp(const jc_str_t *s1, const jc_str_t *s2, size_t len)
 }
 
 
-int jc_strtcasecmp(const jc_str_t *s1, const jc_str_t *s2)
+int jc_strtcasecmp(const JC_STR_T *s1, const JC_STR_T *s2)
 {
 	return strcasecmp(s1->str, s2->str);
 }
 
 
-int jc_strtncasecmp(const jc_str_t *s1, const jc_str_t *s2, size_t len)
+int jc_strtncasecmp(const JC_STR_T *s1, const JC_STR_T *s2, size_t len)
 {
 	return strncasecmp(s1->str, s2->str, len);
 }

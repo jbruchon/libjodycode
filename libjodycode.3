@@ -97,16 +97,16 @@ Selects type of link to perform: SYMLINK, HARDLINK, or REFLINK
 .BI "int jc_strcaseeq(const char *" s1 ", const char *" s2 ")"
 .BI "int jc_strneq(const char *" s1 ", const char *" s2 ", const size_t " len ")"
 .BI "int jc_streq(const char *" s1 ", const char *" s2 ")"
-.BI "jc_str_t *jc_str_init(const char *" string ", size_t " len ")"
-.BI "int jc_strteq(const jc_str_t *" s1 ", const jc_str_t *" s2 ")"
-.BI "int jc_strtneq(const jc_str_t *" s1 ", const jc_str_t *" s2 ", const size_t " len ")"
-.BI "int jc_strtcaseeq(const jc_str_t *" s1 ", const jc_str_t *" s2 ")"
-.BI "int jc_strtncaseeq(const jc_str_t *" s1 ", const jc_str_t *" s2 ", const size_t " len ")"
-.BI "int jc_strtcmp(const jc_str_t *" s1 ", const jc_str_t * " s2 " ")"
-.BI "int jc_strtncmp(const jc_str_t *" s1 ", const jc_str_t * " s2 ", size_t " len " ")"
-.BI "int jc_strtcasecmp(const jc_str_t *" s1 ", const jc_str_t *" s2 " ")"
-.BI "int jc_strtncasecmp(const jc_str_t *" s1 ", const jc_str_t *" s2 ", size_t " len ")"
-.IP jc_str_t
+.BI "JC_STR_T *jc_str_init(const char *" string ", size_t " len ")"
+.BI "int jc_strteq(const JC_STR_T *" s1 ", const JC_STR_T *" s2 ")"
+.BI "int jc_strtneq(const JC_STR_T *" s1 ", const JC_STR_T *" s2 ", const size_t " len ")"
+.BI "int jc_strtcaseeq(const JC_STR_T *" s1 ", const JC_STR_T *" s2 ")"
+.BI "int jc_strtncaseeq(const JC_STR_T *" s1 ", const JC_STR_T *" s2 ", const size_t " len ")"
+.BI "int jc_strtcmp(const JC_STR_T *" s1 ", const JC_STR_T * " s2 " ")"
+.BI "int jc_strtncmp(const JC_STR_T *" s1 ", const JC_STR_T * " s2 ", size_t " len " ")"
+.BI "int jc_strtcasecmp(const JC_STR_T *" s1 ", const JC_STR_T *" s2 " ")"
+.BI "int jc_strtncasecmp(const JC_STR_T *" s1 ", const JC_STR_T *" s2 ", size_t " len ")"
+.IP JC_STR_T
 Structure for a string with its length prefixed as a 32-bit unsigned integer
 
 .SS "Time API"
