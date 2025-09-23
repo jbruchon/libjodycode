@@ -14,7 +14,7 @@ const char *jc_emptystring = '\0';
 
 
 /* Convert a plain C string into a jc_str with size prefix */
-JC_STR_T *jc_str_init(const char *string, size_t len)
+JC_STR_T *jc_str_init(const char *string, uint32_t len)
 {
 	JC_STR_T *jstr;
 
@@ -22,7 +22,7 @@ JC_STR_T *jc_str_init(const char *string, size_t len)
 		len = 0;
 		string = jc_emptystring;
 	} else {
-		if (len == 0) len = strlen(string);
+		if (len == 0) len = (uint32_t)strlen(string);
 		if (len > UINT32_MAX) return NULL;
 	}
 
@@ -106,4 +106,10 @@ int jc_strtcasecmp(const JC_STR_T *s1, const JC_STR_T *s2)
 int jc_strtncasecmp(const JC_STR_T *s1, const JC_STR_T *s2, size_t len)
 {
 	return strncasecmp(s1->str, s2->str, len);
+}
+
+
+int jc_numeric_strtcmp(const JC_STR_T *c1, const JC_STR_T *c2, const int insensitive)
+{
+	return jc_numeric_strcmp(c1->str, c2->str, insensitive);
 }

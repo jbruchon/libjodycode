@@ -44,6 +44,7 @@ extern "C" {
  #pragma warning(disable : 4200)
 #endif
 
+
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/types.h>
@@ -75,6 +76,10 @@ extern "C" {
  #include <sys/stat.h>
  #include <unistd.h>
 #endif /* ON_WINDOWS */
+
+
+/* Extend an allocation length to the next 64-bit (8-byte) boundary */
+#define JC_EXTEND64(a) (((a) & 0x7) > 0 ? (((a) & (~0x7)) + 8) : (a))
 
 
 /* File modes and wchar_t type */
@@ -457,10 +462,11 @@ extern const char *jc_emptystring;
 
 /* string type with length prefix */
 typedef struct _JC_STR_T {
-	size_t len;
+	uint32_t len;
 	char str[1];
 } JC_STR_T;
 
+extern JC_STR_T *jc_str_init(const char *string, uint32_t len);
 extern int jc_strncaseeq(const char *s1, const char *s2, const size_t len);
 extern int jc_strcaseeq(const char *s1, const char *s2);
 extern int jc_strneq(const char *s1, const char *s2, const size_t len);
@@ -469,7 +475,7 @@ extern int jc_strteq(const JC_STR_T *s1, const JC_STR_T *s2);
 extern int jc_strtneq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len);
 extern int jc_strtcaseeq(const JC_STR_T *s1, const JC_STR_T *s2);
 extern int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len);
-extern JC_STR_T *jc_str_init(const char *string, size_t len);
+extern int jc_numeric_strtcmp(const JC_STR_T *c1, const JC_STR_T *c2, const int insensitive);
 
 
 /*** strtoepoch ***/
