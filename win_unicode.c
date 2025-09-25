@@ -97,6 +97,7 @@ int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *s
 		return JC_ESETVBUF;
 	if (stdout_tty != NULL &&_isatty(_fileno(stdout))) *stdout_tty = 1;
 #else
+	(void)argc; (void)wargv; (void)argv;
 	if (stdout_tty != NULL && isatty(fileno(stdout))) *stdout_tty = 1;
 #endif /* ON_WINDOWS */
 

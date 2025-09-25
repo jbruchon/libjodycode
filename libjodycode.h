@@ -247,23 +247,6 @@ extern int jc_start_alarm(const unsigned int seconds, const int repeat);
 extern int jc_stop_alarm(void);
 
 
-/*** batch ***/
-
-struct jc_fileinfo {
-	struct JC_STAT *stat;
-	struct JC_DIRENT *dirent;
-	int status;
-};
-
-struct jc_fileinfo_batch {
-	int count;
-	struct jc_fileinfo files[];
-};
-
-extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen);
-extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch);
-
-
 /*** cacheinfo ***/
 
 /* Cache information structure
@@ -345,6 +328,24 @@ extern JC_DIR *jc_opendir(const char * restrict path);
 extern size_t jc_get_d_namlen(const struct JC_DIRENT * const restrict dirent);
 extern struct JC_DIRENT *jc_readdir(JC_DIR * const restrict dirp);
 extern int jc_closedir(JC_DIR * const restrict dirp);
+
+
+/*** batch ***/
+/* This is out of order because it depends on the dir definitions */
+
+struct jc_fileinfo {
+	struct JC_STAT *stat;
+	struct JC_DIRENT *dirent;
+	int status;
+};
+
+struct jc_fileinfo_batch {
+	int count;
+	struct jc_fileinfo files[];
+};
+
+extern struct jc_fileinfo_batch *jc_fileinfo_batch_alloc(const int filecnt, const int stat, const int namlen);
+extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict batch);
 
 
 /*** error ***/

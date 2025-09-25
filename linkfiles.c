@@ -34,7 +34,7 @@ static const char *tempsuffix = TEMPORARY_SUFFIX;
 static const size_t templen = sizeof TEMPORARY_SUFFIX;
 
 
-static char *alloc_tempname(const struct JC_DIRENT * const restrict dirent)
+static char *alloc_tempname(struct JC_DIRENT *dirent)
 {
 	char *tempname = NULL;
 	size_t len;
