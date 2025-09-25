@@ -1,3 +1,10 @@
+libjodycode 4.1 (2025-09-25)
+- Add jc_setup_unicode_terminal()
+- Add size-prefixed string type JC_STR_T and some relevant functions
+- Move manual from section 7 to 3
+- Update manual to include all existing function definitions
+- Build fixes for old Synology toolchains
+
 libjodycode 4.0.1 (2025-08-21)
 - Fix jc_link() return value on Windows
 
