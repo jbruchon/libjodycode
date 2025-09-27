@@ -62,6 +62,11 @@ ifeq ($(GCCVERSION), 1)
  COMPILER_OPTIONS += -Wextra -Wstrict-overflow=5 -Winit-self
 endif
 
+ifdef USE_LTO
+ COMPILER_OPTIONS += -flto
+ LINK_OPTIONS += -flto
+endif
+
 # C standard selection
 ifndef USE_C99
 COMPILER_OPTIONS += -std=gnu11

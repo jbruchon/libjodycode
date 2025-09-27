@@ -51,6 +51,10 @@ to allow C99 compilation. To build using C99 instead of C11, use USE_C99:
 
 `make USE_C99=1`
 
+You can use link-time optimization (LTO) if your compiler supports it:
+
+`make USE_LTO=1`
+
 
 
 Contact information
