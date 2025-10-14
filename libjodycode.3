@@ -1,5 +1,5 @@
 .\" Copyright (C) 2023-2025 by Jody Bruchon <jody@jodybruchon.com>
-.TH "LIBJODYCODE" "7" "2025-01-21" "4.0" "libjodycode"
+.TH "LIBJODYCODE" "3" "2025-10-14" "4.1" "libjodycode"
 .SH NAME
 libjodycode \- shared code used by several tools written by Jody Bruchon
 
@@ -63,7 +63,7 @@ libjodycode equivalent to C library's errno
 .BI "int jc_block_hash(const enum jc_e_hash " type ", jodyhash_t *" data ", jodyhash_t *" hash ", const size_t " count ")"
 .IP enum\ jc_e_hash
 Selects hash type to perform, NORMAL or ROLLING
-.IP #define JODY_HASH_VERSION
+.IP "#define JODY_HASH_VERSION"
 Version of \fIjody_hash\fP the library currently uses
 
 .SS "Linkfiles API"
