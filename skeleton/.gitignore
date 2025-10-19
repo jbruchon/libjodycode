@@ -1,0 +1,48 @@
+#
+# Build ignores
+#
+#.*
+*.o
+*.o.*
+*.obj
+*.exe
+*.a
+*.so
+*.so.*
+*.1.gz
+
+#
+# Never ignore these
+#
+!.gitignore
+
+#
+# Normal output and testing dirs
+#
+/a_ljc_program
+/a_ljc_program*.exe
+/*.pkg.tar.*
+/ljc_vercheck*
+
+#
+# Backups / patches
+#
+*~
+*.orig
+*.rej
+/*.patch
+
+#
+# debugging and editor stuff
+#
+core
+.gdb_history
+.gdbinit
+.*.swp
+*.gcda
+*.gcno
+*.gcov
+cachegrind.out.*
+
+# Mac OS
+.DS_Store
