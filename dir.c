@@ -54,10 +54,10 @@ JC_DIR *jc_opendir(const char * restrict path)
  #endif  /* UNICODE */
 
  #ifdef UNICODE
-	hFind = FindFirstFileW(widename, &ffd);
+	hFind = FindFirstFileExW(widename, FindExInfoStandard, &ffd, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
 	free(widename);
  #else
-	hFind = FindFirstFileA(tempname, &ffd);
+	hFind = FindFirstFileExA(tempname, FindExInfoStandard, &ffd, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
  #endif
 	free(tempname);
 	if (unlikely(hFind == INVALID_HANDLE_VALUE)) goto error_fff;
