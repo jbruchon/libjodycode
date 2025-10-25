@@ -92,16 +92,11 @@ int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *s
  #ifndef UNICODE
 	(void)argc; (void)wargv; (void)argv;
  #endif
-	/* Windows buffers our std output; don't let it do that */
-	if (setvbuf(stdout, NULL, _IONBF, 0) != 0 || setvbuf(stderr, NULL, _IONBF, 0) != 0)
+	/* Windows buffers stderr; don't let it do that */
+	if (setvbuf(stderr, NULL, _IONBF, 0) != 0)
 		return JC_ESETVBUF;
 	if (stdout_tty != NULL &&_isatty(_fileno(stdout))) *stdout_tty = 1;
-#else
-	(void)argc; (void)wargv; (void)argv;
-	if (stdout_tty != NULL && isatty(fileno(stdout))) *stdout_tty = 1;
-#endif /* ON_WINDOWS */
-
-#ifdef UNICODE
+ #ifdef UNICODE
 	int wa_err;
 	if (wargv == NULL || argv == NULL) return JC_ENULL;
 	/* Create a UTF-8 **argv from the wide version */
@@ -110,7 +105,12 @@ int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *s
 	wa_err = jc_widearg_to_argv(argc, wargv, argv);
 	if (wa_err != 0) return wa_err;
 	jc_set_output_modes(JC_MODE_UTF16_TTY, JC_MODE_UTF16_TTY);
-#endif /* UNICODE */
+ #endif /* UNICODE */
+#else
+	(void)argc; (void)wargv; (void)argv;
+	if (stdout_tty != NULL && isatty(fileno(stdout))) *stdout_tty = 1;
+#endif /* ON_WINDOWS */
+
 	return 0;
 }
 
