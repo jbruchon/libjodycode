@@ -23,8 +23,8 @@ extern "C" {
  * version information for compatibility. See README for more information. */
 #define LIBJODYCODE_API_VERSION       4
 #define LIBJODYCODE_API_FEATURE_LEVEL 5
-#define LIBJODYCODE_VER               "4.1"
-#define LIBJODYCODE_VERDATE           "2025-09-25"
+#define LIBJODYCODE_VER               "4.1.1"
+#define LIBJODYCODE_VERDATE           "2025-10-25"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else
