@@ -14,6 +14,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <VersionHelpers.h>
 #include "likely_unlikely.h"
 #include "libjodycode.h"
 #ifdef ON_WINDOWS
@@ -29,6 +30,8 @@ JC_DIR *jc_opendir(const char * restrict path)
 	char *tempname, *p;
 	WIN32_FIND_DATA ffd;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
+	DWORD fffxw_flags = 0xffffffff;
+	FINDEX_INFO_LEVELS fffxw_info = 0xff;
  #ifdef UNICODE
 	JC_WCHAR_T *widename = NULL;
  #endif
@@ -36,6 +39,14 @@ JC_DIR *jc_opendir(const char * restrict path)
 	if (unlikely(path == NULL)) {
 		jc_errno = EFAULT;
 		return NULL;
+	}
+
+	/* Windows XP doesn't support the large fetch option */
+	if (unlikely(fffxw_flags > FIND_FIRST_EX_LARGE_FETCH)) {
+		fffxw_flags = 0;
+		if (!IsWindowsVistaOrGreater()) fffxw_flags = FIND_FIRST_EX_LARGE_FETCH;
+		fffxw_info = FindExInfoStandard;
+		if (IsWindows7OrGreater()) fffxw_info = FindExInfoBasic;
 	}
 
 	tempname = (char *)malloc(JC_PATHBUF_SIZE + 4);
@@ -54,10 +65,10 @@ JC_DIR *jc_opendir(const char * restrict path)
  #endif  /* UNICODE */
 
  #ifdef UNICODE
-	hFind = FindFirstFileExW(widename, FindExInfoStandard, &ffd, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+	hFind = FindFirstFileExW(widename, fffxw_info, &ffd, FindExSearchNameMatch, NULL, fffxw_flags);
 	free(widename);
  #else
-	hFind = FindFirstFileExA(tempname, FindExInfoStandard, &ffd, FindExSearchNameMatch, NULL, FIND_FIRST_EX_LARGE_FETCH);
+	hFind = FindFirstFileExA(tempname, fffxw_info, &ffd, FindExSearchNameMatch, NULL, fffxw_flags);
  #endif
 	free(tempname);
 	if (unlikely(hFind == INVALID_HANDLE_VALUE)) goto error_fff;
