@@ -1,6 +1,13 @@
-/* a_ljc_program - insert a description here
- * Copyright (C) 2025 by Some Developer <email@address.com>
- * Distributed under The MIT License
+/* a_ljc_program - (insert program description here)
+ *
+ * NOTE: REMOVE THE BELOW PARAGRAPH WHEN MAKING YOUR OWN PROGRAM!
+ * This libjodycode skeleton copy of this file is distributed by Jody Bruchon
+ * <jody@jodybruchon.com> under The MIT License, with the exception that you
+ * may re-license it to any other license once you
+ * modify it for use in your own program.
+ *
+ * Distributed under (insert license info here)
+ * Copyright (C) 20xx by Some Developer <email@address.com>
  */
 
 #include <stdio.h>
@@ -36,13 +43,18 @@ int main(int argc, char **argv)
 	int stdout_tty = 0;
 	/* Insert main()-local variables here */
 
+/* On Windows, set up the terminal and un-wide argv */
 #ifdef ON_WINDOWS
-	/* Windows buffers our std output; don't let it do that */
-	if (setvbuf(stdout, NULL, _IONBF, 0) != 0 || setvbuf(stderr, NULL, _IONBF, 0) != 0)
-		fprintf(stderr, "warning: setvbuf() failed\n");
-	if (_isatty(_fileno(stdout))) stdout_tty = 1;
-#else
-	if (isatty(fileno(stdout))) stdout_tty = 1;
+ #ifdef UNICODE
+	static char **argv;
+	int ut_err = jc_setup_unicode_terminal(argc, wargv, &argv, NULL);
+ #else
+	int ut_err = jc_setup_unicode_terminal(0, NULL, NULL, NULL);
+ #endif /* UNICODE */
+	if (ut_err != 0) {
+		jc_print_error(ut_err);
+		exit(EXIT_FAILURE);
+	}
 #endif /* ON_WINDOWS */
 
 	/* Verify libjodycode compatibility before going further */
