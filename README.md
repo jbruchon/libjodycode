@@ -1,11 +1,22 @@
 Introduction
 -------------------------------------------------------------------------------
-libjodycode is a software code library containing code shared among several of
-the programs written by Jody Bruchon such as imagepile, jdupes, winregfs, and
-zeromerge. These shared pieces of code were copied between each program as
-they were updated. As the number of programs increased and keeping these
-pieces of code synced became more annoying, the decision was made to combine
-all of them into a single reusable shared library.
+In a nutshell: libjodycode helps you to write a cross-platform C console
+program that works on Windows and handles some Unicode complications properly.
+
+libjodycode is a combination of a C code portability helper library and a set
+of useful extras such as a simple hash function. Most of the calls provided by
+libjodycode are drop-in replacements for C, SuS, or POSIX calls that don't
+work well or don't exist on Windows, mostly because Windows natively works in
+UTF-16 rather than UTF-8 like  nearly all other operating systems. Several
+minor quirks are abstracted away, such as using CreateFile and FindFirstFile
+on Windows to read file information and open directories, or using fopen()
+with 'S' in mode strings to indicate an intended sequential access pattern.
+
+It started as a pile of code shared among several programs written by Jody
+Bruchon such as imagepile, jdupes, winregfs, and zeromerge. These shared
+pieces of code were copied between each program as they were updated. As the
+number of programs grew, the copied code was eventually combined into a single
+reusable shared library.
 
 Please consider financially supporting continued development of libjodycode
 using the links on my home page (Ko-fi, PayPal, SubscribeStar, etc.):
@@ -16,25 +27,20 @@ https://www.jodybruchon.com/
 
 Version compatibility
 -------------------------------------------------------------------------------
-libjodycode 3.0 introduced a new "feature level" number which changes on every
-revision to the public API. Programs can check this number against the number
-that corresponds to the newest library interface that they use. Whenever any
-function or variable is added to the public API this number will increase.
-To find the number your program should store and check against this number,
-find every interface you use documented in FEATURELEVELS.txt and choose the
-highest feature level number out of those.
+As of libjodycode 3.0, a "feature level" is provided. Whenever anything is
+added to the public API, this number increases. Programs can integrate the code
+under helper_code/libjodycode_check.{c,h} to dynamically check the version of
+libjodycode linked at run time and exit with an error if the feature level is
+too low or the major version is not correct. In general, you should check for
+the lowest feature level that your program will work with. This can be a bit
+difficult to determine, so the feature level in the version of libjodycode you
+are building against is a safe choice
 
-In libjodycode 2.0 a new version table was introduced that maintains a separate
-version number for each logical section of the library; this table was removed
-in libjodycode 4.0 in favor of the feature level number.
-
-Programs can use the `libjodycode_check.c/.h` helper code provided to check
-for linking against an incompatible version of libjodycode. Copy the files to
-the program's code base, add `#include "libjodycode_check.h"` to the main C
+To use the `libjodycode_check.c/.h` helper code, copy the files into the
+program's code somewhere, add `#include "libjodycode_check.h"` to the main C
 file, and add
 
 `if (libjodycode_version_check(verbose, bail) != 0) failure_action();`
-
 
 somewhere early in `main()`. Set verbose to 1 to output detailed error info
 via `fprintf(stderr, ...)` if a bad version is found. Set bail to 1 to have
@@ -54,6 +60,22 @@ to allow C99 compilation. To build using C99 instead of C11, use USE_C99:
 You can use link-time optimization (LTO) if your compiler supports it:
 
 `make USE_LTO=1`
+
+
+
+Getting started quickly with the libjodycode skeleton
+-------------------------------------------------------------------------------
+If you want to start coding with libjodycode from scratch, copy everything in
+the "skeleton" directory to your program directory. Make sure you place your
+program directroy "beside" the libjodycode source (if you're in your program's
+project directory, '../libjodycode' is the libjodycode source directory). You
+will need to modify almost every file to contain the name of your program, the
+correct copyright and license information, and add your own LICENSE.txt file.
+You need to apply a version number and version date in version.h and then run
+./tune_winres.sh to modify the Windows resource files automatically to pull in
+your version information. To test that the template builds correctly, make
+sure that you've built libjodycode already, then run 'make static_jc' to build
+a dummy test program and try running it.
 
 
 

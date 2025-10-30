@@ -5,6 +5,6 @@
 #define A_LJC_PROGRAM_VERSION_H
 
 #define VER "0.1"
-#define VERDATE "2025-11-01"
+#define VERDATE "2025-11-30"
 
 #endif /* A_LJC_PROGRAM_VERSION_H */

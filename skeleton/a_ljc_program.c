@@ -43,20 +43,6 @@ int main(int argc, char **argv)
 	int stdout_tty = 0;
 	/* Insert main()-local variables here */
 
-/* On Windows, set up the terminal and un-wide argv */
-#ifdef ON_WINDOWS
- #ifdef UNICODE
-	static char **argv;
-	int ut_err = jc_setup_unicode_terminal(argc, wargv, &argv, NULL);
- #else
-	int ut_err = jc_setup_unicode_terminal(0, NULL, NULL, NULL);
- #endif /* UNICODE */
-	if (ut_err != 0) {
-		jc_print_error(ut_err);
-		exit(EXIT_FAILURE);
-	}
-#endif /* ON_WINDOWS */
-
 	/* Verify libjodycode compatibility before going further */
 	if (libjodycode_version_check(1, 0) != 0) {
 		/*** Insert version check failure actions here ***/
@@ -79,6 +65,8 @@ int main(int argc, char **argv)
 
 
 /***** INSERT YOUR PROGRAM HERE *****/
+	/* Sample */
+	printf("Your libjodycode project '%s' (version %s, %s) works!\n", argv[0], VER, VERDATE);
 
 
 	exit(EXIT_SUCCESS);
