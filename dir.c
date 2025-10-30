@@ -1,3 +1,4 @@
+
 /* libjodycode: directory calls
  *
  * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
@@ -85,13 +86,13 @@ error_fff:
 	return NULL;
 error_nomem:
 	if (tempname != NULL) free(tempname);
-#ifdef UNICODE
+ #ifdef UNICODE
 	if (widename != NULL) free(widename);
-#endif
+ #endif
 	jc_errno = ENOMEM;
 	return NULL;
 
-#else
+#else  /* not ON_WINDOWS */
 
 	JC_DIR *retval;
 
