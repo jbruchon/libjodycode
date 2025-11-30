@@ -8,6 +8,7 @@
 #ifdef ON_WINDOWS
  #define WIN32_LEAN_AND_MEAN
  #include <windows.h>
+ #include <VersionHelpers.h>
 #else
  #include <dirent.h>
 #endif  /* ON_WINDOWS */
@@ -15,7 +16,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <VersionHelpers.h>
 #include "likely_unlikely.h"
 #include "libjodycode.h"
 #ifdef ON_WINDOWS
