@@ -42,7 +42,12 @@ ifeq ($(OS), Windows_NT)
  endif
 endif
 
+# Are we running on macOS?
 ifeq ($(UNAME_S), Darwin)
+ ifndef NO_MACOS
+  ON_MACOS = 1
+  COMPILER_OPTIONS += -DON_MACOS=1
+ endif
  SO_SUFFIX    = .dylib
  SO_VER_FULL  = .$(VERSION)$(SO_SUFFIX)
  SO_VER_MAJOR = .$(VERSION_MAJOR)$(SO_SUFFIX)

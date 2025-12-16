@@ -157,6 +157,14 @@ struct JC_TIMESPEC {
 /*** stat ***/
 /* This is out of order because other things depend on it */
 
+/* Use st_?time macros for maximum cross-platform compatibility */
+
+#ifdef ON_MACOS
+ #define st_ctim st_ctimespec
+ #define st_mtim st_mtimespec
+ #define st_atim st_atimespec
+#endif /* ON_MACOS */
+
 #ifdef ON_WINDOWS
 struct JC_STAT {
 	uint64_t st_ino;
@@ -167,8 +175,12 @@ struct JC_STAT {
 	struct JC_TIMESPEC st_atim;
 	struct JC_TIMESPEC st_mtim;
 	struct JC_TIMESPEC st_ctim;
-	/* legacy st_*time should be avoided. Use st_*tim.tv_sec instead. */
 };
+
+/* legacy st_*time compatibility */
+ #define st_ctime st_ctim.tv_sec
+ #define st_mtime st_mtim.tv_sec
+ #define st_atime st_atim.tv_sec
 
 /* stat() macros for Windows "mode" flags (file attributes) */
  #define JC_S_IFMT FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_READONLY | \
