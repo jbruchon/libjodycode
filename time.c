@@ -50,7 +50,7 @@ time_t jc_strtoepoch(const char * const datetime)
 	if (unlikely(*p != '-')) goto error_datetime;
 	p++;
 	/* Process month (0-11, not 1-12) */
-	i = twodigit_atoi(p); if (unlikely(i < 0 || i > 11)) goto error_datetime;
+	i = twodigit_atoi(p); if (unlikely(i < 1 || i > 12)) goto error_datetime;
 	tm.tm_mon = i - 1;
 	p += 2;
 	if (unlikely(*p != '-')) goto error_datetime;
