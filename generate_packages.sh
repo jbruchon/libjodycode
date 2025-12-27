@@ -7,10 +7,11 @@ test -z "$PM" && PM=12
 
 NAME="libjodycode"
 
-VER="$(cat libjodycode.h | grep '#define\s\s*LIBJODYCODE_VER .*"' | cut -d\" -f2)"
+VER="$(grep '#define\s\s*LIBJODYCODE_VER .*"' < libjodycode.h | cut -d\" -f2)"
 echo "Program version: $VER"
 
 TA=__NONE__
+ITYPE=flat
 PKGTYPE=gz
 EXT1=.so; EXT2=.a
 
@@ -38,6 +39,7 @@ fi
 if [ "$UNAME_S" = "linux" ]
 	then
 	TA="linux-$UNAME_M"
+	ITYPE=inst
 	[ ! -z "$ARCH" ] && TA="linux-$ARCH"
 	PKGTYPE=xz
 fi
@@ -58,13 +60,20 @@ test "$TA" = "__NONE__" && echo "Failed to detect system type" && exit 1
 PKGNAME="${NAME}-${VER}-$TA"
 
 echo "Generating package for: $PKGNAME"
+rm -r "$PKGNAME"
 mkdir -p "$PKGNAME"
 test ! -d "$PKGNAME" && echo "Can't create directory for package" && exit 1
-cp CHANGES.txt README.md LICENSE.txt libjodycode.h $PKGNAME/
-E1=1
-make clean && make -j$PM stripped && cp -R $NAME${EXT1}* $NAME$EXT2 $PKGNAME/ && E1=0
-#make clean
+
+[ "$ITYPE" = "flat" ] && cp CHANGES.txt README.md LICENSE.txt libjodycode.h $PKGNAME/
+
+E1=2
+make clean && make -j$PM stripped && E1=$((E1 - 1))
+[ "$ITYPE" = "flat" ] && cp -R $NAME${EXT1}* $NAME$EXT2 $PKGNAME/ && E1=$((E1 - 1))
+[ "$ITYPE" = "inst" ] && make PREFIX=/usr DESTDIR=$(pwd)/$PKGNAME/ install && E1=$((E1 - 1))
+
 [ $E1 -gt 0 ] && echo "Error building packages; aborting." && exit 1
+
+#make clean
 # Make a fat binary on macOS x86_64 if possible
 #if [ "$TA" = "mac64" ] && ld -v 2>&1 | grep -q 'archs:.*i386'
 #	then
@@ -78,7 +87,9 @@ make clean && make -j$PM stripped && cp -R $NAME${EXT1}* $NAME$EXT2 $PKGNAME/ &&
 #	test $ERR -gt 0 && echo "Error building packages; aborting." && exit 1
 #	rm -f $PKGNAME/$NAME$EXT$TYPE
 #fi
-test "$PKGTYPE" = "zip" && zip -9r $PKGNAME.zip $PKGNAME/
-test "$PKGTYPE" = "gz"  && tar -c $PKGNAME/ | gzip -9 > $PKGNAME.pkg.tar.gz
-test "$PKGTYPE" = "xz"  && tar -c $PKGNAME/ | xz -e > $PKGNAME.pkg.tar.xz
+TARDIR="$PKGNAME"
+[ "$ITYPE" = "inst" ] && cd "$PKGNAME" && PFX="../" && TARDIR=usr
+[ "$PKGTYPE" = "zip" ] && zip -9r $PFX$PKGNAME.zip $TARDIR
+[ "$PKGTYPE" = "gz" ]  && tar -c $TARDIR | gzip -9 > $PFX$PKGNAME.pkg.tar.gz
+[ "$PKGTYPE" = "xz" ]  && tar -c $TARDIR | xz -e > $PFX$PKGNAME.pkg.tar.xz
 echo "Package generation complete."

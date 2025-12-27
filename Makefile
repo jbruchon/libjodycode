@@ -230,7 +230,7 @@ uninstall: uninstallfiles uninstalldirs
 test:
 	./test.sh
 
-stripped: sharedlib staticlib
+stripped: sharedlib staticlib manual
 	$(STRIP_UNNEEDED) libjodycode$(SO_SUFFIX)
 	$(STRIP_DEBUG) libjodycode$(LIB_SUFFIX)
 
