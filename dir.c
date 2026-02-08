@@ -29,12 +29,13 @@ JC_DIR *jc_opendir(const char * restrict path)
 #ifdef ON_WINDOWS
 	JC_DIR *dirp;
 	char *tempname, *p;
-	WIN32_FIND_DATA ffd;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	DWORD fffxw_flags = 0xffffffff;
-	FINDEX_INFO_LEVELS fffxw_info = 0xff;
  #ifdef UNICODE
 	JC_WCHAR_T *widename = NULL;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	WIN32_FIND_DATA ffd;
+	/* These two values should only be initialized once for the program's lifetime */
+	static DWORD fffxw_flags = 0xffffffff;
+	static FINDEX_INFO_LEVELS fffxw_info = FindExInfoStandard;
  #endif
 
 	if (unlikely(path == NULL)) {
@@ -42,11 +43,13 @@ JC_DIR *jc_opendir(const char * restrict path)
 		return NULL;
 	}
 
-	/* Windows XP doesn't support the large fetch option */
+	/* Initialize FindFirstFileEx large fetch buffers and skip short file name enumeration */
 	if (unlikely(fffxw_flags > FIND_FIRST_EX_LARGE_FETCH)) {
-		fffxw_flags = 0;
+		/* XP doesn't support large fetch so default to no flags */
+		fffxw_flags = FindExInfoStandard;
+		/* https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfileexw#parameters */
 		if (!IsWindowsVistaOrGreater()) fffxw_flags = FIND_FIRST_EX_LARGE_FETCH;
-		fffxw_info = FindExInfoStandard;
+		/* https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ne-minwinbase-findex_info_levels#constants */
 		if (IsWindows7OrGreater()) fffxw_info = FindExInfoBasic;
 	}
 
