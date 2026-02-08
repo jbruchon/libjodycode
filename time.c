@@ -1,6 +1,6 @@
 /* libjodycode: datetime string to UNIX epoch conversion
  *
- * Copyright (C) 2020-2025 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2020-2026 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

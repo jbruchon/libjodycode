@@ -1,5 +1,5 @@
 /* Jody Bruchon's helpful code library header
- * Copyright (C) 2014-2025 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2014-2026 by Jody Bruchon <jody@jodybruchon.com>
  * Licensed under The MIT License
  * Source code: https://codeberg.org/jbruchon/libjodycode
  */
@@ -23,8 +23,8 @@ extern "C" {
  * version information for compatibility. See README for more information. */
 #define LIBJODYCODE_API_VERSION       4
 #define LIBJODYCODE_API_FEATURE_LEVEL 5
-#define LIBJODYCODE_VER               "4.1.1"
-#define LIBJODYCODE_VERDATE           "2025-10-25"
+#define LIBJODYCODE_VER               "4.1.2"
+#define LIBJODYCODE_VERDATE           "2026-02-08"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else

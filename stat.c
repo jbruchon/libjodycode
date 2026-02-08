@@ -1,6 +1,6 @@
 /* libjodycode: Windows-native code for getting stat()-like information
  *
- * Copyright (C) 2016-2025 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2016-2026 by Jody Bruchon <jody@jodybruchon.com>
  * Released under The MIT License
  */
 

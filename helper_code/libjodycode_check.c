@@ -4,7 +4,7 @@
  * linked libjodycode to check for and report incompatibilities
  * Can also be compiled with -DSTANDALONE for version checking purposes
  *
- * Copyright (C) 2023-2025 by Jody Bruchon <jody@jodybruchon.com>
+ * Copyright (C) 2023-2026 by Jody Bruchon <jody@jodybruchon.com>
  * Licensed under The MIT License */
 
 #include <stdio.h>
