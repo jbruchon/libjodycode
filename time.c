@@ -115,7 +115,7 @@ int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FI
 	nttime = (uint64_t)((unixtime->tv_sec * NTTIME_NSEC) + (unixtime->tv_nsec / 100) + NTTIME_CONSTANT);
 	if (unlikely(nttime <= NTTIME_CONSTANT)) return -1;
 	filetime->dwHighDateTime = (DWORD)(nttime >> 32);
-	filetime->dwLowDateTime = (DWORD)nttime - filetime->dwHighDateTime;
+	filetime->dwLowDateTime = (DWORD)nttime;
 	return 0;
 }
 #endif  /* ON_WINDOWS */
