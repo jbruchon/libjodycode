@@ -21,7 +21,7 @@ int jc_rename(const char *oldpath, const char *newpath)
 {
 	int retval;
 #ifdef UNICODE
-	JC_WCHAR_T *wideold, *widenew;
+	JC_WCHAR_T *wideold = NULL, *widenew = NULL;
 #endif
 
 	if (unlikely(oldpath == NULL || newpath == NULL)) {
@@ -31,6 +31,7 @@ int jc_rename(const char *oldpath, const char *newpath)
 
 #ifdef UNICODE
 	if (unlikely(jc_string_to_wstring(oldpath, &wideold) != 0 || jc_string_to_wstring(newpath, &widenew) != 0)) {
+		if (wideold != NULL) free(wideold);
 		jc_errno = ENOMEM;
 		return -1;
 	}
