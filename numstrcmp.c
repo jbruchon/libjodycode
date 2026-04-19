@@ -83,7 +83,8 @@ int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2, const 
 				if (IS_LOWER(s2)) s2 = (char)(s2 - 32);
 			}
 			if (s1 > s2) return 1;
-			else return -1;
+			if (s1 < s2) return -1;
+			return 0;
 		}
 	}
 
