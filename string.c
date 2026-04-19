@@ -28,6 +28,7 @@ int jc_strneq(const char *s1, const char *s2, const size_t len)
 {
 	size_t i = 0;
 
+	if (unlikely(len == 0UL)) return 0;
 	while (likely(*s1 != '\0' && *s2 != '\0')) {
 		if (*s1 != *s2) return 1;
 		s1++; s2++; i++;
