@@ -44,31 +44,29 @@ extern "C" {
  #pragma warning(disable : 4200)
 #endif
 
+#define JC_PATHBUF_SIZE 32768
 
 #include <stdio.h>
 #include <stdint.h>
-#include <sys/types.h>
-
-#define JC_PATHBUF_SIZE 32768
 
 #ifdef ON_WINDOWS
  #ifndef WIN32_LEAN_AND_MEAN
-  #define WIN32_LEAN_AND_MAN
+  #define WIN32_LEAN_AND_MEAN
  #endif
  #include <windows.h>
  #include <direct.h>
  /* Unicode conversion on Windows */
  #ifndef M2W
-  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, JC_PATHBUF_SIZE)
+  #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, (a), -1, (LPWSTR)(b), JC_PATHBUF_SIZE)
  #endif
  #ifndef M2W_SIZED
-  #define M2W_SIZED(a,b,c) MultiByteToWideChar(CP_UTF8, 0, a, -1, (LPWSTR)b, c)
+  #define M2W_SIZED(a,b,c) MultiByteToWideChar(CP_UTF8, 0, (a), -1, (LPWSTR)(b), (c))
  #endif
  #ifndef W2M
-  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, JC_PATHBUF_SIZE, NULL, FALSE)
+  #define W2M(a,b) WideCharToMultiByte(CP_UTF8, 0, (a), -1, (LPSTR)(b), JC_PATHBUF_SIZE, NULL, FALSE)
  #endif
  #ifndef W2M_SIZED
-  #define W2M_SIZED(a,b,c) WideCharToMultiByte(CP_UTF8, 0, a, -1, (LPSTR)b, c, NULL, FALSE)
+  #define W2M_SIZED(a,b,c) WideCharToMultiByte(CP_UTF8, 0, (a), -1, (LPSTR)(b), (c), NULL, FALSE)
  #endif
  #define jc_GetLastError() (int32_t)GetLastError()
 #else
@@ -77,13 +75,14 @@ extern "C" {
  #include <unistd.h>
 #endif /* ON_WINDOWS */
 
+#include <sys/types.h>
 
 /* Extend an allocation length to the next 64-bit (8-byte) boundary */
-#define JC_EXTEND64(a) (((a) & 0x7) > 0 ? (((a) & (~0x7)) + 8) : (a))
+#define JC_EXTEND64(a) (((a) + 7U) & ~7U)
 
 
 /* File modes and wchar_t type */
-/* Uther things depend on this, keep it at the top */
+/* Other things depend on this, keep it at the top */
 #if defined _WIN32 || defined __WIN32 || defined ON_WINDOWS
  #ifdef UNICODE
   #define JC_WCHAR_T wchar_t
@@ -117,7 +116,7 @@ extern "C" {
  #define JC_F_OK 0
  #define JC_R_OK 4
  #define JC_W_OK 2
- #define JC_X_OK 6
+ #define JC_X_OK 4
 #else /* Not Windows */
  #define JC_WCHAR_T char
  #define JC_FILE_MODE_RDONLY "rb"

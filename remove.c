@@ -30,7 +30,7 @@ int jc_remove(const char *pathname)
 
 #ifdef UNICODE
 	if (jc_string_to_wstring(pathname, &widename) != 0) {
-		jc_errno = ENOMEM;
+		jc_errno = JC_ENOMEM;
 		return -1;
 	}
 	retval = DeleteFileW(widename) ? 0 : -1;
