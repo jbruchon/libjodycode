@@ -14,22 +14,23 @@ const char *jc_emptystring = "";
 
 
 /* Convert a plain C string into a jc_str with size prefix */
-JC_STR_T *jc_str_init(const char *string, uint32_t len)
+JC_STR_T *jc_str_init(const char *string, uint32_t _len)
 {
 	JC_STR_T *jstr;
+	size_t len = _len;
 
 	if (unlikely(string == NULL || len == 0)) {
 		len = 0;
 		string = jc_emptystring;
-	} else {
-		if (len == 0) len = (uint32_t)strlen(string);
-		if (len > UINT32_MAX) return NULL;
 	}
 
+	if (len >= (1<<29)) return NULL;
 	jstr = (JC_STR_T *)malloc(sizeof(JC_STR_T) + len + 1);
 	if (jstr == NULL) return NULL;
+	memset(jstr, '\0', sizeof(*jstr));
 	jstr->len = len;
-	memcpy(jstr->str, string, len + 1);
+	memcpy(jstr->str, string, len);
+	jstr->str[len] = '\0';
 
 	return jstr;
 }
