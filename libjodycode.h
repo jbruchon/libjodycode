@@ -368,21 +368,21 @@ extern int jc_print_error(int errnum);
 
 #define JC_ERRORCODE_START 1024
 
-#define JC_ENOERROR   1024  // 0
-#define JC_ENULL      1025
-#define JC_ECDOTDOT   1026
-#define JC_EGRNEND    1027
-#define JC_EBADERR    1028
-#define JC_EBADARGV   1029
-#define JC_EMBWC      1030
-#define JC_EALARM     1031
-#define JC_EALLOC     1032
-#define JC_ENUMSTRCMP 1033
-#define JC_EDATETIME  1034  // 10
-#define JC_EWIN32API  1035
-#define JC_EKERNVER   1036
-#define JC_ENOMEM     1037
-#define JC_ESETVBUF   1038
+#define JC_ENOERROR   (JC_ERRORCODE_START + 0)
+#define JC_ENULL      (JC_ERRORCODE_START + 1)
+#define JC_ECDOTDOT   (JC_ERRORCODE_START + 2)
+#define JC_EGRNEND    (JC_ERRORCODE_START + 3)
+#define JC_EBADERR    (JC_ERRORCODE_START + 4)
+#define JC_EBADARGV   (JC_ERRORCODE_START + 5)
+#define JC_EMBWC      (JC_ERRORCODE_START + 6)
+#define JC_EALARM     (JC_ERRORCODE_START + 7)
+#define JC_EALLOC     (JC_ERRORCODE_START + 8)
+#define JC_ENUMSTRCMP (JC_ERRORCODE_START + 9)
+#define JC_EDATETIME  (JC_ERRORCODE_START + 10)
+#define JC_EWIN32API  (JC_ERRORCODE_START + 11)
+#define JC_EKERNVER   (JC_ERRORCODE_START + 12)
+#define JC_ENOMEM     (JC_ERRORCODE_START + 13)
+#define JC_ESETVBUF   (JC_ERRORCODE_START + 14)
 
 
 /*** fopen ***/
