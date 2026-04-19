@@ -14,20 +14,18 @@ const char *jc_emptystring = "";
 
 
 /* Convert a plain C string into a jc_str with size prefix */
-JC_STR_T *jc_str_init(const char *string, uint32_t _len)
+JC_STR_T *jc_str_init(const char *string, uint32_t len)
 {
 	JC_STR_T *jstr;
-	size_t len = _len;
 
 	if (unlikely(string == NULL || len == 0)) {
 		len = 0;
 		string = jc_emptystring;
 	}
 
-	if (len >= (1<<29)) return NULL;
+	if (unlikely(len > (0xFFFFFFFFU - sizeof(JC_STR_T) - 1))) return NULL;
 	jstr = (JC_STR_T *)malloc(sizeof(JC_STR_T) + len + 1);
 	if (jstr == NULL) return NULL;
-	memset(jstr, '\0', sizeof(*jstr));
 	jstr->len = len;
 	memcpy(jstr->str, string, len);
 	jstr->str[len] = '\0';
@@ -45,7 +43,7 @@ int jc_strteq(const JC_STR_T *s1, const JC_STR_T *s2)
 
 
 /* jc_strneq() for JC_STR_T strings */
-int jc_strtneq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len)
+int jc_strtneq(const JC_STR_T *s1, const JC_STR_T *s2, const uint32_t len)
 {
 	if (len >= s1->len && len >= s2->len) return jc_strteq(s1, s2);
 	return jc_strneq(s1->str, s2->str, len);
@@ -61,7 +59,7 @@ int jc_strtcaseeq(const JC_STR_T *s1, const JC_STR_T *s2)
 
 
 /* jc_strncaseeq() for JC_STR_T strings */
-int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len)
+int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const uint32_t len)
 {
 	if (len >= s1->len && len >= s2->len) return jc_strtcaseeq(s1, s2);
 	return jc_strncaseeq(s1->str, s2->str, len);
@@ -72,7 +70,7 @@ int jc_strtncaseeq(const JC_STR_T *s1, const JC_STR_T *s2, const size_t len)
 int jc_strtcmp(const JC_STR_T *s1, const JC_STR_T *s2)
 {
 	int cmp;
-	size_t max = s1->len;
+	uint32_t max = s1->len;
 
 	if (s2->len < max) max = s2->len;
 	cmp = memcmp(s1->str, s2->str, max);
@@ -82,11 +80,11 @@ int jc_strtcmp(const JC_STR_T *s1, const JC_STR_T *s2)
 }
 
 
-int jc_strtncmp(const JC_STR_T *s1, const JC_STR_T *s2, size_t len)
+int jc_strtncmp(const JC_STR_T *s1, const JC_STR_T *s2, uint32_t len)
 {
 	int cmp;
 	int limited = 0;
-	size_t max = len;
+	uint32_t max = len;
 
 	if (s1->len < max) { max = s1->len; limited = 1; }
 	if (s2->len < max) { max = s2->len; limited = 1; }
@@ -104,7 +102,7 @@ int jc_strtcasecmp(const JC_STR_T *s1, const JC_STR_T *s2)
 }
 
 
-int jc_strtncasecmp(const JC_STR_T *s1, const JC_STR_T *s2, size_t len)
+int jc_strtncasecmp(const JC_STR_T *s1, const JC_STR_T *s2, uint32_t len)
 {
 	return strncasecmp(s1->str, s2->str, len);
 }
