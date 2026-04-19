@@ -10,7 +10,7 @@
 #include "libjodycode.h"
 #include "likely_unlikely.h"
 
-const char *jc_emptystring = '\0';
+const char *jc_emptystring = "";
 
 
 /* Convert a plain C string into a jc_str with size prefix */
