@@ -18,10 +18,12 @@ JC_STR_T *jc_str_init(const char *string, uint32_t len)
 {
 	JC_STR_T *jstr;
 
-	if (unlikely(string == NULL || len == 0)) {
+	if (unlikely(string == NULL)) {
 		len = 0;
 		string = jc_emptystring;
 	}
+	/* Initialize string length if not provided */
+	if (len == 0) len = (uint32_t)strlen(string);
 
 	if (unlikely(len > (0xFFFFFFFFU - sizeof(JC_STR_T) - 1))) return NULL;
 	jstr = (JC_STR_T *)malloc(sizeof(JC_STR_T) + len + 1);
