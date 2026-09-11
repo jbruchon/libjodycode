@@ -1,4 +1,3 @@
-
 /* libjodycode: directory calls
  *
  * Copyright (C) 2014-2026 by Jody Bruchon <jody@jodybruchon.com>
@@ -45,10 +44,9 @@ JC_DIR *jc_opendir(const char * restrict path)
 
 	/* Initialize FindFirstFileEx large fetch buffers and skip short file name enumeration */
 	if (unlikely(fffxw_flags > FIND_FIRST_EX_LARGE_FETCH)) {
-		/* XP doesn't support large fetch so default to no flags */
-		fffxw_flags = FindExInfoStandard;
+        fffxw_flags = 0;
 		/* https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-findfirstfileexw#parameters */
-		if (!IsWindowsVistaOrGreater()) fffxw_flags = FIND_FIRST_EX_LARGE_FETCH;
+		if (IsWindows7OrGreater()) fffxw_flags = FIND_FIRST_EX_LARGE_FETCH;
 		/* https://learn.microsoft.com/en-us/windows/win32/api/minwinbase/ne-minwinbase-findex_info_levels#constants */
 		if (IsWindows7OrGreater()) fffxw_info = FindExInfoBasic;
 	}
