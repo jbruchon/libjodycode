@@ -34,8 +34,10 @@ extern "C" {
 
 /* Define ON_WINDOWS if not otherwise defined and building on Windows */
 #if defined _WIN32 || defined __WIN32 || defined WIN64 || defined __WIN64
- #ifndef ON_WINDOWS
-  #define ON_WINDOWS
+ #ifndef NO_WINDOWS
+  #ifndef ON_WINDOWS
+   #define ON_WINDOWS
+  #endif
  #endif
 #endif
 
