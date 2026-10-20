@@ -133,7 +133,7 @@ struct JC_DIRENT *jc_readdir(JC_DIR *dirp)
 	int i;
 
 	if (unlikely(dirp == NULL)) goto error_bad_dirp;
-	
+
 	if (dirp->cached == 1) {
 		dirp->cached = 0;
 		goto skip_fnf;

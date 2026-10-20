@@ -166,9 +166,7 @@ extern int jc_utime(const char *filename, const struct JC_UTIMBUF *times);
 
 /*** stat ***/
 /* This is out of order because other things depend on it */
-
 /* Use st_?time macros for maximum cross-platform compatibility */
-
 #ifdef ON_MACOS
  #define st_ctim st_ctimespec
  #define st_mtim st_mtimespec
@@ -258,19 +256,16 @@ extern int jc_stat(const char * const filename, struct JC_STAT * const restrict 
 
 
 /*** access ***/
-
 extern int jc_access(const char *pathname, int mode);
 
 
 /*** alarm ***/
-
 extern int jc_alarm_ring;
 extern int jc_start_alarm(const unsigned int seconds, const int repeat);
 extern int jc_stop_alarm(void);
 
 
 /*** cacheinfo ***/
-
 /* Cache information structure
  * Split caches populate i/d, unified caches populate non-i/d */
 struct jc_proc_cacheinfo {
@@ -289,12 +284,10 @@ extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
 
 
 /*** chmod ***/
-
 extern int jc_chmod(const char *filename, uint32_t mode);
 
 
 /*** dir ***/
-
 /* Directory stream type
  * Must be hijacked because FindFirstFileW() does one readdir() equivalent too
  * When the first file is returned, this entry is removed from the linked list */
@@ -359,7 +352,6 @@ extern int jc_closedir(JC_DIR * const restrict dirp);
 
 /*** batch ***/
 /* This is out of order because it depends on the dir definitions */
-
 struct jc_fileinfo {
 	struct JC_STAT *stat;
 	struct JC_DIRENT *dirent;
@@ -376,7 +368,6 @@ extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict bat
 
 
 /*** error ***/
-
 extern int32_t jc_errno;
 extern const char *jc_get_errname(int errnum);
 extern const char *jc_get_errdesc(int errnum);
@@ -400,30 +391,32 @@ extern int jc_print_error(int errnum);
 #define JC_ENOMEM     (JC_ERRORCODE_START + 13)
 #define JC_ESETVBUF   (JC_ERRORCODE_START + 14)
 
+/*** ferror ***/
+int jc_ferror(FILE *stream);
+
+
+/*** fgets ***/
+extern char *jc_fgets(char * restrict s, int size, FILE * restrict stream);
+
 
 /*** fopen ***/
-
 extern FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
 extern int jc_fclose(FILE *stream);
 
 
 /*** fputs ***/
-
 extern int jc_fputs(const char * restrict s, FILE * restrict stream);
 
 
 /*** jc_fwprint ***/
-
 extern int jc_fwprint(FILE * const restrict stream, const char * const restrict str, const int cr);
 
 
 /*** getcwd ***/
-
 extern char *jc_getcwd(char * const restrict pathname, const size_t size);
 
 
 /*** jody_hash ***/
-
 #ifndef JODY_HASH_H
  #define JODY_HASH_VERSION 7
  #define JODY_HASH_WIDTH 64
@@ -435,25 +428,21 @@ extern int jc_block_hash(const enum jc_e_hash type, jodyhash_t *data, jodyhash_t
 
 
 /*** link ***/
-
 extern int jc_link(const char *path1, const char *path2);
 
 
 /*** linkfiles ***/
-
 enum jc_e_link { SYMLINK = 0, HARDLINK = 1, REFLINK = 2 };
 extern int jc_linkfiles(struct jc_fileinfo_batch * const restrict batch, const enum jc_e_link linktype);
 
 
 /*** oom ***/
-
 /* Out-of-memory and null pointer error-exit functions */
 extern void jc_oom(const char * restrict msg);
 extern void jc_nullptr(const char * restrict func);
 
 
 /*** paths ***/
-
 /* Remove "middle" '..' components in a path: 'foo/../bar/baz' => 'bar/baz' */
 extern int jc_collapse_dotdot(char * const path);
 /* Given a src and dest path, create a relative path name from src to dest */
@@ -461,17 +450,14 @@ extern int jc_make_relative_link_name(const char * const src, const char * const
 
 
 /*** rename ***/
-
 extern int jc_rename(const char *oldpath, const char *newpath);
 
 
 /*** remove ***/
-
 extern int jc_remove(const char *pathname);
 
 
 /*** size_suffix ***/
-
 /* Suffix definitions (treat as case-insensitive) */
 struct jc_size_suffix {
   const char * const suffix;
@@ -483,14 +469,12 @@ extern const struct jc_size_suffix jc_size_suffix[];
 
 
 /*** sort ***/
-
 /* Numerically-correct string sort with a little extra intelligence
    insensitive: 0 = case-sensitive, 1 = case-insensitive */
 extern int jc_numeric_strcmp(const char * restrict c1, const char * restrict c2, const int insensitive);
 
 
 /*** string ***/
-
 extern const char *jc_emptystring;
 
 /* string type with length prefix */
@@ -514,14 +498,12 @@ extern int jc_streq(const char *s1, const char *s2);
 
 
 /*** strtoepoch ***/
-
 /* Convert a date/time string to seconds since the epoch
  * Format must be "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" */
 extern time_t jc_strtoepoch(const char * const datetime);
 
 
 /*** version ***/
-
 /* libjodycode version information */
 extern const char *jc_version;
 extern const char *jc_verdate;

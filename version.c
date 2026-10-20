@@ -47,5 +47,5 @@ int jc_get_kernel_version(void)
 error_failed:
 	kernel_version = -1;
 	return -1;
-}		
+}
 #endif /* __linux__ */
