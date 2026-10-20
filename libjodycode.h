@@ -392,7 +392,7 @@ extern int jc_print_error(int errnum);
 #define JC_ESETVBUF   (JC_ERRORCODE_START + 14)
 
 /*** ferror ***/
-int jc_ferror(FILE *stream);
+extern int jc_ferror(FILE *stream);
 
 
 /*** fgets ***/

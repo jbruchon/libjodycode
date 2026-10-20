@@ -191,21 +191,22 @@ static void jc_destroy_dirp(JC_DIR * const restrict dirp)
 /* Close a directory */
 int jc_closedir(JC_DIR * const restrict dirp)
 {
-	int retval;
 #ifdef ON_WINDOWS
+	BOOL win_res;
 	if (unlikely(dirp == NULL)) {
 		jc_errno = EBADF;
 		return -1;
 	}
 
-	retval = FindClose(dirp->hFind);
+	win_res = FindClose(dirp->hFind);
 	jc_destroy_dirp(dirp);
-	if (retval != 0) jc_errno = jc_GetLastError();
-	return -1;
-
+	if (unlikely(win_res == 0)) {
+		jc_errno = jc_GetLastError();
+		return -1;
+	}
+	return 0;
 #else
-
-	retval = closedir(dirp);
+	int retval = closedir(dirp);
 	if (retval != 0) jc_errno = errno;
 	return retval;
 #endif /* ON_WINDOWS */
