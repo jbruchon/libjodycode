@@ -144,22 +144,24 @@ extern "C" {
 
 /*** time ***/
 /* This is out of order because other things depend on it */
-struct JC_UTIMBUF {
-	time_t actime;
-	time_t modtime;
-};
-extern int jc_utime(const char *filename, const struct JC_UTIMBUF *times);
 #ifdef ON_WINDOWS
 struct JC_TIMESPEC {
 	time_t tv_sec;
 	long tv_nsec;
 };
 
+struct JC_UTIMBUF {
+	time_t actime;
+	time_t modtime;
+};
+
  extern int jc_nttime_to_unixtime(const FILETIME * const restrict filetime, struct JC_TIMESPEC * const restrict unixtime);
  extern int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FILETIME * const restrict filetime);
 #else
  #define JC_TIMESPEC timespec
+ #define JC_TIMESPEC utimbuf
 #endif  /* ON_WINDOWS */
+extern int jc_utime(const char *filename, const struct JC_UTIMBUF *times);
 
 
 /*** stat ***/
@@ -288,7 +290,7 @@ extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
 
 /*** chmod ***/
 
-int jc_chmod(const char *filename, uint32_t mode);
+extern int jc_chmod(const char *filename, uint32_t mode);
 
 
 /*** dir ***/
@@ -403,6 +405,11 @@ extern int jc_print_error(int errnum);
 
 extern FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
 extern int jc_fclose(FILE *stream);
+
+
+/*** fputs ***/
+
+int jc_fputs(const char * restrict s, FILE * restrict stream);
 
 
 /*** jc_fwprint ***/

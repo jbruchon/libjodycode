@@ -144,10 +144,10 @@ LDFLAGS += $(LINK_OPTIONS)
 #ADDITIONAL_OBJECTS += getopt.o
 
 OBJS += access.o alarm.o batch.o block_hash.o cacheinfo.o chmod.o dir.o
-OBJS += error.o fopen.o jc_fwprint.o getcwd.o jody_hash.o link.o
+OBJS += error.o fopen.o fputs.o jc_fwprint.o getcwd.o jody_hash.o link.o
 OBJS += linkfiles.o numstrcmp.o oom.o paths.o
 OBJS += remove.o rename.o size_suffix.o stat.o
-OBJS += string.o str_t.o time.o version.o win_unicode.o
+OBJS += string.o str_t.o time.o utime.o version.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 
 all: manual sharedlib staticlib

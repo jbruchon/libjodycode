@@ -23,6 +23,7 @@ all of them into a single reusable shared library.
 .BI "int jc_fclose(FILE *" stream ")"
 .BI "int jc_chmod(const char * " filename ", uint32_t " mode ");"
 .BI "FILE *jc_fopen(const char *" pathname ", const JC_WCHAR_T *" mode ")"
+.BI "int jc_fputs(const char * restrict " s ", FILE * restrict " stream ")"
 .BI "char *jc_getcwd(char * const restrict " pathname ", const size_t " size ")"
 .BI "int jc_link(const char *" path1 ", const char *" path2 ");"
 .BI "JC_DIR *jc_opendir(const char * restrict " path ")"
