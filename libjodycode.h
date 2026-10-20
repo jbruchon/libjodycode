@@ -391,6 +391,11 @@ extern int jc_print_error(int errnum);
 #define JC_ENOMEM     (JC_ERRORCODE_START + 13)
 #define JC_ESETVBUF   (JC_ERRORCODE_START + 14)
 
+
+/*** feof ***/
+extern int jc_feof(FILE *stream);
+
+
 /*** ferror ***/
 extern int jc_ferror(FILE *stream);
 
