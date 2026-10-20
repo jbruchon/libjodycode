@@ -370,7 +370,7 @@ extern void jc_fileinfo_batch_free(struct jc_fileinfo_batch * const restrict bat
 /*** error ***/
 extern int32_t jc_errno;
 extern const char *jc_get_errname(int errnum);
-extern const char *jc_get_errdesc(int errnum);
+extern const char *jc_strerror(int errnum);
 extern int jc_print_error(int errnum);
 
 #define JC_ERRORCODE_START 1024

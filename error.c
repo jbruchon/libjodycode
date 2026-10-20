@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include "libjodycode.h"
 
 int32_t jc_errno;
@@ -41,17 +42,17 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 const char *jc_get_errname(int errnum)
 {
 	if (errnum == 0) return jc_error_list[0].name;
-	if (errnum < JC_ERRORCODE_START) return NULL;
+	if (errnum < JC_ERRORCODE_START) return "system_error";
 	errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return NULL;
 	return jc_error_list[errnum].name;
 }
 
 
-const char *jc_get_errdesc(int errnum)
+const char *jc_strerror(int errnum)
 {
 	if (errnum == 0) return jc_error_list[0].desc;
-	if (errnum < JC_ERRORCODE_START) return NULL;
+	if (errnum < JC_ERRORCODE_START) return strerror(errnum);
 	errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return NULL;
 	return jc_error_list[errnum].desc;
@@ -64,7 +65,10 @@ int jc_print_error(int errnum)
 		fprintf(stderr, "error: %s (%s)\n", jc_error_list[0].desc, jc_error_list[0].name);
 		return 0;
 	}
-	if (errnum < JC_ERRORCODE_START) return JC_EBADERR;
+	if (errnum < JC_ERRORCODE_START) {
+		fprintf(stderr, "error: %s\n", strerror(errnum));
+		return 0;
+	}
 	errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return JC_EBADERR;
 	fprintf(stderr, "error: %s (%s)\n", jc_error_list[errnum].desc, jc_error_list[errnum].name);
@@ -77,7 +81,7 @@ int main(void)
 {
 	int i;
 
-	for (i = 0; i < errcnt; i++) printf("[%d] %s: %s\n", i, jc_get_errname(i + JC_ERRORCODE_START), jc_get_errdesc(i + JC_ERRORCODE_START));
+	for (i = 0; i < errcnt; i++) printf("[%d] %s: %s\n", i, jc_get_errname(i + JC_ERRORCODE_START), jc_strerror(i + JC_ERRORCODE_START));
 	for (i = 0; i < errcnt; i++) jc_print_error(i + JC_ERRORCODE_START);
 }
 #endif

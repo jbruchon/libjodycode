@@ -33,6 +33,7 @@ all of them into a single reusable shared library.
 .BI "int jc_rename(const char *" oldpath ", const char *" newpath ")"
 .BI "int jc_remove(const char *" pathname ")"
 .BI "int jc_stat(const char * const " filename ", struct JC_STAT * const restrict " buf ")"
+.BI "const char *jc_strerror(int " errnum ")"
 .BI "long jc_strtol(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
 .BI "unsigned long jc_strtoul(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
 .BI "long long jc_strtoll(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
@@ -62,7 +63,6 @@ Number of alarm triggers that have occurred; writable by the program
 .SS "Error API"
 .nf
 .BI "const char *jc_get_errname(int " errnum ")"
-.BI "const char *jc_get_errdesc(int " errnum ")"
 .BI "int jc_print_error(int " errnum ")"
 .BI "int32_t " jc_errno ""
 libjodycode equivalent to C library's errno
