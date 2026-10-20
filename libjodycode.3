@@ -1,5 +1,5 @@
 .\" Copyright (C) 2023-2026 by Jody Bruchon <jody@jodybruchon.com>
-.TH "LIBJODYCODE" "3" "2026-02-08" "4.1.2" "libjodycode"
+.TH "LIBJODYCODE" "3" "2026-10-20" "4.2.0" "libjodycode"
 .SH NAME
 libjodycode \- shared code used by several tools written by Jody Bruchon
 
@@ -21,6 +21,7 @@ all of them into a single reusable shared library.
 .BI "int jc_access(const char *" pathname ", int " mode ")"
 .BI "int jc_closedir(JC_DIR * const restrict " dirp ")"
 .BI "int jc_fclose(FILE *" stream ")"
+.BI "int jc_chmod(const char * " filename ", uint32_t " mode ");"
 .BI "FILE *jc_fopen(const char *" pathname ", const JC_WCHAR_T *" mode ")"
 .BI "char *jc_getcwd(char * const restrict " pathname ", const size_t " size ")"
 .BI "int jc_link(const char *" path1 ", const char *" path2 ");"
@@ -29,12 +30,13 @@ all of them into a single reusable shared library.
 .BI "int jc_rename(const char *" oldpath ", const char *" newpath ")"
 .BI "int jc_remove(const char *" pathname ")"
 .BI "int jc_stat(const char * const " filename ", struct JC_STAT * const restrict " buf ")"
+.BI "int jc_utime(const char * " filename ", const struct JC_UTIMBUF *" times ");"
 
 .SS "Alarm API"
 .nf
 .BI "int jc_start_alarm(const unsigned int " seconds ", const int " repeat ")"
 .BI "int jc_stop_alarm(void)"
-.IP int\ jc_alarm_ring
+.BI "int " jc_alarm_ring ""
 Number of alarm triggers that have occurred; writable by the program
 
 .SS "Batch file list API"
@@ -55,13 +57,13 @@ Number of alarm triggers that have occurred; writable by the program
 .BI "const char *jc_get_errname(int " errnum ")"
 .BI "const char *jc_get_errdesc(int " errnum ")"
 .BI "int jc_print_error(int " errnum ")"
-.IP int32_t\ jc_errno
+.BI "int32_t " jc_errno ""
 libjodycode equivalent to C library's errno
 
 .SS "jodyhash API"
 .nf
 .BI "int jc_block_hash(const enum jc_e_hash " type ", jodyhash_t *" data ", jodyhash_t *" hash ", const size_t " count ")"
-.IP enum\ jc_e_hash
+.BI "enum " jc_e_hash ""
 Selects hash type to perform, NORMAL or ROLLING
 .IP "#define JODY_HASH_VERSION"
 Version of \fIjody_hash\fP the library currently uses
@@ -69,7 +71,7 @@ Version of \fIjody_hash\fP the library currently uses
 .SS "Linkfiles API"
 .nf
 .BI "int jc_linkfiles(struct jc_fileinfo_batch * const restrict " batch ", const enum jc_e_link " linktype ")"
-.IP enum\ jc_e_link
+.BI "enum " jc_e_link ""
 Selects type of link to perform: SYMLINK, HARDLINK, or REFLINK
 
 .SS "OOM (out-of-memory) API"
@@ -115,17 +117,19 @@ Members: len = length, str = string
 .BI "time_t jc_strtoepoch(const char * const " datetime ")"
 .BI "int jc_nttime_to_unixtime(const FILETIME * const restrict " filetime ", struct JC_TIMESPEC * const restrict " unixtime ")"
 .BI "int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict " unixtime ", FILETIME * const restrict " filetime ")"
-.IP "struct JC_TIMESPEC"
+.BI "struct " JC_TIMESPEC ""
 libjodycode equivalent to \fIstruct timespec\fP from \fItime.h\fP
+.BI "struct " JC_UTIMBUF ""
+libjodycode equivalent to \fIstruct utimbuf\fP from \fIutime.h\fP
 
 .SS "Version API"
 .nf
-.BI "const char *jc_version"
-.BI "const char *jc_verdate"
-.BI "const int jc_api_version"
-.BI "const int jc_api_featurelevel"
-.BI "const int jc_jodyhash_version"
-.BI "const unsigned char jc_api_versiontable[]"
+.BI "const char * " jc_version ""
+.BI "const char * " jc_verdate ""
+.BI "const int " jc_api_version ""
+.BI "const int " jc_api_featurelevel ""
+.BI "const int " jc_jodyhash_version ""
+.BI "const unsigned char " jc_api_versiontable " [] "
 
 .BI "int jc_get_kernel_version(" void ")"
 (Linux only) get current Linux kernel version as an integer
