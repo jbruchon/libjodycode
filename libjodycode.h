@@ -22,9 +22,9 @@ extern "C" {
  * supports the used interfaces should be chosen by programs that check
  * version information for compatibility. See README for more information. */
 #define LIBJODYCODE_API_VERSION       4
-#define LIBJODYCODE_API_FEATURE_LEVEL 5
-#define LIBJODYCODE_VER               "4.1.2"
-#define LIBJODYCODE_VERDATE           "2026-02-08"
+#define LIBJODYCODE_API_FEATURE_LEVEL 6
+#define LIBJODYCODE_VER               "4.2.0"
+#define LIBJODYCODE_VERDATE           "2026-10-20"
 #ifdef UNICODE
  #define LIBJODYCODE_WINDOWS_UNICODE  1
 #else
@@ -277,6 +277,11 @@ struct jc_proc_cacheinfo {
 };
 
 extern struct jc_proc_cacheinfo *jc_get_proc_cacheinfo(int cleanup);
+
+
+/*** chmod ***/
+
+int jc_chmod(const char *filename, uint32_t mode);
 
 
 /*** dir ***/

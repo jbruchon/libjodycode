@@ -143,7 +143,7 @@ LDFLAGS += $(LINK_OPTIONS)
 # to support features not supplied by their vendor. Eg: GNU getopt()
 #ADDITIONAL_OBJECTS += getopt.o
 
-OBJS += access.o alarm.o batch.o block_hash.o cacheinfo.o dir.o
+OBJS += access.o alarm.o batch.o block_hash.o cacheinfo.o chmod.o dir.o
 OBJS += error.o fopen.o jc_fwprint.o getcwd.o jody_hash.o link.o
 OBJS += linkfiles.o numstrcmp.o oom.o paths.o
 OBJS += remove.o rename.o size_suffix.o stat.o
