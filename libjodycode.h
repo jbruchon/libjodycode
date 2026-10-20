@@ -159,7 +159,7 @@ struct JC_UTIMBUF {
  extern int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FILETIME * const restrict filetime);
 #else
  #define JC_TIMESPEC timespec
- #define JC_TIMESPEC utimbuf
+ #define JC_UTIMBUF utimbuf
 #endif  /* ON_WINDOWS */
 extern int jc_utime(const char *filename, const struct JC_UTIMBUF *times);
 
@@ -409,7 +409,7 @@ extern int jc_fclose(FILE *stream);
 
 /*** fputs ***/
 
-int jc_fputs(const char * restrict s, FILE * restrict stream);
+extern int jc_fputs(const char * restrict s, FILE * restrict stream);
 
 
 /*** jc_fwprint ***/
