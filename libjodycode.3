@@ -33,6 +33,10 @@ all of them into a single reusable shared library.
 .BI "int jc_rename(const char *" oldpath ", const char *" newpath ")"
 .BI "int jc_remove(const char *" pathname ")"
 .BI "int jc_stat(const char * const " filename ", struct JC_STAT * const restrict " buf ")"
+.BI "long jc_strtol(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
+.BI "unsigned long jc_strtoul(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
+.BI "long long jc_strtoll(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
+.BI "unsigned long long jc_strtoull(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
 .BI "int jc_utime(const char * " filename ", const struct JC_UTIMBUF *" times ")"
 
 .SS "Alarm API"

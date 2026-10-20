@@ -497,6 +497,13 @@ extern int jc_strneq(const char *s1, const char *s2, const size_t len);
 extern int jc_streq(const char *s1, const char *s2);
 
 
+/*** strtol family ***/
+extern long jc_strtol(const char * restrict nptr, char ** restrict endptr, int base);
+extern unsigned long jc_strtoul(const char * restrict nptr, char ** restrict endptr, int base);
+extern long long jc_strtoll(const char * restrict nptr, char ** restrict endptr, int base);
+extern unsigned long long jc_strtoull(const char * restrict nptr, char ** restrict endptr, int base);
+
+
 /*** strtoepoch ***/
 /* Convert a date/time string to seconds since the epoch
  * Format must be "YYYY-MM-DD" or "YYYY-MM-DD HH:MM:SS" */
