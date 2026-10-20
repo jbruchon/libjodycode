@@ -1,3 +1,16 @@
+libjodycode 4.2 (feature level 5) (2026-10-20)
+
+- Add jc_read,write,fread,fwrite,fgets,fputs
+- Add jc_ferror,feof,strerror,utime,chmod
+- Add jc_strto{l,ll,ul,ull} family
+- Removed jc_get_errdesc()
+- Fix lots of issues with error messages and codes
+- dir.c: fix a logic bug for FindClose()
+- Fix strneq() for zero-length strings
+- Fix jc_numeric_strcmp
+- Fix a minor nttime error
+- Add init_project.sh to skeleton for easy new project spin-up
+
 libjodycode 4.1.2 (2026-02-08)
 
 - Fix off-by-one error in jc_strtoepoch for the month value
