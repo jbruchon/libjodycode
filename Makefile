@@ -145,6 +145,7 @@ LDFLAGS += $(LINK_OPTIONS)
 
 OBJS += access.o alarm.o batch.o block_hash.o cacheinfo.o chmod.o
 OBJS += dir.o error.o ferror.o fgets.o fopen.o
+OBJS += read.o write.o fread.o fwrite.o
 OBJS += fputs.o jc_fwprint.o getcwd.o jody_hash.o link.o
 OBJS += linkfiles.o numstrcmp.o oom.o paths.o
 OBJS += remove.o rename.o size_suffix.o stat.o

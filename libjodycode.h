@@ -404,6 +404,14 @@ extern FILE *jc_fopen(const char *pathname, const JC_WCHAR_T *mode);
 extern int jc_fclose(FILE *stream);
 
 
+/*** fread ***/
+extern size_t jc_fread(void * restrict ptr, size_t size, size_t nmemb, FILE * restrict stream);
+
+
+/*** fwrite ***/
+extern size_t jc_fwrite(const void * restrict ptr, size_t size, size_t nmemb, FILE * restrict stream);
+
+
 /*** fputs ***/
 extern int jc_fputs(const char * restrict s, FILE * restrict stream);
 
@@ -447,6 +455,10 @@ extern void jc_nullptr(const char * restrict func);
 extern int jc_collapse_dotdot(char * const path);
 /* Given a src and dest path, create a relative path name from src to dest */
 extern int jc_make_relative_link_name(const char * const src, const char * const dest, char * rel_path);
+
+
+/*** read ***/
+extern ssize_t jc_read(int fd, void *buf, size_t count);
 
 
 /*** rename ***/
@@ -552,6 +564,10 @@ extern const int jc_windows_unicode;
  #define jc_set_output_modes(a,b)
 #endif
 extern int jc_setup_unicode_terminal(int argc, JC_WCHAR_T **wargv, char ***argv, int *stdout_tty);
+
+
+/*** write ***/
+extern ssize_t jc_write(int fd, const void *buf, size_t count);
 
 
 #ifdef __cplusplus

@@ -25,10 +25,13 @@ all of them into a single reusable shared library.
 .BI "int jc_ferror(FILE * " stream ")"
 .BI "char *jc_fgets(char * restrict " s ", int " size ", FILE * restrict " stream ")"
 .BI "FILE *jc_fopen(const char *" pathname ", const JC_WCHAR_T *" mode ")"
+.BI "size_t jc_fread(void * restrict " ptr ", size_t " size ", size_t " nmemb ", FILE * restrict " stream ")"
 .BI "int jc_fputs(const char * restrict " s ", FILE * restrict " stream ")"
+.BI "size_t jc_fwrite(const void * restrict " ptr ", size_t " size ", size_t " nmemb ", FILE * restrict " stream ")"
 .BI "char *jc_getcwd(char * const restrict " pathname ", const size_t " size ")"
 .BI "int jc_link(const char *" path1 ", const char *" path2 ")"
 .BI "JC_DIR *jc_opendir(const char * restrict " path ")"
+.BI "ssize_t jc_read(int " fd ", void *" buf ", size_t " count ")"
 .BI "struct JC_DIRENT *jc_readdir(JC_DIR * const restrict " dirp ")"
 .BI "int jc_rename(const char *" oldpath ", const char *" newpath ")"
 .BI "int jc_remove(const char *" pathname ")"
@@ -39,6 +42,7 @@ all of them into a single reusable shared library.
 .BI "long long jc_strtoll(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
 .BI "unsigned long long jc_strtoull(const char * restrict " nptr ", char ** restrict " endptr ", int " base ")"
 .BI "int jc_utime(const char * " filename ", const struct JC_UTIMBUF *" times ")"
+.BI "ssize_t jc_write(int " fd ", const void *" buf ", size_t " count ")"
 
 .SS "Alarm API"
 .nf
