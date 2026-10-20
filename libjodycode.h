@@ -57,6 +57,7 @@ extern "C" {
  #endif
  #include <windows.h>
  #include <direct.h>
+ #include <sys/utime.h>
  /* Unicode conversion on Windows */
  #ifndef M2W
   #define M2W(a,b) MultiByteToWideChar(CP_UTF8, 0, (a), -1, (LPWSTR)(b), JC_PATHBUF_SIZE)
@@ -75,6 +76,7 @@ extern "C" {
  #include <dirent.h>
  #include <sys/stat.h>
  #include <unistd.h>
+ #include <utime.h>
 #endif /* ON_WINDOWS */
 
 #include <sys/types.h>
@@ -142,12 +144,17 @@ extern "C" {
 
 /*** time ***/
 /* This is out of order because other things depend on it */
-
+struct JC_UTIMBUF {
+	time_t actime;
+	time_t modtime;
+};
+extern int jc_utime(const char *filename, const struct JC_UTIMBUF *times);
 #ifdef ON_WINDOWS
 struct JC_TIMESPEC {
 	time_t tv_sec;
 	long tv_nsec;
 };
+
  extern int jc_nttime_to_unixtime(const FILETIME * const restrict filetime, struct JC_TIMESPEC * const restrict unixtime);
  extern int jc_unixtime_to_nttime(const struct JC_TIMESPEC * const restrict unixtime, FILETIME * const restrict filetime);
 #else
