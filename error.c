@@ -40,6 +40,7 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 
 const char *jc_get_errname(int errnum)
 {
+	if (errnum >= JC_ERRORCODE_START) errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return NULL;
 	if (errnum < 0) errnum = -errnum;
 	return jc_error_list[errnum].name;
@@ -48,6 +49,7 @@ const char *jc_get_errname(int errnum)
 
 const char *jc_get_errdesc(int errnum)
 {
+	if (errnum >= JC_ERRORCODE_START) errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return NULL;
 	if (errnum < 0) errnum = -errnum;
 	return jc_error_list[errnum].desc;
@@ -56,6 +58,7 @@ const char *jc_get_errdesc(int errnum)
 
 int jc_print_error(int errnum)
 {
+	if (errnum >= JC_ERRORCODE_START) errnum -= JC_ERRORCODE_START;
 	if (errnum > errcnt) return JC_EBADERR;
 	if (errnum < 0) errnum = -errnum;
 	fprintf(stderr, "error: %s (%s)\n", jc_error_list[errnum].desc, jc_error_list[errnum].name);
