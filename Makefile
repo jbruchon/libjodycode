@@ -148,8 +148,8 @@ OBJS += dir.o error.o feof.o ferror.o fgets.o fopen.o
 OBJS += read.o write.o fread.o fwrite.o
 OBJS += fputs.o jc_fwprint.o getcwd.o jody_hash.o link.o
 OBJS += linkfiles.o numstrcmp.o oom.o paths.o
-OBJS += remove.o rename.o size_suffix.o stat.o
-OBJS += strtol.o strtoll.o strtoul.o strtoull.o
+OBJS += remove.o rename.o size_suffix.o size_suffix_funcs.o
+OBJS += stat.o strtol.o strtoll.o strtoul.o strtoull.o
 OBJS += string.o str_t.o time.o utime.o version.o win_unicode.o
 OBJS += $(ADDITIONAL_OBJECTS)
 

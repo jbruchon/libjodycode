@@ -99,6 +99,8 @@ Selects type of link to perform: SYMLINK, HARDLINK, or REFLINK
 .SS "Size Suffix API"
 .nf
 .BI "const struct jc_size_suffix jc_size_suffix[]"
+.BI "int jc_sizestr_to_int64(const char *" str ", int64_t *" out_val ")"
+.BI "int jc_int64_to_sizestr(int64_t " bytes ", char *" buf ", size_t " bufsz ", int " units ", int " decimals ")"
 
 .SS "Numerically correct string comparison API"
 .nf

@@ -17,7 +17,7 @@ struct jc_error {
 };
 
 
-#define JC_ERRCNT 15
+#define JC_ERRCNT 17
 static const int errcnt = JC_ERRCNT;
 static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "no_error",    "success" },  // 0 - not a real error
@@ -35,7 +35,9 @@ static const struct jc_error jc_error_list[JC_ERRCNT + 1] = {
 	{ "kernelver",   "kernel version is too old" },  // 12
 	{ "no_memory",   "memory allocation failed (out of memory)" }, // 13
 	{ "vbuf_fail",   "setvbuf() call failed" }, // 14
-	{ NULL, NULL },  // 15
+	{ "ouflow",      "an overflow or underflow was caught" }, // 15
+	{ "size_suffix", "an invalid size suffix was specified" }, // 16
+	{ NULL, NULL },  // 17
 };
 
 

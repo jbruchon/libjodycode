@@ -375,21 +375,23 @@ extern int jc_print_error(int errnum);
 
 #define JC_ERRORCODE_START 1024
 
-#define JC_ENOERROR   (JC_ERRORCODE_START + 0)
-#define JC_ENULL      (JC_ERRORCODE_START + 1)
-#define JC_ECDOTDOT   (JC_ERRORCODE_START + 2)
-#define JC_EGRNEND    (JC_ERRORCODE_START + 3)
-#define JC_EBADERR    (JC_ERRORCODE_START + 4)
-#define JC_EBADARGV   (JC_ERRORCODE_START + 5)
-#define JC_EMBWC      (JC_ERRORCODE_START + 6)
-#define JC_EALARM     (JC_ERRORCODE_START + 7)
-#define JC_EALLOC     (JC_ERRORCODE_START + 8)
-#define JC_ENUMSTRCMP (JC_ERRORCODE_START + 9)
-#define JC_EDATETIME  (JC_ERRORCODE_START + 10)
-#define JC_EWIN32API  (JC_ERRORCODE_START + 11)
-#define JC_EKERNVER   (JC_ERRORCODE_START + 12)
-#define JC_ENOMEM     (JC_ERRORCODE_START + 13)
-#define JC_ESETVBUF   (JC_ERRORCODE_START + 14)
+#define JC_ENOERROR    (JC_ERRORCODE_START + 0)
+#define JC_ENULL       (JC_ERRORCODE_START + 1)
+#define JC_ECDOTDOT    (JC_ERRORCODE_START + 2)
+#define JC_EGRNEND     (JC_ERRORCODE_START + 3)
+#define JC_EBADERR     (JC_ERRORCODE_START + 4)
+#define JC_EBADARGV    (JC_ERRORCODE_START + 5)
+#define JC_EMBWC       (JC_ERRORCODE_START + 6)
+#define JC_EALARM      (JC_ERRORCODE_START + 7)
+#define JC_EALLOC      (JC_ERRORCODE_START + 8)
+#define JC_ENUMSTRCMP  (JC_ERRORCODE_START + 9)
+#define JC_EDATETIME   (JC_ERRORCODE_START + 10)
+#define JC_EWIN32API   (JC_ERRORCODE_START + 11)
+#define JC_EKERNVER    (JC_ERRORCODE_START + 12)
+#define JC_ENOMEM      (JC_ERRORCODE_START + 13)
+#define JC_ESETVBUF    (JC_ERRORCODE_START + 14)
+#define JC_EOUFLOW     (JC_ERRORCODE_START + 15)
+#define JC_ESIZESUFFIX (JC_ERRORCODE_START + 16)
 
 
 /*** feof ***/
@@ -483,6 +485,11 @@ struct jc_size_suffix {
 };
 
 extern const struct jc_size_suffix jc_size_suffix[];
+
+
+/*** size_suffix_funcs ***/
+extern int jc_sizestr_to_int64(const char *str, int64_t *out_val);
+extern int jc_int64_to_sizestr(int64_t bytes, char *buf, size_t bufsz, int units, int decimals);
 
 
 /*** sort ***/
