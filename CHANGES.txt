@@ -1,3 +1,8 @@
+libjodycode 4.3 (feature level 7) (2026-11-23)
+
+- Add size suffix helpers: jc_int64_to_sizestr, jc_sizestr_to_int64
+- Add return error codes for new size suffix helper functions
+
 libjodycode 4.2 (feature level 6) (2026-10-20)
 
 - Add jc_read,write,fread,fwrite,fgets,fputs
