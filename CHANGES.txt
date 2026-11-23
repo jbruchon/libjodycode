@@ -1,4 +1,4 @@
-libjodycode 4.2 (feature level 5) (2026-10-20)
+libjodycode 4.2 (feature level 6) (2026-10-20)
 
 - Add jc_read,write,fread,fwrite,fgets,fputs
 - Add jc_ferror,feof,strerror,utime,chmod
@@ -24,7 +24,7 @@ libjodycode 4.1.1 (2025-10-25)
 - Fix some man page issues
 - Add a project "skeleton" for easily starting new libjodycode programs
 
-libjodycode 4.1 (2025-09-25)
+libjodycode 4.1 (feature level 5) (2025-09-25)
 
 - Add jc_setup_unicode_terminal()
 - Add size-prefixed string type JC_STR_T and some relevant functions
@@ -49,6 +49,7 @@ libjodycode 4.0 (feature level 4) (2025-08-15)
 - Add jc_str_t data type (string prefixed with its own length)
 - Add jc_close() stub function
 - jc_get_proc_cacheinfo() is a stub function on non-Linux for future use
+- Note: feature level was bumped directly to 4 to sync with major version
 
 libjodycode 3.1.1 (2024-04-01)
 
