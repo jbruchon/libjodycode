@@ -7,6 +7,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
+#include <errno.h>
 #include "libjodycode.h"
 
 #define MAX_SIZE_DECIMALS 9
