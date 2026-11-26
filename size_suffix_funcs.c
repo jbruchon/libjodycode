@@ -4,6 +4,7 @@
  * Released under The MIT License
  */
 
+#include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <inttypes.h>
@@ -25,10 +26,10 @@ int jc_sizestr_to_int64(const char *str, int64_t *out_val)
 	int64_t val;
 	uint64_t mult = 1;
 
-	if (!str || !out_val || *str < '0' || *str > '9') return EINVAL;
+	if (!str || !out_val || *str < '0' || *str > '9') return -EINVAL;
 	jc_errno = 0;
 	val = jc_strtoll(str, &end, 10);
-	if (jc_errno != 0 || val < 0 || end == str) return EINVAL;
+	if (jc_errno != 0 || val < 0 || end == str) return -EINVAL;
 
 	if (*end != '\0') {
 		while (ss->suffix != NULL && jc_strcaseeq(ss->suffix, end) != 0) ss++;

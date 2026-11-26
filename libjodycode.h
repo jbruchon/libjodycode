@@ -48,6 +48,7 @@ extern "C" {
 
 #define JC_PATHBUF_SIZE 32768
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdint.h>
 
