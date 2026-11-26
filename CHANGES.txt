@@ -1,3 +1,7 @@
+libjodycode 4.3.1 (2026-11-26)
+
+- Compile fix only; if 4.3 already builds for you, you don't need to update
+
 libjodycode 4.3 (feature level 7) (2026-11-23)
 
 - Add size suffix helpers: jc_int64_to_sizestr, jc_sizestr_to_int64
